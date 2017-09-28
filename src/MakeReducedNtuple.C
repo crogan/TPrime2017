@@ -1,6 +1,9 @@
 // C++ includes
 #include <iostream>
 #include <fstream>
+#include <sstream>
+#include <ostream>
+#include <istream>
 #include <stdio.h>
 #include <dirent.h>
 
@@ -33,9 +36,9 @@ int main(int argc, char* argv[]) {
   if ( argc < 2 ){
     cout << "Error at Input: please specify an input file name, a list of input ROOT files and/or a folder path"; 
     cout << " and an output filename:" << endl; 
-    cout << "  Example:      ./MakeOptTree.x -ifile=input.root -ofile=output.root"  << endl;
-    cout << "  Example:      ./MakeOptTree.x -ilist=input.list -ofile=output.root"  << endl;
-    cout << "  Example:      ./MakeOptTree.x -ifold=folder_path -ofile=output.root" << endl;
+    cout << "  Example:      ./MakeReducedTree.x -ifile=input.root -ofile=output.root"  << endl;
+    cout << "  Example:      ./MakeReducedTree.x -ilist=input.list -ofile=output.root"  << endl;
+    cout << "  Example:      ./MakeReducedTree.x -ifold=folder_path -ofile=output.root" << endl;
     
     return 1;
   }
@@ -97,53 +100,33 @@ int main(int argc, char* argv[]) {
   }
   int Nfile = filenames.size();
   for(int i = 0; i < Nfile; i++){
-    std::cout << "Adding trees from file " << filenames[i] << " :" << endl;
-    TFile* F = new TFile(filenames[i].c_str(),"READ");
-    TObjLink* link = F->GetListOfKeys()->FirstLink();
-    vector<string> treenames;
-    while(link){
-      string name = link->GetObject()->GetName();
-      // if( ((name.find("VR") != string::npos) ||
-      // 	   (name.find("CR") != string::npos) ||
-      // 	   (name.find("SR") != string::npos)) &&
-      // 	  (name.find("Counter") == string::npos)){
-      if( ((name.find("SR") != string::npos) ||
-	   (name.find("SR") != string::npos) ||
-	   (name.find("SR") != string::npos)) &&
-	  ((name.find("Counter") == string::npos) && 
-	   (name.find("VRWT_") == string::npos) &&
-	   (name.find("VRWTLPT_") == string::npos) &&
-	   (name.find("CRZ_") == string::npos) &&
-	   (name.find("CRWT_") == string::npos) &&
-	   (name.find("CRWTLPT_") == string::npos) &&
-	   (name.find("CRY_") == string::npos) &&
-	   (name.find("CR3L_") == string::npos) &&
-	   (name.find("SRAll_") == string::npos))){
-	int Nt = treenames.size();
-	bool isnew = true;
-	for(int i = 0; i < Nt; i++){
-	  if(name == treenames[i]){
-	    isnew = false;
-	    break;
-	  }
-	}
-	if(isnew){
-	  treenames.push_back(name);
-	  cout << name << endl;
-	}
-      }
-      link = link->Next();
+  
+    TChain* chain = new TChain("anaCHS/tree");
+    chain->Add(filenames[i].c_str());
+    cout << "   Running tree " << "anaCHS/tree" << " " << chain->GetEntries() << endl;
+    ReducedNtuple* ntuple = new ReducedNtuple(chain);
+    
+    // pass filename label
+    string label = filenames[i];
+    if(label.find(".root") != string::npos )
+      label.erase(label.find(".root"));
+    while(label.find("/") != string::npos){
+      label.erase(0, label.find("/")+1);
+      cout << label << endl;
+    }
+    ntuple->AddLabel(label);
+
+    //Get event count
+    TFile* f = new TFile(filenames[i].c_str(),"READ");
+    TH1D* hevt = nullptr;
+    hevt = (TH1D*) f->Get("allEvents/hEventCount_wt");
+    if(hevt){
+      ntuple->AddNevent( hevt->Integral() );
+      delete hevt;
     }
 
-    int Ntree = treenames.size();
-    for(int j = 0; j < Ntree; j++){
-      TChain* chain = new TChain(treenames[j].c_str());
-      chain->Add(filenames[i].c_str());
-      cout << "   Running tree " << treenames[j] << " " << chain->GetEntries() << endl;
-      ReducedNtuple* ntuple = new ReducedNtuple(chain);
-      ntuple->WriteNtuple(string(outputFileName));
-      delete ntuple;
-    }
+    ntuple->WriteNtuple(string(outputFileName));
+    delete ntuple;
   }
  
   return 0;

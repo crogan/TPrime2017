@@ -1,9 +1,7 @@
 #include <TFile.h>
 
 #include "NtupleBase.hh"
-#include "ZeroLeptonBase.hh"
-#include "ChicagoBase.hh"
-#include "SunBase.hh"
+#include "InputTreeBase.hh"
 
 template <class Base>
 NtupleBase<Base>::NtupleBase(TTree* tree)
@@ -42,8 +40,6 @@ void NtupleBase<Base>::WriteNtuple(const string& filename){
   delete outfile;
 }
 
-template class NtupleBase<ZeroLeptonBase>;
-template class NtupleBase<ChicagoBase>;
-template class NtupleBase<SunBase>;
+template class NtupleBase<InputTreeBase>;
 
 

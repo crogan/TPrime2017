@@ -23,11 +23,11 @@ CC_FILES := $(wildcard src/*.cc)
 HH_FILES := $(wildcard include/*.hh)
 OBJ_FILES := $(addprefix $(OUTOBJ),$(notdir $(CC_FILES:.cc=.o)))
 
-all: MakeReducedTree.x 
+all: MakeReducedNtuple.x 
 
-MakeReducedTree.x:  $(SRCDIR)MakeReducedTree.C $(OBJ_FILES) $(HH_FILES)
-	$(CXX) $(CXXFLAGS) -o MakeReducedTree.x $(OUTOBJ)/*.o $(GLIBS) $ $<
-	touch MakeReducedTree.x
+MakeReducedNtuple.x:  $(SRCDIR)MakeReducedNtuple.C $(OBJ_FILES) $(HH_FILES)
+	$(CXX) $(CXXFLAGS) -o MakeReducedNtuple.x $(OUTOBJ)/*.o $(GLIBS) $ $<
+	touch MakeReducedNtuple.x
 
 $(OUTOBJ)%.o: src/%.cc include/%.hh
 	$(CXX) $(CXXFLAGS) -c $< -o $@

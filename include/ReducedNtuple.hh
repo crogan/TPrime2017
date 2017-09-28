@@ -2,12 +2,9 @@
 #define ReducedNtuple_h
 
 #include "NtupleBase.hh"
-#include "ZeroLeptonBase.hh"
-#include "RestFrames/RestFrames.hh"
+#include "InputTreeBase.hh"
 
-using namespace RestFrames;
-
-class ReducedNtuple : public NtupleBase<ZeroLeptonBase> {
+class ReducedNtuple : public NtupleBase<InputTreeBase> {
 
 public:
   ReducedNtuple(TTree* tree = 0);
@@ -326,82 +323,6 @@ private:
   float m_pPP_V1b_3;
   float m_pPP_V2b_3;
   float m_pPP_V3b_3;
-  
-  // RestFrames stuff
-  LabRecoFrame*       LAB;
-  DecayRecoFrame*     PP;
-  DecayRecoFrame*     Pa;
-  DecayRecoFrame*     Pb;
-  DecayRecoFrame*     Ca;
-  DecayRecoFrame*     Cb;
-  SelfAssemblingRecoFrame* SAV1a;
-  SelfAssemblingRecoFrame* SAV1b;
-  SelfAssemblingRecoFrame* SAV2a;
-  SelfAssemblingRecoFrame* SAV2b;
-  VisibleRecoFrame*   V1a;
-  VisibleRecoFrame*   V1b;
-  VisibleRecoFrame*   V2a;
-  VisibleRecoFrame*   V2b;
-  InvisibleRecoFrame* Ia;
-  InvisibleRecoFrame* Ib;
-
-  InvisibleGroup*    INV;
-  CombinatoricGroup* VIS;
-
-  SetMassInvJigsaw*     InvMassJigsaw;
-  SetRapidityInvJigsaw* InvRapidityJigsaw;
-  ContraBoostInvJigsaw* InvCBJigsaw;
-  MinMassesCombJigsaw*  CombPPJigsaw;
-  MinMassesCombJigsaw*  CombPaJigsaw;
-  MinMassesCombJigsaw*  CombPbJigsaw;
-  
-  LabRecoFrame*            LAB_bkg;
-  SelfAssemblingRecoFrame* S_bkg;
-  VisibleRecoFrame*        V_bkg;
-  InvisibleRecoFrame*      I_bkg;
-
-  InvisibleGroup*    INV_bkg;
-  CombinatoricGroup* VIS_bkg;
-
-  SetMassInvJigsaw*     InvMass_bkg;
-  SetRapidityInvJigsaw* InvRapidity_bkg;
-
-  LabRecoFrame*       LAB_ISR;
-  DecayRecoFrame*     CM_ISR;
-  DecayRecoFrame*     S_ISR;
-  VisibleRecoFrame*   ISR_ISR;
-  VisibleRecoFrame*   V_ISR;
-  InvisibleRecoFrame* I_ISR;
-
-  InvisibleGroup* INV_ISR;
-  CombinatoricGroup* VIS_ISR;
-
-  SetMassInvJigsaw* InvMass_ISR;
-  MinMassesCombJigsaw* SplitVis_ISR;
-
-  // 3-3 tree
-  LabRecoFrame*       LAB_3;
-  DecayRecoFrame*     PP_3;
-  DecayRecoFrame*     Pa_3;
-  DecayRecoFrame*     Pb_3;
-  VisibleRecoFrame*   V1a_3;
-  VisibleRecoFrame*   V1b_3;
-  VisibleRecoFrame*   V2a_3;
-  VisibleRecoFrame*   V2b_3;
-  VisibleRecoFrame*   V3a_3;
-  VisibleRecoFrame*   V3b_3;
-  InvisibleRecoFrame* Ia_3;
-  InvisibleRecoFrame* Ib_3;
-
-  InvisibleGroup*    INV_3;
-  CombinatoricGroup* VIS_3;
-
-  SetMassInvJigsaw*     InvMassJigsaw_3;
-  SetRapidityInvJigsaw* InvRapidityJigsaw_3;
-  ContraBoostInvJigsaw* InvCBJigsaw_3;
-  MinMassesCombJigsaw*  CombPPJigsaw_3;
-  MinMassesSqCombJigsaw*  CombPaJigsaw_3;
-  MinMassesSqCombJigsaw*  CombPbJigsaw_3;
 
 };
 

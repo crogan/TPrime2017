@@ -20,7 +20,7 @@
 // Fixed size dimensions of array or collections stored in the TTree if any.
    const Int_t kMaxSelectedEvent_lhewts = 1;
 
-using namespace std:
+using namespace std;
 
 class InputTreeBase {
 public :

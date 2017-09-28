@@ -17,6 +17,9 @@ public:
   AnalysisBase(TTree* tree = 0);
   virtual ~AnalysisBase();
 
+  void AddLabel(string& label);
+  void AddNevent(double nevt);
+
   virtual Int_t GetEntry(Long64_t entry);
 
   virtual TVector3 GetMET();
@@ -33,8 +36,10 @@ protected:
 private:
   int m_CurrentFile;
   int m_DSID;
-  map<int,double> m_IDtoNEVT;
-  map<int,double> m_IDtoXSEC;
+  string m_Label;
+  double m_Nevent;
+  map<string,double> m_IDtoNEVT;
+  map<string,double> m_IDtoXSEC;
 
   void NewFile();
   void InitXSECmap();
