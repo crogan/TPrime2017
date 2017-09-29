@@ -1,13 +1,41 @@
 #include "ReducedNtuple.hh"
 
+using namespace RestFrames;
+
 ReducedNtuple::ReducedNtuple(TTree* tree)
   : NtupleBase<InputTreeBase>(tree)
 {
   
+  LAB = new LabRecoFrame("LAB","lab");
+  Tp = new DecayRecoFrame("Tp","T'");
+  T  = new DecayRecoFrame("T","top");
+  H  = new DecayRecoFrame("H","H");
+  T0 = new VisibleRecoFrame("V1a","V_{1a}");
+  T1 = new VisibleRecoFrame("V1b","V_{1b}");
+  H0 = new VisibleRecoFrame("V2a","V_{2a}");
+  H1 = new VisibleRecoFrame("V2b","V_{2b}");
+
+  LAB->SetChildFrame(*Tp);
+  Tp->AddChildFrame(*T);
+  Tp->AddChildFrame(*H);
+  T->AddChildFrame(*T0);
+  T->AddChildFrame(*T1);
+  H->AddChildFrame(*H0);
+  H->AddChildFrame(*H1);
+
+  LAB->InitializeTree(); 
+  LAB->InitializeAnalysis(); 
 }
 
 ReducedNtuple::~ReducedNtuple() {
-  
+   delete LAB;
+   delete Tp;
+   delete T;
+   delete H;
+   delete T0;
+   delete T1;
+   delete H0;
+   delete H1;
 }
 
 void ReducedNtuple::InitOutputTree(){
@@ -16,350 +44,312 @@ void ReducedNtuple::InitOutputTree(){
 
   string name = string(fChain->GetName());
 
-  m_Tree = (TTree*) new TTree(name.c_str(), name.c_str());
+  m_Tree = (TTree*) new TTree("TPrime", "TPrime");
 
-  m_Tree->Branch("systWeights", &m_systWeights);
-  m_Tree->Branch("btagSystWeights", &m_btagSystWeights);
-  m_Tree->Branch("WZweight", &m_WZweight);
-  m_Tree->Branch("PRWHash", &m_PRWHash);
-
-  m_Tree->Branch("eventWeight", &m_eventWeight);
-  m_Tree->Branch("pileupWeight", &m_pileupWeight);
-  m_Tree->Branch("pileupWeightUp", &m_pileupWeightUp);
-  m_Tree->Branch("pileupWeightDown", &m_pileupWeightDown);
-  m_Tree->Branch("genWeight", &m_genWeight);
-  m_Tree->Branch("normWeight", &m_normWeight);
-  m_Tree->Branch("normWeightUp", &m_normWeightUp);
-  m_Tree->Branch("normWeightDown", &m_normWeightDown);
-
-  m_Tree->Branch("metTST", &m_metTST);
-  m_Tree->Branch("metTSTPhi", &m_metTSTPhi);
-
-  m_Tree->Branch("RunNumber", &m_RunNumber);
-  m_Tree->Branch("EventNumber", &m_EventNumber);
-
-  // special variables for DATA
-  if(m_DATA){
-    m_Tree->Branch("LumiBlockNumber", &m_LumiBlockNumber);
-  }
-
-  // special variables for control regions
-  if(m_CRWT){
-    m_Tree->Branch("MTW", &m_MTW);
-    m_Tree->Branch("lep1Pt", &m_lep1Pt);
-    m_Tree->Branch("lep1sign", &m_lep1sign);
-    m_Tree->Branch("lep1Triggered", &m_lep1Triggered);
-    m_Tree->Branch("lep1Signal", &m_lep1Signal);
-  }
-
-  if(m_CRZ){
-    m_Tree->Branch("lep1Pt", &m_lep1Pt);
-    m_Tree->Branch("lep2Pt", &m_lep2Pt);
-    m_Tree->Branch("lep1Eta", &m_lep1Eta);
-    m_Tree->Branch("lep2Eta", &m_lep2Eta);
-    m_Tree->Branch("lep1Phi", &m_lep1Phi);
-    m_Tree->Branch("lep2Phi", &m_lep2Phi);
-    m_Tree->Branch("lep1sign", &m_lep1sign);
-    m_Tree->Branch("lep2sign", &m_lep2sign);
-    m_Tree->Branch("mll", &m_mll);
-    m_Tree->Branch("Zpt", &m_Zpt);
-    m_Tree->Branch("fakemet", &m_fakemet);
-    m_Tree->Branch("fakemetPhi", &m_fakemetPhi);
-    m_Tree->Branch("lep1Iso", &m_lep1Iso);
-    m_Tree->Branch("lep2Iso", &m_lep2Iso);
-    m_Tree->Branch("lep1DRjet", &m_lep1DRjet);
-    m_Tree->Branch("lep2DRjet", &m_lep2DRjet);
-    m_Tree->Branch("lep1jetJVF", &m_lep1jetJVF);
-    m_Tree->Branch("lep2jetJVF", &m_lep2jetJVF);
-    m_Tree->Branch("leptonWeight", &m_leptonWeight);
-  }
-
-  if(m_CRY){
-    m_Tree->Branch("phSignal", &m_phSignal);
-    m_Tree->Branch("phPt", &m_phPt);
-    m_Tree->Branch("phTruthOrigin", &m_phTruthOrigin);
-    m_Tree->Branch("phTopoetcone40", &m_phTopoetcone40);
-    m_Tree->Branch("phPtcone20", &m_phPtcone20);
-    m_Tree->Branch("phTight", &m_phTight);
-  }
- 
   m_Tree->Branch("weight", &m_weight);
-  m_Tree->Branch("veto", &m_veto);
-  m_Tree->Branch("cleaning", &m_cleaning);
-  m_Tree->Branch("timing", &m_timing);
+  m_Tree->Branch("NPV", &m_NPV);
+  m_Tree->Branch("NPU", &m_NPU); 
 
-  m_Tree->Branch("nBJet", &m_nBJet);
-  m_Tree->Branch("nCJet", &m_nCJet);
-  m_Tree->Branch("bTagWeight", &m_bTagWeight);
-  m_Tree->Branch("m_jet1_eta", &m_jet1_eta);
-  m_Tree->Branch("m_jet1_chf", &m_jet1_chf);
-  m_Tree->Branch("m_jet1_FracSamplingMax", &m_jet1_FracSamplingMax);
+  m_Tree->Branch("isA", &m_isA);
+  m_Tree->Branch("isB", &m_isB);
+  m_Tree->Branch("isC", &m_isC);
+  m_Tree->Branch("isD", &m_isD);
 
-  // QCD type A
-  m_Tree->Branch("Rsib", &m_Rsib);
-  m_Tree->Branch("deltaQCD", &m_deltaQCD);
+  // AK8 candidate 4-vectors
+  m_Tree->Branch("pT_top", &m_pT_top);
+  m_Tree->Branch("eta_top", &m_eta_top);
+  m_Tree->Branch("phi_top", &m_phi_top);
+  m_Tree->Branch("mass_top", &m_mass_top);
+  m_Tree->Branch("pT_higgs", &m_pT_higgs);
+  m_Tree->Branch("eta_higgs", &m_eta_higgs);
+  m_Tree->Branch("phi_higgs", &m_phi_higgs);
+  m_Tree->Branch("mass_higgs", &m_mass_higgs);
 
-  m_Tree->Branch("pTCM", &m_pTCM);
-  m_Tree->Branch("pZCM", &m_pZCM);
+  // subjet 4-vectors ("0" is leading CSV score from each)
+  m_Tree->Branch("pT_top_sj0", &m_pT_top_sj0);
+  m_Tree->Branch("eta_top_sj0", &m_eta_top_sj0);
+  m_Tree->Branch("phi_top_sj0", &m_phi_top_sj0);
+  m_Tree->Branch("mass_top_sj0", &m_mass_top_sj0);
+  m_Tree->Branch("pT_top_sj1", &m_pT_top_sj1);
+  m_Tree->Branch("eta_top_sj1", &m_eta_top_sj1);
+  m_Tree->Branch("phi_top_sj1", &m_phi_top_sj1);
+  m_Tree->Branch("mass_top_sj1", &m_mass_top_sj1);
+  m_Tree->Branch("pT_higgs_sj0", &m_pT_higgs_sj0);
+  m_Tree->Branch("eta_higgs_sj0", &m_eta_higgs_sj0);
+  m_Tree->Branch("phi_higgs_sj0", &m_phi_higgs_sj0);
+  m_Tree->Branch("mass_higgs_sj0", &m_mass_higgs_sj0);
+  m_Tree->Branch("pT_higgs_sj1", &m_pT_higgs_sj1);
+  m_Tree->Branch("pT_higgs_sj1", &m_eta_higgs_sj1);
+  m_Tree->Branch("phi_higgs_sj1", &m_phi_higgs_sj1);
+  m_Tree->Branch("mass_higgs_sj1", &m_mass_higgs_sj1);
 
-  // trigger
-  m_Tree->Branch("PP_VisShape", &m_PP_VisShape);
-  m_Tree->Branch("MDR", &m_MDR);
+  // extra-jet 4-vectors
+  m_Tree->Branch("pT_extrajet", &m_pT_extrajet);
+  m_Tree->Branch("eta_extrajet", &m_eta_extrajet);
+  m_Tree->Branch("phi_extrajet", &m_phi_extrajet);
+  m_Tree->Branch("mass_extrajet", &m_mass_extrajet);
+ 
+  // pre-calc variables
+  m_Tree->Branch("M_Tp", &m_M_Tp);
+  m_Tree->Branch("pT_Tp", &m_pT_Tp);
 
-  m_Tree->Branch("H2PP", &m_H2PP);
+  m_Tree->Branch("cosTp", &m_cosTp); // wrt T
+  m_Tree->Branch("cosH", &m_cosH);
+  m_Tree->Branch("cosT", &m_cosT);
+  m_Tree->Branch("cosTq", &m_cosTq);
+  m_Tree->Branch("dphiTpT", &m_dphiTpT);
+  m_Tree->Branch("dphiTpH", &m_dphiTpH);
+  m_Tree->Branch("dphiTH", &m_dphiTH);
 
-  // compressed 
-  m_Tree->Branch("PTISR", &m_PTISR);
-  m_Tree->Branch("RISR", &m_RISR);
-  m_Tree->Branch("cosS", &m_cosS);
-  m_Tree->Branch("dphiCMI", &m_dphiCMI);
-  m_Tree->Branch("dphiISRI", &m_dphiISRI);
-  m_Tree->Branch("MS", &m_MS);
-  m_Tree->Branch("NV", &m_NV);
-  m_Tree->Branch("NISR", &m_NISR);
-  m_Tree->Branch("MISR", &m_MISR);
-  m_Tree->Branch("MV", &m_MV);
-  m_Tree->Branch("pTjV1", &m_pTjV1);
-  m_Tree->Branch("pTjV2", &m_pTjV2);
-  m_Tree->Branch("pTjV3", &m_pTjV3);
-  m_Tree->Branch("pTjV4", &m_pTjV4);
-  m_Tree->Branch("etajV1", &m_etajV1);
-  m_Tree->Branch("etajV2", &m_etajV2);
-  m_Tree->Branch("etajV3", &m_etajV3);
-  m_Tree->Branch("etajV4", &m_etajV4);
-  m_Tree->Branch("RPT_PTISR", &m_RPT_PTISR);
+  m_Tree->Branch("T", &m_T);
+  m_Tree->Branch("Tm", &m_Tm);
+  m_Tree->Branch("TT", &m_TT);
+  m_Tree->Branch("T_CM", &m_T_CM);
+  m_Tree->Branch("Tm_CM", &m_Tm_CM);
+  m_Tree->Branch("TT_CM", &m_TT_CM);
 
-  m_Tree->Branch("cosPP", &m_cosPP);
-  m_Tree->Branch("dphiVP", &m_dphiVP);
-  m_Tree->Branch("dphiPPV", &m_dphiPPV);
-  m_Tree->Branch("cosP", &m_cosP);
-  m_Tree->Branch("sangle", &m_sangle);
-  m_Tree->Branch("dangle", &m_dangle);
-  m_Tree->Branch("dphiPa", &m_dphiPa);
-  m_Tree->Branch("dphiPb", &m_dphiPb);
-  m_Tree->Branch("ddphiP", &m_ddphiP);
-  m_Tree->Branch("sdphiP", &m_sdphiP);
+  m_Tree->Branch("M_extra", &m_M_extra);
+  m_Tree->Branch("N_extra", &m_N_extra);
+  m_Tree->Branch("pT_q", &m_pT_q);
+  m_Tree->Branch("eta_q", &m_eta_q);
+  m_Tree->Branch("phi_q", &m_phi_q);
+  m_Tree->Branch("mass_q", &m_mass_q);
 
-  // squark-direct specific
-  m_Tree->Branch("H3PP", &m_H3PP);
-  m_Tree->Branch("H4PP", &m_H4PP);
-  m_Tree->Branch("HT3PP", &m_HT3PP);
-  m_Tree->Branch("HT4PP", &m_HT4PP);
-  m_Tree->Branch("R_H2PP_H3PP", &m_R_H2PP_H3PP);
-  m_Tree->Branch("R_pTj2_HT3PP", &m_R_pTj2_HT3PP);
-  m_Tree->Branch("RPZ_HT3PP", &m_RPZ_HT3PP);
-  m_Tree->Branch("RPT_HT3PP", &m_RPT_HT3PP);
-
-  // gluino-direct specific
-  m_Tree->Branch("H5PP", &m_H5PP);
-  m_Tree->Branch("H6PP", &m_H6PP);
-  m_Tree->Branch("HT5PP", &m_HT5PP);
-  m_Tree->Branch("HT6PP", &m_HT6PP);
-  m_Tree->Branch("R_H2PP_H5PP", &m_R_H2PP_H5PP);
-  m_Tree->Branch("R_HT5PP_H5PP", &m_R_HT5PP_H5PP);
-  m_Tree->Branch("minR_pTj2i_HT3PPi", &m_minR_pTj2i_HT3PPi);
-  m_Tree->Branch("maxR_H1PPi_H2PPi", &m_maxR_H1PPi_H2PPi);
-  m_Tree->Branch("RPZ_HT5PP", &m_RPZ_HT5PP);
-  m_Tree->Branch("RPT_HT5PP", &m_RPT_HT5PP);
-
-  // GG onestep CC specific
-  m_Tree->Branch("H9PP", &m_H9PP);
-  m_Tree->Branch("H10PP", &m_H10PP);
-  m_Tree->Branch("HT9PP", &m_HT9PP);
-  m_Tree->Branch("HT10PP", &m_HT10PP);
-  m_Tree->Branch("R_H2PP_H9PP", &m_R_H2PP_H9PP);
-  m_Tree->Branch("R_HT9PP_H9PP", &m_R_HT9PP_H9PP);
-  m_Tree->Branch("RPZ_HT9PP", &m_RPZ_HT9PP);
-  m_Tree->Branch("RPT_HT9PP", &m_RPT_HT9PP);
-
-  // P -frames 
-  m_Tree->Branch("H2Pa", &m_H2Pa);
-  m_Tree->Branch("H2Pb", &m_H2Pb);
-  m_Tree->Branch("H3Pa", &m_H3Pa);
-  m_Tree->Branch("H3Pb", &m_H3Pb);
-  m_Tree->Branch("H4Pa", &m_H4Pa);
-  m_Tree->Branch("H4Pb", &m_H4Pb);
-  m_Tree->Branch("H5Pa", &m_H5Pa);
-  m_Tree->Branch("H5Pb", &m_H5Pb);
-  m_Tree->Branch("dH2o3P", &m_dH2o3P);
-
-  // C -frames
-  m_Tree->Branch("H2Ca", &m_H2Ca);
-  m_Tree->Branch("H2Cb", &m_H2Cb);
-  m_Tree->Branch("H3Ca", &m_H3Ca);
-  m_Tree->Branch("H3Cb", &m_H3Cb);
-
-  m_Tree->Branch("dphiPV1a", &m_dphiPV1a);
-  m_Tree->Branch("dphiPV1b", &m_dphiPV1b);
-  m_Tree->Branch("cosV1a", &m_cosV1a);
-  m_Tree->Branch("cosV1b", &m_cosV1b);
-  m_Tree->Branch("dphiCV2a", &m_dphiCV2a);
-  m_Tree->Branch("dphiCV2b", &m_dphiCV2b);
-  m_Tree->Branch("cosV2a", &m_cosV2a);
-  m_Tree->Branch("cosV2b", &m_cosV2b);
-
-  // other
-  m_Tree->Branch("MET", &m_MET);
-  m_Tree->Branch("Meff", &m_Meff);
-  m_Tree->Branch("Aplan", &m_Aplan);
-  m_Tree->Branch("dphi", &m_dphi);
-  m_Tree->Branch("dphiR", &m_dphiR);
-
-  m_Tree->Branch("dphiMin1", &m_dphiMin1);
-  m_Tree->Branch("dphiMin2", &m_dphiMin2);
-  m_Tree->Branch("dphiMin3", &m_dphiMin3);
-  m_Tree->Branch("dphiMinAll", &m_dphiMinAll);
-
-  m_Tree->Branch("NJet", &m_NJet);
-  m_Tree->Branch("NJa", &m_NJa);
-  m_Tree->Branch("NJb", &m_NJb);
-  m_Tree->Branch("NJ1a", &m_NJ1a);
-  m_Tree->Branch("NJ1b", &m_NJ1b);
-  m_Tree->Branch("NJ2a", &m_NJ2a);
-  m_Tree->Branch("NJ2b", &m_NJ2b);
-
-  m_Tree->Branch("pT_jet1", &m_pT_jet1);
-  m_Tree->Branch("pT_jet2", &m_pT_jet2);
-  m_Tree->Branch("pT_jet3", &m_pT_jet3);
-  m_Tree->Branch("pT_jet4", &m_pT_jet4);
-  m_Tree->Branch("pT_jet5", &m_pT_jet5);
-  m_Tree->Branch("pT_jet6", &m_pT_jet6);
-
-  m_Tree->Branch("eta_jet1", &m_eta_jet1);
-  m_Tree->Branch("eta_jet2", &m_eta_jet2);
-  m_Tree->Branch("eta_jet3", &m_eta_jet3);
-  m_Tree->Branch("eta_jet4", &m_eta_jet4);
-  m_Tree->Branch("eta_jet5", &m_eta_jet5);
-  m_Tree->Branch("eta_jet6", &m_eta_jet6);
-
-  m_Tree->Branch("pTPP_jet1", &m_pTPP_jet1);
-  m_Tree->Branch("pTPP_jet2", &m_pTPP_jet2);
-
-  m_Tree->Branch("pT_jet1a", &m_pT_jet1a);
-  m_Tree->Branch("pT_jet2a", &m_pT_jet2a);
-  m_Tree->Branch("pT_jet1b", &m_pT_jet1b);
-  m_Tree->Branch("pT_jet2b", &m_pT_jet2b);
-
-  m_Tree->Branch("pTPP_jet1a", &m_pTPP_jet1a);
-  m_Tree->Branch("pTPP_jet2a", &m_pTPP_jet2a);
-  m_Tree->Branch("pTPP_jet3a", &m_pTPP_jet3a);
-  m_Tree->Branch("pTPP_jet1b", &m_pTPP_jet1b);
-  m_Tree->Branch("pTPP_jet2b", &m_pTPP_jet2b);
-  m_Tree->Branch("pTPP_jet3b", &m_pTPP_jet3b);
-
-  m_Tree->Branch("pPP_jet1a", &m_pPP_jet1a);
-  m_Tree->Branch("pPP_jet2a", &m_pPP_jet2a);
-  m_Tree->Branch("pPP_jet3a", &m_pPP_jet3a);
-  m_Tree->Branch("pPP_jet1b", &m_pPP_jet1b);
-  m_Tree->Branch("pPP_jet2b", &m_pPP_jet2b);
-  m_Tree->Branch("pPP_jet3b", &m_pPP_jet3b);
-
-  m_Tree->Branch("eta_jet1a", &m_eta_jet1a);
-  m_Tree->Branch("eta_jet2a", &m_eta_jet2a);
-  m_Tree->Branch("eta_jet3a", &m_eta_jet3a);
-  m_Tree->Branch("eta_jet1b", &m_eta_jet1b);
-  m_Tree->Branch("eta_jet2b", &m_eta_jet2b);
-  m_Tree->Branch("eta_jet3b", &m_eta_jet3b);
-
-  m_Tree->Branch("pTPP_Va", &m_pTPP_Va);
-  m_Tree->Branch("pTPP_V1a", &m_pTPP_V1a);
-  m_Tree->Branch("pTPP_V2a", &m_pTPP_V2a);
-  m_Tree->Branch("pTPP_Vb", &m_pTPP_Vb);
-  m_Tree->Branch("pTPP_V1b", &m_pTPP_V1b);
-  m_Tree->Branch("pTPP_V2b", &m_pTPP_V2b);
-  m_Tree->Branch("pTPP_Ia", &m_pTPP_Ia);
-  m_Tree->Branch("pTPP_Ib", &m_pTPP_Ib);
-
-  m_Tree->Branch("pTPP_V1a_3", &m_pTPP_V1a_3);
-  m_Tree->Branch("pTPP_V2a_3", &m_pTPP_V2a_3);
-  m_Tree->Branch("pTPP_V3a_3", &m_pTPP_V3a_3);
-  m_Tree->Branch("pTPP_V1b_3", &m_pTPP_V1b_3);
-  m_Tree->Branch("pTPP_V2b_3", &m_pTPP_V2b_3);
-  m_Tree->Branch("pTPP_V3b_3", &m_pTPP_V3b_3);
-
-  m_Tree->Branch("pPP_Va", &m_pPP_Va);
-  m_Tree->Branch("pPP_V1a", &m_pPP_V1a);
-  m_Tree->Branch("pPP_V2a", &m_pPP_V2a);
-  m_Tree->Branch("pPP_Vb", &m_pPP_Vb);
-  m_Tree->Branch("pPP_V1b", &m_pPP_V1b);
-  m_Tree->Branch("pPP_V2b", &m_pPP_V2b);
-  m_Tree->Branch("pPP_Ia", &m_pPP_Ia);
-  m_Tree->Branch("pPP_Ib", &m_pPP_Ib);
-
-  m_Tree->Branch("pPP_V1a_3", &m_pPP_V1a_3);
-  m_Tree->Branch("pPP_V2a_3", &m_pPP_V2a_3);
-  m_Tree->Branch("pPP_V3a_3", &m_pPP_V3a_3);
-  m_Tree->Branch("pPP_V1b_3", &m_pPP_V1b_3);
-  m_Tree->Branch("pPP_V2b_3", &m_pPP_V2b_3);
-  m_Tree->Branch("pPP_V3b_3", &m_pPP_V3b_3);
-
-  // 3-3 tree
-  m_Tree->Branch("NJ1a_3", &m_NJ1a_3);
-  m_Tree->Branch("NJ1b_3", &m_NJ1b_3);
-  m_Tree->Branch("NJ2a_3", &m_NJ2a_3);
-  m_Tree->Branch("NJ2b_3", &m_NJ2b_3);
-  m_Tree->Branch("NJ3a_3", &m_NJ3a_3);
-  m_Tree->Branch("NJ3b_3", &m_NJ3b_3);
-
-  m_Tree->Branch("H7PP_3", &m_H7PP_3);
-  m_Tree->Branch("H8PP_3", &m_H8PP_3);
-  m_Tree->Branch("HT7PP_3", &m_HT7PP_3);
-  m_Tree->Branch("HT8PP_3", &m_HT8PP_3);
-  m_Tree->Branch("R_H2PP_H7PP_3", &m_R_H2PP_H7PP_3);
-  m_Tree->Branch("R_HT7PP_H7PP_3", &m_R_HT7PP_H7PP_3);
-  m_Tree->Branch("RPZ_HT7PP_3", &m_RPZ_HT7PP_3);
-  m_Tree->Branch("RPT_HT7PP_3", &m_RPT_HT7PP_3);
-
-  m_Tree->Branch("MJet", &m_MJet);
-  m_Tree->Branch("MJa", &m_MJa);
-  m_Tree->Branch("MJb", &m_MJb);
-  m_Tree->Branch("MJ1a", &m_MJ1a);
-  m_Tree->Branch("MJ1b", &m_MJ1b);
-  m_Tree->Branch("MJ2a", &m_MJ2a);
-  m_Tree->Branch("MJ2b", &m_MJ2b);
-
-  m_Tree->Branch("MJ1a_3", &m_MJ1a_3);
-  m_Tree->Branch("MJ1b_3", &m_MJ1b_3);
-  m_Tree->Branch("MJ2a_3", &m_MJ2a_3);
-  m_Tree->Branch("MJ2b_3", &m_MJ2b_3);
-  m_Tree->Branch("MJ3a_3", &m_MJ3a_3);
-  m_Tree->Branch("MJ3b_3", &m_MJ3b_3);
-
+  m_Tree->Branch("EtaMax", &m_EtaMax);
 }
 
 void ReducedNtuple::FillOutputTree(){
 
-  //cout << GetEventWeight() << endl;
-
-  TVector3 ETMiss = GetMET(); 
+  m_weight = GetEventWeight();
+  m_NPV = SelectedEvent_npv;
+  m_NPU = SelectedEvent_npuTrue; 
+  m_isA = SelectedEvent_isRegionA;
+  m_isB = SelectedEvent_isRegionB;
+  m_isC = SelectedEvent_isRegionC;
+  m_isD = SelectedEvent_isRegionD;
 
   vector<TLorentzVector> Jets; 
-  GetJets(Jets, 50., 2.8); 
+  GetJets(Jets, 30.); 
 
-  // need two jets to play
-  if(Jets.size() < 2) 
+  // need four AK4 jets to play
+  if(Jets.size() < 4) 
     return; 
 
-  if(ETMiss.Mag() < 200. || m_NJet < 2)
+  vector<TLorentzVector> FatJets; 
+  GetLargeRJets(FatJets, 30.); 
+
+  // Need two AK8 jets
+  if(FatJets.size() < 2) 
+    return; 
+
+  // trigger preselection
+  if(FatJets[0].Pt()+FatJets[1].Pt() < 850.)
     return;
 
-  m_dphiMin1   = DeltaPhiMin(Jets, ETMiss, 1);
-  m_dphiMin2   = DeltaPhiMin(Jets, ETMiss, 2);
-  m_dphiMin3   = DeltaPhiMin(Jets, ETMiss, 3);
-  m_dphiMinAll = DeltaPhiMin(Jets, ETMiss);
+  // need to match higgs/top to lead AK8's
+  int ihiggs[2];
+  int itop[2];
+  for(int i = 0; i < 2; i++){
+    ihiggs[i] = -1;
+    itop[i] = -1;
+  }
 
- 
+  TLorentzVector Higgs;
+  TLorentzVector Top;
 
-  // m_systWeights.clear();
-  // for(int i = 0; i < int(systWeights->size()); i++)
-  //   m_systWeights.push_back(systWeights->at(i));
- 
-  // m_btagSystWeights.clear();
-  // for(int i = 0; i < int(btagSystWeights->size()); i++)
-  //   m_btagSystWeights.push_back(btagSystWeights->at(i));
- 
-  // m_metTST = NTVars_metTST;
-  // m_metTSTPhi = NTVars_metTSTPhi;
+  for(int ijet = 0; ijet < 2; ijet++){
+    
+    // loop through higgs tags
+    int NH = ptHTagged->size();
+    for(int h = 0; h < NH; h++){
+      Higgs.SetPtEtaPhiM( ptHTagged->at(h), 
+			etaHTagged->at(h),
+			phiHTagged->at(h),
+			MHTagged->at(h) );
+      if(FatJets[ijet].DeltaR(Higgs) < 0.1){
+	ihiggs[ijet] = h;
+	break;
+      }
+    }
+    // loop through top tags
+    int NT = ptTopTagged->size();
+    for(int t = 0; t < NT; t++){
+      Top.SetPtEtaPhiM( ptTopTagged->at(t), 
+			etaTopTagged->at(t),
+			phiTopTagged->at(t),
+			MTopTagged->at(t) );
+      if(FatJets[ijet].DeltaR(Top) < 0.1){
+	itop[ijet] = t;
+	break;
+      }
+    }
+  }
+
+  // make sure there is a good Higgs/top combo
+  int ih = -1;
+  int it = -1;
+  if( itop[0] >= 0 && ihiggs[1] >= 0 ){
+    ih = ihiggs[1];
+    it = itop[0];
+    itop[0] = 1;
+    ihiggs[1] = 1;
+    itop[1] = -1;
+    ihiggs[0] = -1;
+    
+  } else {
+    if( itop[1] >= 0 && ihiggs[0] >= 0 ){
+      ih = ihiggs[0];
+      it = itop[1];
+      itop[0] = -1;
+      ihiggs[1] = -1;
+      itop[1] = 1;
+      ihiggs[0] = 1;
+    
+    } else {
+      return;
+    }
+  }
+
+  m_pT_top   = Top.Pt();
+  m_eta_top  = Top.Eta();
+  m_phi_top  = Top.Phi();
+  m_mass_top = Top.M();
+  m_pT_higgs   = Higgs.Pt();
+  m_eta_higgs  = Higgs.Eta();
+  m_phi_higgs  = Higgs.Phi();
+  m_mass_higgs = Higgs.M();
+
+  m_M_Tp  = (Higgs+Top).M();
+  m_pT_Tp = (Higgs+Top).Pt();
+
+  TLorentzVector Higgs0, Higgs1;
+  TLorentzVector Top0, Top1;
+
+  for(int ijet = 0; ijet < 2; ijet++){
+    TLorentzVector j1, j2;
+    j1.SetPtEtaPhiE( sj0ptAK8->at(ijet),
+		     sj0etaAK8->at(ijet),
+		     sj0phiAK8->at(ijet),
+		     sj0EnergyAK8->at(ijet) );
+    j2.SetPtEtaPhiE( sj1ptAK8->at(ijet),
+		     sj1etaAK8->at(ijet),
+		     sj1phiAK8->at(ijet),
+		     sj1EnergyAK8->at(ijet) );
+    if(sj0CSVAK8->at(ijet) < sj1CSVAK8->at(ijet)){
+      TLorentzVector temp = j1;
+      j1 = j2;
+      j2 = temp;
+    }
+    if(ihiggs[ijet] > 0){
+      Higgs0 = j1;
+      Higgs1 = j2;
+    } else {
+      Top0 = j1;
+      Top1 = j2;
+    }
+  }
+
+  m_pT_top_sj0   = Top0.Pt();
+  m_eta_top_sj0  = Top0.Eta();
+  m_phi_top_sj0  = Top0.Phi();
+  m_mass_top_sj0 = Top0.M();
+  m_pT_top_sj1   = Top1.Pt();
+  m_eta_top_sj1  = Top1.Eta();
+  m_phi_top_sj1  = Top1.Phi();
+  m_mass_top_sj1 = Top1.M();
+  m_pT_higgs_sj0   = Higgs0.Pt();
+  m_eta_higgs_sj0  = Higgs0.Eta();
+  m_phi_higgs_sj0  = Higgs0.Phi();
+  m_mass_higgs_sj0 = Higgs0.M();
+  m_pT_higgs_sj1   = Higgs1.Pt();
+  m_eta_higgs_sj1  = Higgs1.Eta();
+  m_phi_higgs_sj1  = Higgs1.Phi();
+  m_mass_higgs_sj1 = Higgs1.M();
+
+  // "extra" jet stuff
+  vector<TLorentzVector> ExtraJets;
+  TLorentzVector AllJets(0.,0.,0.,0.);
+  int Nj =  Jets.size();
+
+  TLorentzVector fjet(0.,0.,0.,0.);
+  m_eta_q = 0.; 
+  m_EtaMax = 0.;
+  
+  for(int i = 0; i < Nj; i++){
+    if(fabs(Jets[i].Eta()) > fabs(m_EtaMax))
+      m_EtaMax = Jets[i].Eta();
+
+    if(Jets[i].DeltaR( FatJets[0] ) < 1. ||
+       Jets[i].DeltaR( FatJets[1] ) < 1.) continue;
+    ExtraJets.push_back(Jets[i]);
+    AllJets += Jets[i];
+    m_pT_extrajet.push_back(Jets[i].Pt());
+    m_eta_extrajet.push_back(Jets[i].Eta());
+    m_phi_extrajet.push_back(Jets[i].Phi());
+    m_mass_extrajet.push_back(Jets[i].M());
+    if(fabs(Jets[i].Eta()) > fabs(m_eta_q)){
+      fjet = Jets[i];
+      m_eta_q = Jets[i].Eta();
+    }
+  }
+
+  m_M_extra = AllJets.M();
+  m_N_extra = ExtraJets.size();
+  if(m_N_extra > 0){
+    m_pT_q = fjet.Pt();
+    m_eta_q = fjet.Eta();
+    m_phi_q = fjet.Phi();
+    m_mass_q = fjet.M();
+  } else {
+    m_pT_q = 0;
+    m_eta_q = 0;
+    m_phi_q = 0;
+    m_mass_q = 0;
+  }
+  
+
+  vector<double> eigenvalues;
+  MomTensorCalc(ExtraJets, eigenvalues, 1., true);
+  m_T  = eigenvalues[0];
+  m_Tm = eigenvalues[2];
+  MomTensorCalc(ExtraJets, eigenvalues, 1., false);
+  m_TT = eigenvalues[0];
+
+  TVector3 CMboost = AllJets.BoostVector();
+  Nj = ExtraJets.size();
+  for(int i = 0; i < Nj; i++)
+    ExtraJets[i].Boost(-CMboost);
+  
+  MomTensorCalc(ExtraJets, eigenvalues, 1., true);
+  m_T_CM  = eigenvalues[0];
+  m_Tm_CM = eigenvalues[2];
+  MomTensorCalc(ExtraJets, eigenvalues, 1., false);
+  m_TT_CM = eigenvalues[0];
+
+  // RestFrames stuff
+
+  LAB->ClearEvent();
+  T0->SetLabFrameFourVector(Top0);
+  T1->SetLabFrameFourVector(Top1);
+  H0->SetLabFrameFourVector(Higgs0);
+  H1->SetLabFrameFourVector(Higgs1);
+  if(!LAB->AnalyzeEvent()) cout << "Something went wrong..." << endl;
+
+  m_cosTp = Tp->GetCosDecayAngle();
+  m_cosH  = H->GetCosDecayAngle();
+  m_cosT  = T->GetCosDecayAngle();
+  m_dphiTH = T->GetDeltaPhiDecayPlanes(*H);
+  m_dphiTpH = Tp->GetDeltaPhiDecayPlanes(*H);
+  m_dphiTpT = Tp->GetDeltaPhiDecayPlanes(*T);
+
+  if(ExtraJets.size() > 0){
+    CMboost = (Higgs+Top).BoostVector();
+    Top.Boost(-CMboost);
+    fjet.Boost(-CMboost);
+    m_cosTq = Top.Vect().Unit().Dot( fjet.Vect().Unit() );
+  } else {
+    m_cosTq = 0;
+  }
 
   if(m_Tree)
     m_Tree->Fill();

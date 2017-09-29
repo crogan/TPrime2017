@@ -3,6 +3,8 @@
 
 #include "AnalysisBase.hh"
 #include "InputTreeBase.hh"
+#include "TMatrixDSym.h"
+#include "TVectorD.h"
 
 using namespace std;
 
@@ -114,6 +116,99 @@ template <class Base>
 int AnalysisBase<Base>::GetLargeRJets(vector<TLorentzVector>& JETs, double pt_cut, double eta_cut) {
   return 0.;
 }
+
+template <class Base>
+void AnalysisBase<Base>::MomTensorCalc(vector<TLorentzVector>& input, vector<double>& eigenvalues, double power, bool threeD){
+
+  eigenvalues.clear();
+  
+  int N = input.size();
+
+  if(threeD){
+    if(N <= 0){
+      for(int i = 0; i < 3; i++) eigenvalues.push_back(0.);
+      return;
+    }
+    if(N == 1){
+      eigenvalues.push_back(1.);
+      for(int i = 0; i < 2; i++) eigenvalues.push_back(0.);
+      return;
+    }
+    
+    TMatrixDSym momTensor(3);
+    momTensor.Zero();
+
+    double norm = 0.;
+    double P = 0.;
+    double pnorm = 0.;
+    for(int i = 0; i < N; i++){
+      P = input[i].P();
+      if( P > 0. ){
+	norm += pow(P, power);
+	pnorm = pow(P, power - 2.);
+	momTensor(0,0) += pnorm*input[i].Px()*input[i].Px();
+	momTensor(0,1) += pnorm*input[i].Px()*input[i].Py();
+	momTensor(0,2) += pnorm*input[i].Px()*input[i].Pz();
+	momTensor(1,0) += pnorm*input[i].Py()*input[i].Px();
+	momTensor(1,1) += pnorm*input[i].Py()*input[i].Py();
+	momTensor(1,2) += pnorm*input[i].Py()*input[i].Pz();
+	momTensor(2,0) += pnorm*input[i].Pz()*input[i].Px();
+	momTensor(2,1) += pnorm*input[i].Pz()*input[i].Py();
+	momTensor(2,2) += pnorm*input[i].Pz()*input[i].Pz();
+      }
+    }
+    if(norm > 0.){
+      momTensor = (1./norm)*momTensor;
+      TVectorD evalues(3);
+      momTensor.EigenVectors(evalues);
+      for(int i = 0; i < 3; i++) eigenvalues.push_back(evalues(i));
+      return;
+    } else {
+      for(int i = 0; i < 3; i++) eigenvalues.push_back(0.);
+      return;
+    }
+
+  } else { // transverse
+    if(N <= 0){
+      for(int i = 0; i < 2; i++) eigenvalues.push_back(0.);
+      return;
+    }
+    if(N == 1){
+      eigenvalues.push_back(1.);
+      eigenvalues.push_back(0.);
+      return;
+    }
+
+    TMatrixDSym momTensor(2);
+    momTensor.Zero();
+
+    double norm = 0.;
+    double P = 0.;
+    double pnorm = 0.;
+    for(int i = 0; i < N; i++){
+      P = input[i].Pt();
+      if( P > 0. ){
+	norm += pow(P, power);
+	pnorm = pow(P, power - 2.);
+	momTensor(0,0) += pnorm*input[i].Px()*input[i].Px();
+	momTensor(0,1) += pnorm*input[i].Px()*input[i].Py();
+	momTensor(1,0) += pnorm*input[i].Py()*input[i].Px();
+	momTensor(1,1) += pnorm*input[i].Py()*input[i].Py();
+      }
+    }
+    if(norm > 0.){
+      momTensor = (1./norm)*momTensor;
+      TVectorD evalues(2);
+      momTensor.EigenVectors(evalues);
+      for(int i = 0; i < 2; i++) eigenvalues.push_back(evalues(i));
+      return;
+    } else{
+      for(int i = 0; i < 2; i++) eigenvalues.push_back(0.);
+      return;
+    }
+
+  }
+} 
 
 template <>
 void AnalysisBase<InputTreeBase>::InitXSECmap() {
@@ -389,10 +484,6 @@ void AnalysisBase<InputTreeBase>::InitXSECmap() {
 
 template <>
 double AnalysisBase<InputTreeBase>::GetEventWeight(){
-  // if(m_IDtoNEVT[m_DSID] <= 0. || NTVars_eventWeight <= 0.) return 0.;
-  // return 1000.*m_IDtoXSEC[m_DSID]*NTVars_eventWeight/m_IDtoNEVT[m_DSID];
-  // if(NTVars_eventWeight <= 0. || NTVars_normWeight <= 0.)
-  //   return 0.;
   if(m_Nevent > 0.)
     return 1000.*m_IDtoXSEC[m_Label]*SelectedEvent_EvtWeight*SelectedEvent_EvtWtPV/m_Nevent;
   else
@@ -406,42 +497,49 @@ double AnalysisBase<InputTreeBase>::GetEventWeight(){
 //   return met;
 // }
 
-// template <>
-// int AnalysisBase<ZeroLeptonBase>::GetJets(vector<TLorentzVector>& JETs, double pt_cut, double eta_cut){
-//   // hack for R__unzip errors
-//   int Njet = std::min(jetPt->size(),std::min(jetEta->size(),std::min(jetPhi->size(),jetM->size())));
-//   for(int i = 0; i < Njet; i++){
-//     if((jetPt->at(i) >= pt_cut) && (fabs(jetEta->at(i)) < eta_cut || eta_cut < 0)){
-//       TLorentzVector JET;
-//       float mass = jetM->at(i);
-//       if(std::isnan(mass))
-// 	mass = 0;
-//       if(std::isinf(mass))
-// 	mass = 0;
-//       if(mass < 0.)
-// 	mass = 0.;
-//       JET.SetPtEtaPhiM( jetPt->at(i), jetEta->at(i), jetPhi->at(i), mass );
-//       JETs.push_back(JET);
-//     }
-//   }
-//   return 0.;
-// }
+template <>
+int AnalysisBase<InputTreeBase>::GetJets(vector<TLorentzVector>& JETs, double pt_cut, double eta_cut){
 
-// template<>
-// int AnalysisBase<ChicagoBase>::GetLargeRJets(vector<TLorentzVector>& JETs, double pt_cut, double eta_cut){
-//   int Njet = jet_largeR_pt->size();
-//   int NTOP = 0;
-//   for(int i = 0; i < Njet; i++){
-//     if((jet_largeR_pt->at(i) >= pt_cut) && (fabs(jet_largeR_eta->at(i)) < eta_cut)){
-//       TLorentzVector JET;
-//       JET.SetPtEtaPhiM(jet_largeR_pt->at(i)/1000.,jet_largeR_eta->at(i),jet_largeR_phi->at(i),jet_largeR_m->at(i)/1000.);
-//       JETs.push_back(JET);
-//       if(jet_largeR_isTopLoose->at(i))
-//         NTOP++;
-//     }
-//   }
-//   return NTOP;
-// }
+  int Njet = ptAK4->size();
+  for(int i = 0; i < Njet; i++){
+    if((ptAK4->at(i) >= pt_cut) && (fabs(etaAK4->at(i)) < eta_cut || eta_cut < 0)){
+      TLorentzVector JET;
+      float mass = MAK4->at(i);
+      if(std::isnan(mass))
+	mass = 0;
+      if(std::isinf(mass))
+	mass = 0;
+      if(mass < 0.)
+	mass = 0.;
+      JET.SetPtEtaPhiM( ptAK4->at(i), etaAK4->at(i), phiAK4->at(i), mass );
+      JETs.push_back(JET);
+    }
+  }
+  return 0.;
+
+}
+
+template<>
+int AnalysisBase<InputTreeBase>::GetLargeRJets(vector<TLorentzVector>& JETs, double pt_cut, double eta_cut){
+  
+  int Njet = ptAK8->size();
+  for(int i = 0; i < Njet; i++){
+    if((ptAK8->at(i) >= pt_cut) && (fabs(etaAK8->at(i)) < eta_cut || eta_cut < 0)){
+      TLorentzVector JET;
+      float mass = MAK8->at(i);
+      if(std::isnan(mass))
+	mass = 0;
+      if(std::isinf(mass))
+	mass = 0;
+      if(mass < 0.)
+	mass = 0.;
+      JET.SetPtEtaPhiM( ptAK8->at(i), etaAK8->at(i), phiAK8->at(i), mass );
+      JETs.push_back(JET);
+    }
+  }
+  return 0.;
+
+}
 
 template class AnalysisBase<InputTreeBase>;
 
