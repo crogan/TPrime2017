@@ -29,11 +29,13 @@ int main(int argc, char* argv[]) {
   char inputFolderName[400];
   char outputFileName[400];
   char outputFolderName[400];
+  char TreeName[400];
 
   bool DO_FILE = false;
   bool DO_LIST = false;
   bool DO_FOLDER = false;
   bool DO_OFOLD = false;
+  bool DO_TREE = false;
 
   if ( argc < 2 ){
     cout << "Error at Input: please specify an input file name, a list of input ROOT files and/or a folder path"; 
@@ -42,6 +44,7 @@ int main(int argc, char* argv[]) {
     cout << "  Example:      ./MakeReducedTree.x -ilist=input.list -ofile=output.root"  << endl;
     cout << "  Example:      ./MakeReducedTree.x -ifold=folder_path -ofile=output.root" << endl;
     cout << "  Example:      ./MakeReducedTree.x -ifold=folder_path -ofold=folder_path" << endl;
+    cout << "  Example:      ./MakeReducedTree.x -ifold=folder_path -ofold=folder_path -tree=treename" << endl;
     
     return 1;
   }
@@ -61,6 +64,10 @@ int main(int argc, char* argv[]) {
     if (strncmp(argv[i],"-ofold",6)==0){
       sscanf(argv[i],"-ofold=%s",  outputFolderName);
       DO_OFOLD = true;
+    }
+    if (strncmp(argv[i],"-tree",5)==0){
+      sscanf(argv[i],"-tree=%s",  TreeName);
+      DO_TREE = true;
     }
     if (strncmp(argv[i],"-ofile",6)==0)  sscanf(argv[i],"-ofile=%s",  outputFileName);
   }
@@ -110,10 +117,17 @@ int main(int argc, char* argv[]) {
 
     //TTree* chain = (TTree*) f->Get("anaCHS/tree");
     
-    TChain* chain = new TChain("anaCHS/tree");
+    TChain* chain;
+    if(DO_TREE)
+      chain = (TChain*) new TChain(TreeName);
+    else
+      chain = (TChain*) new TChain("anaCHS/tree");
     chain->Add(filenames[i].c_str());
     cout << "   Running file " << filenames[i] << endl;
-    cout << "   Running tree " << "anaCHS/tree" << " " << chain->GetEntries() << endl;
+    if(DO_TREE)
+      cout << "   Running tree " << TreeName << " " << chain->GetEntries() << endl;
+    else
+      cout << "   Running tree " << "anaCHS/tree" << " " << chain->GetEntries() << endl;
     ReducedNtuple* ntuple = new ReducedNtuple(chain);
     
     // pass filename label
