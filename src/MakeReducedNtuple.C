@@ -107,7 +107,9 @@ int main(int argc, char* argv[]) {
   }
   int Nfile = filenames.size();
   for(int i = 0; i < Nfile; i++){
-  
+
+    //TTree* chain = (TTree*) f->Get("anaCHS/tree");
+    
     TChain* chain = new TChain("anaCHS/tree");
     chain->Add(filenames[i].c_str());
     cout << "   Running file " << filenames[i] << endl;
@@ -123,8 +125,8 @@ int main(int argc, char* argv[]) {
     ntuple->AddLabel(label);
 
     //Get event count
-    TFile* f = new TFile(filenames[i].c_str(),"READ");
     TH1D* hevt = nullptr;
+    TFile* f = new TFile(filenames[i].c_str(),"READ");
     hevt = (TH1D*) f->Get("allEvents/hEventCount_wt");
     if(hevt){
       ntuple->AddNevent( hevt->Integral() );

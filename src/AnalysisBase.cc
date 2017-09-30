@@ -16,6 +16,7 @@ AnalysisBase<Base>::AnalysisBase(TTree* tree)
   m_DSID = -1;
   m_Nevent = 0.;
   m_Label  = "";
+  m_XSEC = 0.;
   InitXSECmap();
 }
 
@@ -25,8 +26,9 @@ AnalysisBase<Base>::~AnalysisBase() {}
 template <class Base>
 Int_t AnalysisBase<Base>::GetEntry(Long64_t entry){
   if (!Base::fChain) return 0;
+  
   Int_t ret = Base::fChain->GetEntry(entry);
-
+ 
   // if(Base::fChain->GetTreeNumber() != m_CurrentFile)
   //   NewFile();
 
@@ -36,11 +38,14 @@ Int_t AnalysisBase<Base>::GetEntry(Long64_t entry){
 template <class Base>
 void AnalysisBase<Base>::AddLabel(string& label){
   m_Label = label;
+  m_XSEC = m_IDtoXSEC[m_Label];
+  return;
 }
 
 template <class Base>
 void AnalysisBase<Base>::AddNevent(double nevt){
   m_Nevent = nevt;
+  return;
 }
 
 template <class Base>
@@ -484,8 +489,10 @@ void AnalysisBase<InputTreeBase>::InitXSECmap() {
 
 template <>
 double AnalysisBase<InputTreeBase>::GetEventWeight(){
-  if(m_Nevent > 0.)
-    return 1000.*m_IDtoXSEC[m_Label]*SelectedEvent_EvtWeight*SelectedEvent_EvtWtPV/m_Nevent;
+  if(m_Nevent > 0.){
+    double ret = 1000.*m_XSEC*SelectedEvent_EvtWeight*SelectedEvent_EvtWtPV/m_Nevent;
+    return ret;
+  }
   else
     return 0.;
 }

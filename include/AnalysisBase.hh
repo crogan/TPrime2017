@@ -7,6 +7,7 @@
 #include <TLorentzVector.h>
 #include <TVector3.h>
 #include <TH1D.h>
+#include <string>
 
 using namespace std;
 
@@ -40,6 +41,7 @@ private:
   int m_DSID;
   string m_Label;
   double m_Nevent;
+  double m_XSEC;
   map<string,double> m_IDtoNEVT;
   map<string,double> m_IDtoXSEC;
 

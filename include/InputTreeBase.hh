@@ -15,10 +15,8 @@
 // Header file for the classes stored in the TTree if any.
 #include <utility>
 #include <vector>
-#include <vector>
 
-// Fixed size dimensions of array or collections stored in the TTree if any.
-   const Int_t kMaxSelectedEvent_lhewts = 1;
+const Int_t kMaxSelectedEvent_lhewts = 446;
 
 using namespace std;
 
@@ -414,7 +412,7 @@ public :
    InputTreeBase(TTree *tree=0);
    virtual ~InputTreeBase();
    virtual Int_t    Cut(Long64_t entry);
-   virtual Int_t    GetEntry(Long64_t entry);
+  //virtual Int_t    GetEntry(Long64_t entry);
    virtual Long64_t LoadTree(Long64_t entry);
    virtual void     Init(TTree *tree);
    virtual Bool_t   Notify();
@@ -445,12 +443,12 @@ inline InputTreeBase::~InputTreeBase()
    delete fChain->GetCurrentFile();
 }
 
-inline Int_t InputTreeBase::GetEntry(Long64_t entry)
-{
-// Read contents of entry.
-   if (!fChain) return 0;
-   return fChain->GetEntry(entry);
-}
+// inline Int_t InputTreeBase::GetEntry(Long64_t entry)
+// {
+// // Read contents of entry.
+//    if (!fChain) return 0;
+//    return fChain->GetEntry(entry);
+// }
 inline Long64_t InputTreeBase::LoadTree(Long64_t entry)
 {
 // Set the environment to read one entry
@@ -623,6 +621,8 @@ inline void InputTreeBase::Init(TTree *tree)
    fCurrent = -1;
    fChain->SetMakeClass(1);
 
+   fChain->SetBranchStatus("SelectedEvent_lhewts*", 0);
+
    fChain->SetBranchAddress("SelectedEvent_runno", &SelectedEvent_runno, &b_SelectedEvent_runno);
    fChain->SetBranchAddress("SelectedEvent_lumisec", &SelectedEvent_lumisec, &b_SelectedEvent_lumisec);
    fChain->SetBranchAddress("SelectedEvent_evtno", &SelectedEvent_evtno, &b_SelectedEvent_evtno);
@@ -660,9 +660,9 @@ inline void InputTreeBase::Init(TTree *tree)
    fChain->SetBranchAddress("SelectedEvent_isRegionC", &SelectedEvent_isRegionC, &b_isRegionC);
    fChain->SetBranchAddress("SelectedEvent_isRegionD", &SelectedEvent_isRegionD, &b_isRegionD);
    fChain->SetBranchAddress("SelectedEvent_isRegionNotABCD", &SelectedEvent_isRegionNotABCD, &b_isRegionNotABCD);
-   fChain->SetBranchAddress("SelectedEvent_lhewts", &SelectedEvent_lhewts_, &b_SelectedEvent_lhewts_);
-   fChain->SetBranchAddress("SelectedEvent_lhewts.first", SelectedEvent_lhewts_first, &b_SelectedEvent_lhewts_first);
-   fChain->SetBranchAddress("SelectedEvent_lhewts.second", SelectedEvent_lhewts_second, &b_SelectedEvent_lhewts_second);
+   // fChain->SetBranchAddress("SelectedEvent_lhewts", &SelectedEvent_lhewts_, &b_SelectedEvent_lhewts_);
+   // fChain->SetBranchAddress("SelectedEvent_lhewts.first", SelectedEvent_lhewts_first, &b_SelectedEvent_lhewts_first);
+   // fChain->SetBranchAddress("SelectedEvent_lhewts.second", SelectedEvent_lhewts_second, &b_SelectedEvent_lhewts_second);
    fChain->SetBranchAddress("SelectedEvent_isotropy", &SelectedEvent_isotropy, &b_isotropy);
    fChain->SetBranchAddress("SelectedEvent_circularity", &SelectedEvent_circularity, &b_circularity);
    fChain->SetBranchAddress("SelectedEvent_sphericity", &SelectedEvent_sphericity, &b_sphericity);

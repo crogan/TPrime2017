@@ -30,6 +30,7 @@ void NtupleBase<Base>::WriteNtuple(const string& filename){
       cout << " event = " << i << " : " << N << endl;
     
     AnalysisBase<Base>::GetEntry(i);
+   
     outfile->cd();
     FillOutputTree();
   }
