@@ -110,6 +110,7 @@ int main(int argc, char* argv[]) {
   
     TChain* chain = new TChain("anaCHS/tree");
     chain->Add(filenames[i].c_str());
+    cout << "   Running file " << filenames[i] << endl;
     cout << "   Running tree " << "anaCHS/tree" << " " << chain->GetEntries() << endl;
     ReducedNtuple* ntuple = new ReducedNtuple(chain);
     
