@@ -28,10 +28,12 @@ int main(int argc, char* argv[]) {
   char inputListName[400];
   char inputFolderName[400];
   char outputFileName[400];
+  char outputFolderName[400];
 
   bool DO_FILE = false;
   bool DO_LIST = false;
   bool DO_FOLDER = false;
+  bool DO_OFOLD = false;
 
   if ( argc < 2 ){
     cout << "Error at Input: please specify an input file name, a list of input ROOT files and/or a folder path"; 
@@ -39,6 +41,7 @@ int main(int argc, char* argv[]) {
     cout << "  Example:      ./MakeReducedTree.x -ifile=input.root -ofile=output.root"  << endl;
     cout << "  Example:      ./MakeReducedTree.x -ilist=input.list -ofile=output.root"  << endl;
     cout << "  Example:      ./MakeReducedTree.x -ifold=folder_path -ofile=output.root" << endl;
+    cout << "  Example:      ./MakeReducedTree.x -ifold=folder_path -ofold=folder_path" << endl;
     
     return 1;
   }
@@ -54,6 +57,10 @@ int main(int argc, char* argv[]) {
     if (strncmp(argv[i],"-ifold",6)==0){
       sscanf(argv[i],"-ifold=%s",  inputFolderName);
       DO_FOLDER = true;
+    }
+    if (strncmp(argv[i],"-ofold",6)==0){
+      sscanf(argv[i],"-ofold=%s",  outputFolderName);
+      DO_OFOLD = true;
     }
     if (strncmp(argv[i],"-ofile",6)==0)  sscanf(argv[i],"-ofile=%s",  outputFileName);
   }
@@ -110,10 +117,8 @@ int main(int argc, char* argv[]) {
     string label = filenames[i];
     if(label.find(".root") != string::npos )
       label.erase(label.find(".root"));
-    while(label.find("/") != string::npos){
+    while(label.find("/") != string::npos)
       label.erase(0, label.find("/")+1);
-      cout << label << endl;
-    }
     ntuple->AddLabel(label);
 
     //Get event count
@@ -124,8 +129,10 @@ int main(int argc, char* argv[]) {
       ntuple->AddNevent( hevt->Integral() );
       delete hevt;
     }
-
-    ntuple->WriteNtuple(string(outputFileName));
+    if(DO_OFOLD)
+      ntuple->WriteNtuple(string(outputFolderName)+"/"+label+".root");
+    else
+      ntuple->WriteNtuple(string(outputFileName));
     delete ntuple;
   }
  
