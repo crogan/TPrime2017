@@ -79,7 +79,7 @@ void ReducedNtuple::InitOutputTree(){
   m_Tree->Branch("phi_higgs_sj0", &m_phi_higgs_sj0);
   m_Tree->Branch("mass_higgs_sj0", &m_mass_higgs_sj0);
   m_Tree->Branch("pT_higgs_sj1", &m_pT_higgs_sj1);
-  m_Tree->Branch("pT_higgs_sj1", &m_eta_higgs_sj1);
+  m_Tree->Branch("eta_higgs_sj1", &m_eta_higgs_sj1);
   m_Tree->Branch("phi_higgs_sj1", &m_phi_higgs_sj1);
   m_Tree->Branch("mass_higgs_sj1", &m_mass_higgs_sj1);
 
@@ -274,6 +274,11 @@ void ReducedNtuple::FillOutputTree(){
   TLorentzVector fjet(0.,0.,0.,0.);
   m_eta_q = 0.; 
   m_EtaMax = 0.;
+
+  m_pT_extrajet.clear();
+  m_eta_extrajet.clear();
+  m_phi_extrajet.clear();
+  m_mass_extrajet.clear();
   
   for(int i = 0; i < Nj; i++){
     if(fabs(Jets[i].Eta()) > fabs(m_EtaMax))
