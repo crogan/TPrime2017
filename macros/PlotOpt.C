@@ -23,22 +23,18 @@ void PlotOpt(){
   // fixed background uncertainty (%)
   g_deltaNbkg = 20.;
   // integrated luminosity (fb^-1)
-  g_lumi = 10.;
+  g_lumi = 36.;
   // minimum number of expected background events
-  g_minBKG = 0.01;
+  g_minBKG = 1.;
 
-  TFile* input = new TFile("test.root","READ");
-
-  int ParentMass = 250;
-  int LSPMass    = 77;
+  TFile* input = new TFile("test_0p1.root","READ");
 
   double Sscale = 1.;
   double Bscale = 1.;
 
-  string SignalModel = "TT";
-  string plot_title = "#tilde{t} #tilde{t} #rightarrow (t #tilde{#chi})(t #tilde{#chi}); m_{#tilde{t}} = ";
-  plot_title += to_string(ParentMass)+", m_{#tilde{#chi}} = "+to_string(LSPMass)+" GeV";
-  
+  string SignalModel = "TbtH_1200_LH";
+  string plot_title = "TbtH LH, m_{T'} = 1200 GeV";
+
   TTree* tree  = (TTree*) input->Get("optimization");
   double Nsig, Nbkg;
   vector<double> VAR;
@@ -52,7 +48,7 @@ void PlotOpt(){
     if(string(branches->At(i)->GetName()).find("var") != string::npos)
       Ncut++;
   tree->SetBranchStatus("*",0);
-  string sname = "Nsig_"+SignalModel+"_"+to_string(ParentMass)+"_"+to_string(LSPMass);
+  string sname = "Nsig_"+SignalModel;
   tree->SetBranchStatus(sname.c_str(),"1");
   tree->SetBranchAddress(sname.c_str(),&Nsig,&b_Nsig);
   tree->SetBranchStatus("Nbkg","1");
@@ -100,7 +96,7 @@ void PlotOpt(){
   
   vector<double> VAR_max;
   tree->GetEntry(c_max);
-  cout << "Point: " << ParentMass << " " << LSPMass << endl;;
+  cout << "Point: " << SignalModel << endl;;
   cout << "Max significance of " << EvaluateMetric(g_lumi*Nsig*Sscale,g_lumi*Nbkg*Bscale);
   cout << " sigma with:" << endl;
   cout << "   Nsig = " << g_lumi*Nsig*Sscale << endl;
@@ -237,10 +233,14 @@ void PlotOpt(){
   
 }
 
+// double EvaluateMetric(double Nsig, double Nbkg){
+//   double Nobs = Nsig+Nbkg;
+//   double tau = 1./Nbkg/(g_deltaNbkg*g_deltaNbkg/10000.);
+//   double aux = Nbkg*tau;
+//   double Pvalue = TMath::BetaIncomplete(1./(1.+tau),Nobs,aux+1.);
+//   return sqrt(2.)*TMath::ErfcInverse(Pvalue*2);
+// }
+
 double EvaluateMetric(double Nsig, double Nbkg){
-  double Nobs = Nsig+Nbkg;
-  double tau = 1./Nbkg/(g_deltaNbkg*g_deltaNbkg/10000.);
-  double aux = Nbkg*tau;
-  double Pvalue = TMath::BetaIncomplete(1./(1.+tau),Nobs,aux+1.);
-  return sqrt(2.)*TMath::ErfcInverse(Pvalue*2);
+  return Nsig / sqrt( Nbkg*Nbkg*g_deltaNbkg*g_deltaNbkg/10000. + Nbkg );
 }

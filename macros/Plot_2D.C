@@ -39,8 +39,8 @@ using namespace RestFrames;
 void Plot_2D(){
   RestFrames::SetStyle();
 
-  // g_File.push_back("bkg/QCDPt.root");
-  // g_PlotTitle = "QCD multijets";
+  g_File.push_back("bkg/QCDPt.root");
+  g_PlotTitle = "QCD multijets";
   
   // g_File.push_back("bkg/TTJets.root");
   // g_File.push_back("bkg/ttHJets.root");
@@ -70,11 +70,10 @@ void Plot_2D(){
   // g_Hist.push_back(ihist);
   // g_PlotTitle = "other";
  
-  g_File.push_back("signal/TbtH_1200_LH.root");
-  g_PlotTitle = "TbtH LH M_{T'} = 1.2 TeV";
+  // g_File.push_back("signal/TbtH_1200_LH.root");
+  // g_PlotTitle = "TbtH LH M_{T'} = 1.2 TeV";
 
   // g_File.push_back("signal/TbtH_1500_LH.root");
-  // g_Hist.push_back(ihist);
   // g_PlotTitle = "TbtH LH M_{T'} = 1.5 TeV";
 
   // g_File.push_back("signal/TbtH_1800_LH.root");
@@ -106,11 +105,11 @@ void Plot_2D(){
 
   g_Xname = "R_{ISR}";
   g_Xmin = 0.;
-  g_Xmax = 5.; 
+  g_Xmax = 1.; 
   g_NX = 30;
   g_Yname = "PTISR";
-  g_Ymin = 750.;
-  g_Ymax = 2000.;
+  g_Ymin = 0.;
+  g_Ymax = 1.;
   g_NY = 30.;
 
   TH2D* hist = new TH2D("hist","hist",
@@ -127,10 +126,10 @@ void Plot_2D(){
     for(int e = 0; e < Nentry; e++){
       base->GetEntry(e);
 
-      if(base->N_extra < 2)
+      if(base->N_extra < 1)
        	continue;
 
-      // if(base->M_Tp < 1200)
+      // if(base->M_Tp < 1500)
       //  	continue;
 
       TLorentzVector H,T;
@@ -140,14 +139,22 @@ void Plot_2D(){
       TLorentzVector q;
       q.SetPtEtaPhiM( base->pT_q, base->eta_q, base->phi_q, base->mass_q );
 
-      double deta = 0;
-      if(base->N_extra > 1)
-	for(int i = 0; i < base->N_extra-1; i++)
-	  for(int j = i+1; j < base->N_extra; j++)
-	    if(fabs(base->eta_extrajet->at(i)-base->eta_extrajet->at(j)) > deta){
-	      deta = fabs(base->eta_extrajet->at(i)-base->eta_extrajet->at(j));
-	    }
-      hist->Fill(deta, base->M_Tp, base->weight);
+      // double deta = 0;
+      // if(base->N_extra > 1)
+      // 	for(int i = 0; i < base->N_extra-1; i++)
+      // 	  for(int j = i+1; j < base->N_extra; j++)
+      // 	    if(fabs(base->eta_extrajet->at(i)-base->eta_extrajet->at(j)) > deta){
+      // 	      deta = fabs(base->eta_extrajet->at(i)-base->eta_extrajet->at(j));
+
+      TVector3 boost = Tp.BoostVector();
+      T.Boost(-boost);
+      double mycos = T.Vect().Unit().Dot(-boost.Unit());
+
+      double v1 = (mycos-base->cosTq)/(2. - fabs(mycos+base->cosTq));
+      double v2 = (mycos+base->cosTq)/(2. - fabs(mycos-base->cosTq));
+      double v3 = sqrt(v1*v1+v2*v2)/sqrt(2);
+      
+      hist->Fill(base->pT_higgs / (base->pT_higgs+base->M_Tp), v2, base->weight);
       //hist->Fill(fabs(q.Rapidity()-Tp.Rapidity()), base->M_Tp, base->weight);
     }
 

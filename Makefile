@@ -23,11 +23,15 @@ CC_FILES := $(wildcard src/*.cc)
 HH_FILES := $(wildcard include/*.hh)
 OBJ_FILES := $(addprefix $(OUTOBJ),$(notdir $(CC_FILES:.cc=.o)))
 
-all: MakeReducedNtuple.x 
+all: MakeReducedNtuple.x DoTPrimeOptimization.x
 
 MakeReducedNtuple.x:  $(SRCDIR)MakeReducedNtuple.C $(OBJ_FILES) $(HH_FILES)
 	$(CXX) $(CXXFLAGS) -o MakeReducedNtuple.x $(OUTOBJ)/*.o $(GLIBS) $ $<
 	touch MakeReducedNtuple.x
+
+DoTPrimeOptimization.x:  $(SRCDIR)DoTPrimeOptimization.C $(OBJ_FILES) $(HH_FILES)
+	$(CXX) $(CXXFLAGS) -o DoTPrimeOptimization.x $(OUTOBJ)/*.o $(GLIBS) $ $<
+	touch DoTPrimeOptimization.x
 
 $(OUTOBJ)%.o: src/%.cc include/%.hh
 	$(CXX) $(CXXFLAGS) -c $< -o $@
