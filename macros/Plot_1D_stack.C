@@ -150,12 +150,12 @@ void Plot_1D_stack(){
   int Nhist = ihist;
 
   g_Path = "/Users/crogan/Dropbox/SAMPLES/Tprime/TPrime_0p3/";
-  g_PlotTitle = "Region D (0p1)";
+  g_PlotTitle = "Region D (#epsilon_{top} = 0.3)";
   g_Lumi = 36;
 
-  g_Xname = "R_{ISR}";
+  g_Xname = "p_{T}^{Higgs} / ( p_{T}^{Higgs} + M_{T'} ) ";
   g_Xmin = 0.;
-  g_Xmax = 5.5;
+  g_Xmax = 0.5;
   g_NX = 50;
 
 
@@ -179,8 +179,8 @@ void Plot_1D_stack(){
       if(e%(max(1,Nentry/10)) == 0)
 	cout << "event " << e << " | " << Nentry << endl;
 
-      if(base->N_extra < 1)
-      	continue;
+      // if(base->N_extra < 1)
+      // 	continue;
 
       // if(base->M_Tp < 1200.)
       // 	continue;
@@ -194,8 +194,11 @@ void Plot_1D_stack(){
       TLorentzVector q;
       q.SetPtEtaPhiM( base->pT_q, base->eta_q, base->phi_q, base->mass_q );
       
-      //hist[g_Hist[s]]->Fill(base->cosH, weight*g_Lumi);
-      hist[g_Hist[s]]->Fill(fabs(q.Rapidity()-Tp.Rapidity()), weight*g_Lumi);
+      double RPTtop = base->pT_top / (base->pT_top + base->M_Tp);
+      double RPThiggs = base->pT_higgs / (base->pT_higgs + base->M_Tp);
+
+      hist[g_Hist[s]]->Fill(RPThiggs, weight*g_Lumi);
+      //hist[g_Hist[s]]->Fill(fabs(q.Rapidity()-Tp.Rapidity()), weight*g_Lumi);
 
     }
 

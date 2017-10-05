@@ -166,7 +166,7 @@ void ReducedNtuple::FillOutputTree(){
 			etaHTagged->at(h),
 			phiHTagged->at(h),
 			MHTagged->at(h) );
-      if(FatJets[ijet].DeltaR(Higgs) < 0.1){
+      if(FatJets[ijet].DeltaR(Higgs) < 0.0001){
 	ihiggs[ijet] = h;
 	break;
       }
@@ -178,7 +178,7 @@ void ReducedNtuple::FillOutputTree(){
 			etaTopTagged->at(t),
 			phiTopTagged->at(t),
 			MTopTagged->at(t) );
-      if(FatJets[ijet].DeltaR(Top) < 0.1){
+      if(FatJets[ijet].DeltaR(Top) < 0.0001){
 	itop[ijet] = t;
 	break;
       }
@@ -195,7 +195,6 @@ void ReducedNtuple::FillOutputTree(){
     ihiggs[1] = 1;
     itop[1] = -1;
     ihiggs[0] = -1;
-    
   } else {
     if( itop[1] >= 0 && ihiggs[0] >= 0 ){
       ih = ihiggs[0];
@@ -204,11 +203,18 @@ void ReducedNtuple::FillOutputTree(){
       ihiggs[1] = -1;
       itop[1] = 1;
       ihiggs[0] = 1;
-    
     } else {
       return;
     }
   }
+  Higgs.SetPtEtaPhiM( ptHTagged->at(ih), 
+		      etaHTagged->at(ih),
+		      phiHTagged->at(ih),
+		      MHTagged->at(ih) );
+  Top.SetPtEtaPhiM( ptTopTagged->at(it), 
+		    etaTopTagged->at(it),
+		    phiTopTagged->at(it),
+		    MTopTagged->at(it) );
 
   m_pT_top   = Top.Pt();
   m_eta_top  = Top.Eta();
@@ -340,16 +346,17 @@ void ReducedNtuple::FillOutputTree(){
   H1->SetLabFrameFourVector(Higgs1);
   if(!LAB->AnalyzeEvent()) cout << "Something went wrong..." << endl;
 
-  m_cosTp = Tp->GetCosDecayAngle();
+  //m_cosTp = Tp->GetCosDecayAngle();
   m_cosH  = H->GetCosDecayAngle();
   m_cosT  = T->GetCosDecayAngle();
   m_dphiTH = T->GetDeltaPhiDecayPlanes(*H);
   m_dphiTpH = Tp->GetDeltaPhiDecayPlanes(*H);
   m_dphiTpT = Tp->GetDeltaPhiDecayPlanes(*T);
 
+  CMboost = (Higgs+Top).BoostVector();
+  Top.Boost(-CMboost);
+  m_cosTp = Top.Vect().Unit().Dot(-CMboost.Unit());
   if(ExtraJets.size() > 0){
-    CMboost = (Higgs+Top).BoostVector();
-    Top.Boost(-CMboost);
     fjet.Boost(-CMboost);
     m_cosTq = Top.Vect().Unit().Dot( fjet.Vect().Unit() );
   } else {

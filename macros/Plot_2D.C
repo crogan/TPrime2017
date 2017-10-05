@@ -39,14 +39,14 @@ using namespace RestFrames;
 void Plot_2D(){
   RestFrames::SetStyle();
 
-  g_File.push_back("bkg/QCDPt.root");
-  g_PlotTitle = "QCD multijets";
+  // g_File.push_back("bkg/QCDPt.root");
+  // g_PlotTitle = "QCD multijets";
   
-  // g_File.push_back("bkg/TTJets.root");
-  // g_File.push_back("bkg/ttHJets.root");
-  // g_File.push_back("bkg/ttWJets.root");
-  // g_File.push_back("bkg/ttZJets.root");
-  // g_PlotTitle = "t #bar{t} + X";
+  g_File.push_back("bkg/TTJets.root");
+  g_File.push_back("bkg/ttHJets.root");
+  g_File.push_back("bkg/ttWJets.root");
+  g_File.push_back("bkg/ttZJets.root");
+  g_PlotTitle = "t #bar{t} + X";
 
   // g_File.push_back("bkg/ST_antitop.root");
   // g_Hist.push_back(ihist);
@@ -98,17 +98,17 @@ void Plot_2D(){
 
   int Nsample = g_File.size();
 
-  g_Path = "/Users/crogan/Dropbox/SAMPLES/Tprime/TPrime_3p0/";
+  g_Path = "/Users/crogan/Dropbox/SAMPLES/Tprime/TPrime_0p1/";
   
   //string g_Label = "No selection";
-  string g_Label = "p_{T}^{ ISR} > 400 GeV";
+  string g_Label = "Region D (#epsilon_{top} = 3.0)";
 
-  g_Xname = "R_{ISR}";
-  g_Xmin = 0.;
+  g_Xname = "(cos #theta_{T'}-cos #theta_{T,q}) / (2 - |cos #theta_{T'}+cos #theta_{T,q}})";
+  g_Xmin = -1.;
   g_Xmax = 1.; 
   g_NX = 30;
-  g_Yname = "PTISR";
-  g_Ymin = 0.;
+  g_Yname = "(cos #theta_{T'}+cos #theta_{T,q}) / (2 - |cos #theta_{T'}-cos #theta_{T,q}})";
+  g_Ymin = -1.;
   g_Ymax = 1.;
   g_NY = 30.;
 
@@ -129,7 +129,7 @@ void Plot_2D(){
       if(base->N_extra < 1)
        	continue;
 
-      // if(base->M_Tp < 1500)
+      // if(base->M_Tp < 1200)
       //  	continue;
 
       TLorentzVector H,T;
@@ -154,7 +154,7 @@ void Plot_2D(){
       double v2 = (mycos+base->cosTq)/(2. - fabs(mycos-base->cosTq));
       double v3 = sqrt(v1*v1+v2*v2)/sqrt(2);
       
-      hist->Fill(base->pT_higgs / (base->pT_higgs+base->M_Tp), v2, base->weight);
+      hist->Fill(v1, v2, 36*base->weight);
       //hist->Fill(fabs(q.Rapidity()-Tp.Rapidity()), base->M_Tp, base->weight);
     }
 
@@ -205,10 +205,10 @@ void Plot_2D(){
     l.SetTextSize(0.05);
     l.SetTextFont(132);
     // l.DrawLatex(0.17,0.855,g_PlotTitle.c_str());
-    l.DrawLatex(0.5,0.943,g_PlotTitle.c_str());
+    l.DrawLatex(0.6,0.943,g_PlotTitle.c_str());
     l.SetTextSize(0.04);
     l.SetTextFont(42);
-    l.DrawLatex(0.01,0.943,"#bf{#it{ATLAS}} Internal 13 TeV Simulation");
+    l.DrawLatex(0.01,0.943,"#bf{#it{CMS}} Internal 13 TeV Simulation");
 
     l.SetTextSize(0.04);
     l.SetTextFont(132);
