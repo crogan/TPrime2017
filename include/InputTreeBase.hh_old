@@ -1,8 +1,8 @@
 //////////////////////////////////////////////////////////
 // This class has been automatically generated on
-// Thu Oct  5 17:25:42 2017 by ROOT version 5.34/25
+// Wed Sep 27 11:16:51 2017 by ROOT version 5.34/25
 // from TTree tree/TtHT
-// found on file: TbtH_800_LH.root
+// found on file: TTJets.root
 //////////////////////////////////////////////////////////
 
 #ifndef InputTreeBase_h
@@ -16,16 +16,7 @@
 #include <utility>
 #include <vector>
 
-// Fixed size dimensions of array or collections stored in the TTree if any.
-   const Int_t kMaxSelectedEvent_lhewts = 1;
-   const Int_t kMaxisotropy_ExtraAK4 = 1;
-   const Int_t kMaxcircularity_ExtraAK4 = 1;
-   const Int_t kMaxsphericity_ExtraAK4 = 1;
-   const Int_t kMaxaplanarity_ExtraAK4 = 1;
-   const Int_t kMaxC_ExtraAK4 = 1;
-   const Int_t kMaxD_ExtraAK4 = 1;
-   const Int_t kMaxthrust_ExtraAK4 = 1;
-   const Int_t kMaxthrustminor_ExtraAK4 = 1;
+const Int_t kMaxSelectedEvent_lhewts = 446;
 
 using namespace std;
 
@@ -67,10 +58,6 @@ public :
    Double_t        SelectedEvent_ht;
    Int_t           SelectedEvent_nAK4;
    Int_t           SelectedEvent_nAK8;
-   Int_t           SelectedEvent_nEl;
-   Int_t           SelectedEvent_nMu;
-   Int_t           SelectedEvent_nCleanedEl;
-   Int_t           SelectedEvent_nCleanedMu;
    Bool_t          SelectedEvent_isRegionA;
    Bool_t          SelectedEvent_isRegionB;
    Bool_t          SelectedEvent_isRegionC;
@@ -87,14 +74,6 @@ public :
    Double_t        SelectedEvent_D;
    Double_t        SelectedEvent_thrust;
    Double_t        SelectedEvent_thrustminor;
-   Double_t        SelectedEvent_isotropy_ExtraAK4;
-   Double_t        SelectedEvent_circularity_ExtraAK4;
-   Double_t        SelectedEvent_sphericity_ExtraAK4;
-   Double_t        SelectedEvent_aplanarity_ExtraAK4;
-   Double_t        SelectedEvent_C_ExtraAK4;
-   Double_t        SelectedEvent_D_ExtraAK4;
-   Double_t        SelectedEvent_thrust_ExtraAK4;
-   Double_t        SelectedEvent_thrustminor_ExtraAK4;
    vector<int>     *idxAK4;
    vector<double>  *ptAK4;
    vector<double>  *etaAK4;
@@ -103,14 +82,6 @@ public :
    vector<double>  *csvAK4;
    vector<double>  *partonFlavourAK4;
    vector<double>  *hadronFlavourAK4;
-   vector<int>     *idxExtraAK4;
-   vector<double>  *ptExtraAK4;
-   vector<double>  *etaExtraAK4;
-   vector<double>  *phiExtraAK4;
-   vector<double>  *MExtraAK4;
-   vector<double>  *csvExtraAK4;
-   vector<double>  *partonFlavourExtraAK4;
-   vector<double>  *hadronFlavourExtraAK4;
    vector<int>     *idxAK8;
    vector<double>  *ptAK8;
    vector<double>  *etaAK8;
@@ -155,14 +126,6 @@ public :
    vector<double>  *sj1CSVHTagged;
    vector<double>  *hadronFlavourSJ0HTagged;
    vector<double>  *hadronFlavourSJ1HTagged;
-   vector<double>  *sj0ptHTagged;
-   vector<double>  *sj1ptHTagged;
-   vector<double>  *sj0etaHTagged;
-   vector<double>  *sj1etaHTagged;
-   vector<double>  *sj0phiHTagged;
-   vector<double>  *sj1phiHTagged;
-   vector<double>  *sj0EnergyHTagged;
-   vector<double>  *sj1EnergyHTagged;
    vector<int>     *idxAntiHTagged;
    vector<double>  *ptAntiHTagged;
    vector<double>  *etaAntiHTagged;
@@ -181,14 +144,6 @@ public :
    vector<double>  *sj1CSVAntiHTagged;
    vector<double>  *hadronFlavourSJ0AntiHTagged;
    vector<double>  *hadronFlavourSJ1AntiHTagged;
-   vector<double>  *sj0ptAntiHTagged;
-   vector<double>  *sj1ptAntiHTagged;
-   vector<double>  *sj0etaAntiHTagged;
-   vector<double>  *sj1etaAntiHTagged;
-   vector<double>  *sj0phiAntiHTagged;
-   vector<double>  *sj1phiAntiHTagged;
-   vector<double>  *sj0EnergyAntiHTagged;
-   vector<double>  *sj1EnergyAntiHTagged;
    vector<int>     *idxTopTagged;
    vector<double>  *ptTopTagged;
    vector<double>  *etaTopTagged;
@@ -207,14 +162,6 @@ public :
    vector<double>  *sj1CSVTopTagged;
    vector<double>  *hadronFlavourSJ0TopTagged;
    vector<double>  *hadronFlavourSJ1TopTagged;
-   vector<double>  *sj0ptTopTagged;
-   vector<double>  *sj1ptTopTagged;
-   vector<double>  *sj0etaTopTagged;
-   vector<double>  *sj1etaTopTagged;
-   vector<double>  *sj0phiTopTagged;
-   vector<double>  *sj1phiTopTagged;
-   vector<double>  *sj0EnergyTopTagged;
-   vector<double>  *sj1EnergyTopTagged;
    vector<int>     *idxAntiTopTagged;
    vector<double>  *ptAntiTopTagged;
    vector<double>  *etaAntiTopTagged;
@@ -233,14 +180,6 @@ public :
    vector<double>  *sj1CSVAntiTopTagged;
    vector<double>  *hadronFlavourSJ0AntiTopTagged;
    vector<double>  *hadronFlavourSJ1AntiTopTagged;
-   vector<double>  *sj0ptAntiTopTagged;
-   vector<double>  *sj1ptAntiTopTagged;
-   vector<double>  *sj0etaAntiTopTagged;
-   vector<double>  *sj1etaAntiTopTagged;
-   vector<double>  *sj0phiAntiTopTagged;
-   vector<double>  *sj1phiAntiTopTagged;
-   vector<double>  *sj0EnergyAntiTopTagged;
-   vector<double>  *sj1EnergyAntiTopTagged;
    vector<int>     *idxZTagged;
    vector<double>  *ptZTagged;
    vector<double>  *etaZTagged;
@@ -259,14 +198,6 @@ public :
    vector<double>  *sj1CSVZTagged;
    vector<double>  *hadronFlavourSJ0ZTagged;
    vector<double>  *hadronFlavourSJ1ZTagged;
-   vector<double>  *sj0ptZTagged;
-   vector<double>  *sj1ptZTagged;
-   vector<double>  *sj0etaZTagged;
-   vector<double>  *sj1etaZTagged;
-   vector<double>  *sj0phiZTagged;
-   vector<double>  *sj1phiZTagged;
-   vector<double>  *sj0EnergyZTagged;
-   vector<double>  *sj1EnergyZTagged;
    vector<int>     *idxAntiZTagged;
    vector<double>  *ptAntiZTagged;
    vector<double>  *etaAntiZTagged;
@@ -285,42 +216,6 @@ public :
    vector<double>  *sj1CSVAntiZTagged;
    vector<double>  *hadronFlavourSJ0AntiZTagged;
    vector<double>  *hadronFlavourSJ1AntiZTagged;
-   vector<double>  *sj0ptAntiZTagged;
-   vector<double>  *sj1ptAntiZTagged;
-   vector<double>  *sj0etaAntiZTagged;
-   vector<double>  *sj1etaAntiZTagged;
-   vector<double>  *sj0phiAntiZTagged;
-   vector<double>  *sj1phiAntiZTagged;
-   vector<double>  *sj0EnergyAntiZTagged;
-   vector<double>  *sj1EnergyAntiZTagged;
-   vector<int>     *idxEl;
-   vector<double>  *ptEl;
-   vector<double>  *etaEl;
-   vector<double>  *phiEl;
-   vector<double>  *EEl;
-   vector<double>  *IsoDREl;
-   vector<double>  *dR_Iso2DEl;
-   vector<double>  *ptrel_Iso2DEl;
-   vector<double>  *IsoDRAfterIso2DEl;
-   vector<int>     *idxCleanedEl;
-   vector<double>  *ptCleanedEl;
-   vector<double>  *etaCleanedEl;
-   vector<double>  *phiCleanedEl;
-   vector<double>  *ECleanedEl;
-   vector<int>     *idxMu;
-   vector<double>  *ptMu;
-   vector<double>  *etaMu;
-   vector<double>  *phiMu;
-   vector<double>  *EMu;
-   vector<double>  *IsoDRMu;
-   vector<double>  *dR_Iso2DMu;
-   vector<double>  *ptrel_Iso2DMu;
-   vector<double>  *IsoDRAfterIso2DMu;
-   vector<int>     *idxCleanedMu;
-   vector<double>  *ptCleanedMu;
-   vector<double>  *etaCleanedMu;
-   vector<double>  *phiCleanedMu;
-   vector<double>  *ECleanedMu;
 
    // List of branches
    TBranch        *b_SelectedEvent_runno;   //!
@@ -355,10 +250,6 @@ public :
    TBranch        *b_ht;   //!
    TBranch        *b_nAK4;   //!
    TBranch        *b_nAK8;   //!
-   TBranch        *b_nEl;   //!
-   TBranch        *b_nMu;   //!
-   TBranch        *b_nCleanedEl;   //!
-   TBranch        *b_nCleanedMu;   //!
    TBranch        *b_isRegionA;   //!
    TBranch        *b_isRegionB;   //!
    TBranch        *b_isRegionC;   //!
@@ -375,14 +266,6 @@ public :
    TBranch        *b_D;   //!
    TBranch        *b_thrust;   //!
    TBranch        *b_thrustminor;   //!
-   TBranch        *b_isotropy_ExtraAK4_;   //!
-   TBranch        *b_circularity_ExtraAK4_;   //!
-   TBranch        *b_sphericity_ExtraAK4_;   //!
-   TBranch        *b_aplanarity_ExtraAK4_;   //!
-   TBranch        *b_C_ExtraAK4_;   //!
-   TBranch        *b_D_ExtraAK4_;   //!
-   TBranch        *b_thrust_ExtraAK4_;   //!
-   TBranch        *b_thrustminor_ExtraAK4_;   //!
    TBranch        *b_idxAK4;   //!
    TBranch        *b_ptAK4;   //!
    TBranch        *b_etaAK4;   //!
@@ -391,14 +274,6 @@ public :
    TBranch        *b_csvAK4;   //!
    TBranch        *b_partonFlavourAK4;   //!
    TBranch        *b_hadronFlavourAK4;   //!
-   TBranch        *b_idxExtraAK4;   //!
-   TBranch        *b_ptExtraAK4;   //!
-   TBranch        *b_etaExtraAK4;   //!
-   TBranch        *b_phiExtraAK4;   //!
-   TBranch        *b_MExtraAK4;   //!
-   TBranch        *b_csvExtraAK4;   //!
-   TBranch        *b_partonFlavourExtraAK4;   //!
-   TBranch        *b_hadronFlavourExtraAK4;   //!
    TBranch        *b_idxAK8;   //!
    TBranch        *b_ptAK8;   //!
    TBranch        *b_etaAK8;   //!
@@ -443,14 +318,6 @@ public :
    TBranch        *b_sj1CSVHTagged;   //!
    TBranch        *b_hadronFlavourSJ0HTagged;   //!
    TBranch        *b_hadronFlavourSJ1HTagged;   //!
-   TBranch        *b_sj0ptHTagged;   //!
-   TBranch        *b_sj1ptHTagged;   //!
-   TBranch        *b_sj0etaHTagged;   //!
-   TBranch        *b_sj1etaHTagged;   //!
-   TBranch        *b_sj0phiHTagged;   //!
-   TBranch        *b_sj1phiHTagged;   //!
-   TBranch        *b_sj0EnergyHTagged;   //!
-   TBranch        *b_sj1EnergyHTagged;   //!
    TBranch        *b_idxAntiHTagged;   //!
    TBranch        *b_ptAntiHTagged;   //!
    TBranch        *b_etaAntiHTagged;   //!
@@ -469,14 +336,6 @@ public :
    TBranch        *b_sj1CSVAntiHTagged;   //!
    TBranch        *b_hadronFlavourSJ0AntiHTagged;   //!
    TBranch        *b_hadronFlavourSJ1AntiHTagged;   //!
-   TBranch        *b_sj0ptAntiHTagged;   //!
-   TBranch        *b_sj1ptAntiHTagged;   //!
-   TBranch        *b_sj0etaAntiHTagged;   //!
-   TBranch        *b_sj1etaAntiHTagged;   //!
-   TBranch        *b_sj0phiAntiHTagged;   //!
-   TBranch        *b_sj1phiAntiHTagged;   //!
-   TBranch        *b_sj0EnergyAntiHTagged;   //!
-   TBranch        *b_sj1EnergyAntiHTagged;   //!
    TBranch        *b_idxTopTagged;   //!
    TBranch        *b_ptTopTagged;   //!
    TBranch        *b_etaTopTagged;   //!
@@ -495,14 +354,6 @@ public :
    TBranch        *b_sj1CSVTopTagged;   //!
    TBranch        *b_hadronFlavourSJ0TopTagged;   //!
    TBranch        *b_hadronFlavourSJ1TopTagged;   //!
-   TBranch        *b_sj0ptTopTagged;   //!
-   TBranch        *b_sj1ptTopTagged;   //!
-   TBranch        *b_sj0etaTopTagged;   //!
-   TBranch        *b_sj1etaTopTagged;   //!
-   TBranch        *b_sj0phiTopTagged;   //!
-   TBranch        *b_sj1phiTopTagged;   //!
-   TBranch        *b_sj0EnergyTopTagged;   //!
-   TBranch        *b_sj1EnergyTopTagged;   //!
    TBranch        *b_idxAntiTopTagged;   //!
    TBranch        *b_ptAntiTopTagged;   //!
    TBranch        *b_etaAntiTopTagged;   //!
@@ -521,14 +372,6 @@ public :
    TBranch        *b_sj1CSVAntiTopTagged;   //!
    TBranch        *b_hadronFlavourSJ0AntiTopTagged;   //!
    TBranch        *b_hadronFlavourSJ1AntiTopTagged;   //!
-   TBranch        *b_sj0ptAntiTopTagged;   //!
-   TBranch        *b_sj1ptAntiTopTagged;   //!
-   TBranch        *b_sj0etaAntiTopTagged;   //!
-   TBranch        *b_sj1etaAntiTopTagged;   //!
-   TBranch        *b_sj0phiAntiTopTagged;   //!
-   TBranch        *b_sj1phiAntiTopTagged;   //!
-   TBranch        *b_sj0EnergyAntiTopTagged;   //!
-   TBranch        *b_sj1EnergyAntiTopTagged;   //!
    TBranch        *b_idxZTagged;   //!
    TBranch        *b_ptZTagged;   //!
    TBranch        *b_etaZTagged;   //!
@@ -547,14 +390,6 @@ public :
    TBranch        *b_sj1CSVZTagged;   //!
    TBranch        *b_hadronFlavourSJ0ZTagged;   //!
    TBranch        *b_hadronFlavourSJ1ZTagged;   //!
-   TBranch        *b_sj0ptZTagged;   //!
-   TBranch        *b_sj1ptZTagged;   //!
-   TBranch        *b_sj0etaZTagged;   //!
-   TBranch        *b_sj1etaZTagged;   //!
-   TBranch        *b_sj0phiZTagged;   //!
-   TBranch        *b_sj1phiZTagged;   //!
-   TBranch        *b_sj0EnergyZTagged;   //!
-   TBranch        *b_sj1EnergyZTagged;   //!
    TBranch        *b_idxAntiZTagged;   //!
    TBranch        *b_ptAntiZTagged;   //!
    TBranch        *b_etaAntiZTagged;   //!
@@ -573,47 +408,11 @@ public :
    TBranch        *b_sj1CSVAntiZTagged;   //!
    TBranch        *b_hadronFlavourSJ0AntiZTagged;   //!
    TBranch        *b_hadronFlavourSJ1AntiZTagged;   //!
-   TBranch        *b_sj0ptAntiZTagged;   //!
-   TBranch        *b_sj1ptAntiZTagged;   //!
-   TBranch        *b_sj0etaAntiZTagged;   //!
-   TBranch        *b_sj1etaAntiZTagged;   //!
-   TBranch        *b_sj0phiAntiZTagged;   //!
-   TBranch        *b_sj1phiAntiZTagged;   //!
-   TBranch        *b_sj0EnergyAntiZTagged;   //!
-   TBranch        *b_sj1EnergyAntiZTagged;   //!
-   TBranch        *b_idxEl;   //!
-   TBranch        *b_ptEl;   //!
-   TBranch        *b_etaEl;   //!
-   TBranch        *b_phiEl;   //!
-   TBranch        *b_EEl;   //!
-   TBranch        *b_IsoDREl;   //!
-   TBranch        *b_dR_Iso2DEl;   //!
-   TBranch        *b_ptrel_Iso2DEl;   //!
-   TBranch        *b_IsoDRAfterIso2DEl;   //!
-   TBranch        *b_idxCleanedEl;   //!
-   TBranch        *b_ptCleanedEl;   //!
-   TBranch        *b_etaCleanedEl;   //!
-   TBranch        *b_phiCleanedEl;   //!
-   TBranch        *b_ECleanedEl;   //!
-   TBranch        *b_idxMu;   //!
-   TBranch        *b_ptMu;   //!
-   TBranch        *b_etaMu;   //!
-   TBranch        *b_phiMu;   //!
-   TBranch        *b_EMu;   //!
-   TBranch        *b_IsoDRMu;   //!
-   TBranch        *b_dR_Iso2DMu;   //!
-   TBranch        *b_ptrel_Iso2DMu;   //!
-   TBranch        *b_IsoDRAfterIso2DMu;   //!
-   TBranch        *b_idxCleanedMu;   //!
-   TBranch        *b_ptCleanedMu;   //!
-   TBranch        *b_etaCleanedMu;   //!
-   TBranch        *b_phiCleanedMu;   //!
-   TBranch        *b_ECleanedMu;   //!
 
    InputTreeBase(TTree *tree=0);
    virtual ~InputTreeBase();
    virtual Int_t    Cut(Long64_t entry);
-   virtual Int_t    GetEntry(Long64_t entry);
+  //virtual Int_t    GetEntry(Long64_t entry);
    virtual Long64_t LoadTree(Long64_t entry);
    virtual void     Init(TTree *tree);
    virtual Bool_t   Notify();
@@ -627,11 +426,11 @@ inline InputTreeBase::InputTreeBase(TTree *tree) : fChain(0)
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
    if (tree == 0) {
-      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("TbtH_800_LH.root");
+      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("TTJets.root");
       if (!f || !f->IsOpen()) {
-         f = new TFile("TbtH_800_LH.root");
+         f = new TFile("TTJets.root");
       }
-      TDirectory * dir = (TDirectory*)f->Get("TbtH_800_LH.root:/anaCHS");
+      TDirectory * dir = (TDirectory*)f->Get("TTJets.root:/anaCHS");
       dir->GetObject("tree",tree);
 
    }
@@ -644,12 +443,12 @@ inline InputTreeBase::~InputTreeBase()
    delete fChain->GetCurrentFile();
 }
 
-inline Int_t InputTreeBase::GetEntry(Long64_t entry)
-{
-// Read contents of entry.
-   if (!fChain) return 0;
-   return fChain->GetEntry(entry);
-}
+// inline Int_t InputTreeBase::GetEntry(Long64_t entry)
+// {
+// // Read contents of entry.
+//    if (!fChain) return 0;
+//    return fChain->GetEntry(entry);
+// }
 inline Long64_t InputTreeBase::LoadTree(Long64_t entry)
 {
 // Set the environment to read one entry
@@ -682,14 +481,6 @@ inline void InputTreeBase::Init(TTree *tree)
    csvAK4 = 0;
    partonFlavourAK4 = 0;
    hadronFlavourAK4 = 0;
-   idxExtraAK4 = 0;
-   ptExtraAK4 = 0;
-   etaExtraAK4 = 0;
-   phiExtraAK4 = 0;
-   MExtraAK4 = 0;
-   csvExtraAK4 = 0;
-   partonFlavourExtraAK4 = 0;
-   hadronFlavourExtraAK4 = 0;
    idxAK8 = 0;
    ptAK8 = 0;
    etaAK8 = 0;
@@ -734,14 +525,6 @@ inline void InputTreeBase::Init(TTree *tree)
    sj1CSVHTagged = 0;
    hadronFlavourSJ0HTagged = 0;
    hadronFlavourSJ1HTagged = 0;
-   sj0ptHTagged = 0;
-   sj1ptHTagged = 0;
-   sj0etaHTagged = 0;
-   sj1etaHTagged = 0;
-   sj0phiHTagged = 0;
-   sj1phiHTagged = 0;
-   sj0EnergyHTagged = 0;
-   sj1EnergyHTagged = 0;
    idxAntiHTagged = 0;
    ptAntiHTagged = 0;
    etaAntiHTagged = 0;
@@ -760,14 +543,6 @@ inline void InputTreeBase::Init(TTree *tree)
    sj1CSVAntiHTagged = 0;
    hadronFlavourSJ0AntiHTagged = 0;
    hadronFlavourSJ1AntiHTagged = 0;
-   sj0ptAntiHTagged = 0;
-   sj1ptAntiHTagged = 0;
-   sj0etaAntiHTagged = 0;
-   sj1etaAntiHTagged = 0;
-   sj0phiAntiHTagged = 0;
-   sj1phiAntiHTagged = 0;
-   sj0EnergyAntiHTagged = 0;
-   sj1EnergyAntiHTagged = 0;
    idxTopTagged = 0;
    ptTopTagged = 0;
    etaTopTagged = 0;
@@ -786,14 +561,6 @@ inline void InputTreeBase::Init(TTree *tree)
    sj1CSVTopTagged = 0;
    hadronFlavourSJ0TopTagged = 0;
    hadronFlavourSJ1TopTagged = 0;
-   sj0ptTopTagged = 0;
-   sj1ptTopTagged = 0;
-   sj0etaTopTagged = 0;
-   sj1etaTopTagged = 0;
-   sj0phiTopTagged = 0;
-   sj1phiTopTagged = 0;
-   sj0EnergyTopTagged = 0;
-   sj1EnergyTopTagged = 0;
    idxAntiTopTagged = 0;
    ptAntiTopTagged = 0;
    etaAntiTopTagged = 0;
@@ -812,14 +579,6 @@ inline void InputTreeBase::Init(TTree *tree)
    sj1CSVAntiTopTagged = 0;
    hadronFlavourSJ0AntiTopTagged = 0;
    hadronFlavourSJ1AntiTopTagged = 0;
-   sj0ptAntiTopTagged = 0;
-   sj1ptAntiTopTagged = 0;
-   sj0etaAntiTopTagged = 0;
-   sj1etaAntiTopTagged = 0;
-   sj0phiAntiTopTagged = 0;
-   sj1phiAntiTopTagged = 0;
-   sj0EnergyAntiTopTagged = 0;
-   sj1EnergyAntiTopTagged = 0;
    idxZTagged = 0;
    ptZTagged = 0;
    etaZTagged = 0;
@@ -838,14 +597,6 @@ inline void InputTreeBase::Init(TTree *tree)
    sj1CSVZTagged = 0;
    hadronFlavourSJ0ZTagged = 0;
    hadronFlavourSJ1ZTagged = 0;
-   sj0ptZTagged = 0;
-   sj1ptZTagged = 0;
-   sj0etaZTagged = 0;
-   sj1etaZTagged = 0;
-   sj0phiZTagged = 0;
-   sj1phiZTagged = 0;
-   sj0EnergyZTagged = 0;
-   sj1EnergyZTagged = 0;
    idxAntiZTagged = 0;
    ptAntiZTagged = 0;
    etaAntiZTagged = 0;
@@ -864,42 +615,6 @@ inline void InputTreeBase::Init(TTree *tree)
    sj1CSVAntiZTagged = 0;
    hadronFlavourSJ0AntiZTagged = 0;
    hadronFlavourSJ1AntiZTagged = 0;
-   sj0ptAntiZTagged = 0;
-   sj1ptAntiZTagged = 0;
-   sj0etaAntiZTagged = 0;
-   sj1etaAntiZTagged = 0;
-   sj0phiAntiZTagged = 0;
-   sj1phiAntiZTagged = 0;
-   sj0EnergyAntiZTagged = 0;
-   sj1EnergyAntiZTagged = 0;
-   idxEl = 0;
-   ptEl = 0;
-   etaEl = 0;
-   phiEl = 0;
-   EEl = 0;
-   IsoDREl = 0;
-   dR_Iso2DEl = 0;
-   ptrel_Iso2DEl = 0;
-   IsoDRAfterIso2DEl = 0;
-   idxCleanedEl = 0;
-   ptCleanedEl = 0;
-   etaCleanedEl = 0;
-   phiCleanedEl = 0;
-   ECleanedEl = 0;
-   idxMu = 0;
-   ptMu = 0;
-   etaMu = 0;
-   phiMu = 0;
-   EMu = 0;
-   IsoDRMu = 0;
-   dR_Iso2DMu = 0;
-   ptrel_Iso2DMu = 0;
-   IsoDRAfterIso2DMu = 0;
-   idxCleanedMu = 0;
-   ptCleanedMu = 0;
-   etaCleanedMu = 0;
-   phiCleanedMu = 0;
-   ECleanedMu = 0;
    // Set branch addresses and branch pointers
    if (!tree) return;
    fChain = tree;
@@ -940,10 +655,6 @@ inline void InputTreeBase::Init(TTree *tree)
    fChain->SetBranchAddress("SelectedEvent_ht", &SelectedEvent_ht, &b_ht);
    fChain->SetBranchAddress("SelectedEvent_nAK4", &SelectedEvent_nAK4, &b_nAK4);
    fChain->SetBranchAddress("SelectedEvent_nAK8", &SelectedEvent_nAK8, &b_nAK8);
-   fChain->SetBranchAddress("SelectedEvent_nEl", &SelectedEvent_nEl, &b_nEl);
-   fChain->SetBranchAddress("SelectedEvent_nMu", &SelectedEvent_nMu, &b_nMu);
-   fChain->SetBranchAddress("SelectedEvent_nCleanedEl", &SelectedEvent_nCleanedEl, &b_nCleanedEl);
-   fChain->SetBranchAddress("SelectedEvent_nCleanedMu", &SelectedEvent_nCleanedMu, &b_nCleanedMu);
    fChain->SetBranchAddress("SelectedEvent_isRegionA", &SelectedEvent_isRegionA, &b_isRegionA);
    fChain->SetBranchAddress("SelectedEvent_isRegionB", &SelectedEvent_isRegionB, &b_isRegionB);
    fChain->SetBranchAddress("SelectedEvent_isRegionC", &SelectedEvent_isRegionC, &b_isRegionC);
@@ -960,14 +671,6 @@ inline void InputTreeBase::Init(TTree *tree)
    fChain->SetBranchAddress("SelectedEvent_D", &SelectedEvent_D, &b_D);
    fChain->SetBranchAddress("SelectedEvent_thrust", &SelectedEvent_thrust, &b_thrust);
    fChain->SetBranchAddress("SelectedEvent_thrustminor", &SelectedEvent_thrustminor, &b_thrustminor);
-   fChain->SetBranchAddress("SelectedEvent_isotropy_ExtraAK4", &SelectedEvent_isotropy_ExtraAK4, &b_isotropy_ExtraAK4_);
-   fChain->SetBranchAddress("SelectedEvent_circularity_ExtraAK4", &SelectedEvent_circularity_ExtraAK4, &b_circularity_ExtraAK4_);
-   fChain->SetBranchAddress("SelectedEvent_sphericity_ExtraAK4", &SelectedEvent_sphericity_ExtraAK4, &b_sphericity_ExtraAK4_);
-   fChain->SetBranchAddress("SelectedEvent_aplanarity_ExtraAK4", &SelectedEvent_aplanarity_ExtraAK4, &b_aplanarity_ExtraAK4_);
-   fChain->SetBranchAddress("SelectedEvent_C_ExtraAK4", &SelectedEvent_C_ExtraAK4, &b_C_ExtraAK4_);
-   fChain->SetBranchAddress("SelectedEvent_D_ExtraAK4", &SelectedEvent_D_ExtraAK4, &b_D_ExtraAK4_);
-   fChain->SetBranchAddress("SelectedEvent_thrust_ExtraAK4", &SelectedEvent_thrust_ExtraAK4, &b_thrust_ExtraAK4_);
-   fChain->SetBranchAddress("SelectedEvent_thrustminor_ExtraAK4", &SelectedEvent_thrustminor_ExtraAK4, &b_thrustminor_ExtraAK4_);
    fChain->SetBranchAddress("idxAK4", &idxAK4, &b_idxAK4);
    fChain->SetBranchAddress("ptAK4", &ptAK4, &b_ptAK4);
    fChain->SetBranchAddress("etaAK4", &etaAK4, &b_etaAK4);
@@ -976,14 +679,6 @@ inline void InputTreeBase::Init(TTree *tree)
    fChain->SetBranchAddress("csvAK4", &csvAK4, &b_csvAK4);
    fChain->SetBranchAddress("partonFlavourAK4", &partonFlavourAK4, &b_partonFlavourAK4);
    fChain->SetBranchAddress("hadronFlavourAK4", &hadronFlavourAK4, &b_hadronFlavourAK4);
-   fChain->SetBranchAddress("idxExtraAK4", &idxExtraAK4, &b_idxExtraAK4);
-   fChain->SetBranchAddress("ptExtraAK4", &ptExtraAK4, &b_ptExtraAK4);
-   fChain->SetBranchAddress("etaExtraAK4", &etaExtraAK4, &b_etaExtraAK4);
-   fChain->SetBranchAddress("phiExtraAK4", &phiExtraAK4, &b_phiExtraAK4);
-   fChain->SetBranchAddress("MExtraAK4", &MExtraAK4, &b_MExtraAK4);
-   fChain->SetBranchAddress("csvExtraAK4", &csvExtraAK4, &b_csvExtraAK4);
-   fChain->SetBranchAddress("partonFlavourExtraAK4", &partonFlavourExtraAK4, &b_partonFlavourExtraAK4);
-   fChain->SetBranchAddress("hadronFlavourExtraAK4", &hadronFlavourExtraAK4, &b_hadronFlavourExtraAK4);
    fChain->SetBranchAddress("idxAK8", &idxAK8, &b_idxAK8);
    fChain->SetBranchAddress("ptAK8", &ptAK8, &b_ptAK8);
    fChain->SetBranchAddress("etaAK8", &etaAK8, &b_etaAK8);
@@ -1028,14 +723,6 @@ inline void InputTreeBase::Init(TTree *tree)
    fChain->SetBranchAddress("sj1CSVHTagged", &sj1CSVHTagged, &b_sj1CSVHTagged);
    fChain->SetBranchAddress("hadronFlavourSJ0HTagged", &hadronFlavourSJ0HTagged, &b_hadronFlavourSJ0HTagged);
    fChain->SetBranchAddress("hadronFlavourSJ1HTagged", &hadronFlavourSJ1HTagged, &b_hadronFlavourSJ1HTagged);
-   fChain->SetBranchAddress("sj0ptHTagged", &sj0ptHTagged, &b_sj0ptHTagged);
-   fChain->SetBranchAddress("sj1ptHTagged", &sj1ptHTagged, &b_sj1ptHTagged);
-   fChain->SetBranchAddress("sj0etaHTagged", &sj0etaHTagged, &b_sj0etaHTagged);
-   fChain->SetBranchAddress("sj1etaHTagged", &sj1etaHTagged, &b_sj1etaHTagged);
-   fChain->SetBranchAddress("sj0phiHTagged", &sj0phiHTagged, &b_sj0phiHTagged);
-   fChain->SetBranchAddress("sj1phiHTagged", &sj1phiHTagged, &b_sj1phiHTagged);
-   fChain->SetBranchAddress("sj0EnergyHTagged", &sj0EnergyHTagged, &b_sj0EnergyHTagged);
-   fChain->SetBranchAddress("sj1EnergyHTagged", &sj1EnergyHTagged, &b_sj1EnergyHTagged);
    fChain->SetBranchAddress("idxAntiHTagged", &idxAntiHTagged, &b_idxAntiHTagged);
    fChain->SetBranchAddress("ptAntiHTagged", &ptAntiHTagged, &b_ptAntiHTagged);
    fChain->SetBranchAddress("etaAntiHTagged", &etaAntiHTagged, &b_etaAntiHTagged);
@@ -1054,14 +741,6 @@ inline void InputTreeBase::Init(TTree *tree)
    fChain->SetBranchAddress("sj1CSVAntiHTagged", &sj1CSVAntiHTagged, &b_sj1CSVAntiHTagged);
    fChain->SetBranchAddress("hadronFlavourSJ0AntiHTagged", &hadronFlavourSJ0AntiHTagged, &b_hadronFlavourSJ0AntiHTagged);
    fChain->SetBranchAddress("hadronFlavourSJ1AntiHTagged", &hadronFlavourSJ1AntiHTagged, &b_hadronFlavourSJ1AntiHTagged);
-   fChain->SetBranchAddress("sj0ptAntiHTagged", &sj0ptAntiHTagged, &b_sj0ptAntiHTagged);
-   fChain->SetBranchAddress("sj1ptAntiHTagged", &sj1ptAntiHTagged, &b_sj1ptAntiHTagged);
-   fChain->SetBranchAddress("sj0etaAntiHTagged", &sj0etaAntiHTagged, &b_sj0etaAntiHTagged);
-   fChain->SetBranchAddress("sj1etaAntiHTagged", &sj1etaAntiHTagged, &b_sj1etaAntiHTagged);
-   fChain->SetBranchAddress("sj0phiAntiHTagged", &sj0phiAntiHTagged, &b_sj0phiAntiHTagged);
-   fChain->SetBranchAddress("sj1phiAntiHTagged", &sj1phiAntiHTagged, &b_sj1phiAntiHTagged);
-   fChain->SetBranchAddress("sj0EnergyAntiHTagged", &sj0EnergyAntiHTagged, &b_sj0EnergyAntiHTagged);
-   fChain->SetBranchAddress("sj1EnergyAntiHTagged", &sj1EnergyAntiHTagged, &b_sj1EnergyAntiHTagged);
    fChain->SetBranchAddress("idxTopTagged", &idxTopTagged, &b_idxTopTagged);
    fChain->SetBranchAddress("ptTopTagged", &ptTopTagged, &b_ptTopTagged);
    fChain->SetBranchAddress("etaTopTagged", &etaTopTagged, &b_etaTopTagged);
@@ -1080,14 +759,6 @@ inline void InputTreeBase::Init(TTree *tree)
    fChain->SetBranchAddress("sj1CSVTopTagged", &sj1CSVTopTagged, &b_sj1CSVTopTagged);
    fChain->SetBranchAddress("hadronFlavourSJ0TopTagged", &hadronFlavourSJ0TopTagged, &b_hadronFlavourSJ0TopTagged);
    fChain->SetBranchAddress("hadronFlavourSJ1TopTagged", &hadronFlavourSJ1TopTagged, &b_hadronFlavourSJ1TopTagged);
-   fChain->SetBranchAddress("sj0ptTopTagged", &sj0ptTopTagged, &b_sj0ptTopTagged);
-   fChain->SetBranchAddress("sj1ptTopTagged", &sj1ptTopTagged, &b_sj1ptTopTagged);
-   fChain->SetBranchAddress("sj0etaTopTagged", &sj0etaTopTagged, &b_sj0etaTopTagged);
-   fChain->SetBranchAddress("sj1etaTopTagged", &sj1etaTopTagged, &b_sj1etaTopTagged);
-   fChain->SetBranchAddress("sj0phiTopTagged", &sj0phiTopTagged, &b_sj0phiTopTagged);
-   fChain->SetBranchAddress("sj1phiTopTagged", &sj1phiTopTagged, &b_sj1phiTopTagged);
-   fChain->SetBranchAddress("sj0EnergyTopTagged", &sj0EnergyTopTagged, &b_sj0EnergyTopTagged);
-   fChain->SetBranchAddress("sj1EnergyTopTagged", &sj1EnergyTopTagged, &b_sj1EnergyTopTagged);
    fChain->SetBranchAddress("idxAntiTopTagged", &idxAntiTopTagged, &b_idxAntiTopTagged);
    fChain->SetBranchAddress("ptAntiTopTagged", &ptAntiTopTagged, &b_ptAntiTopTagged);
    fChain->SetBranchAddress("etaAntiTopTagged", &etaAntiTopTagged, &b_etaAntiTopTagged);
@@ -1106,14 +777,6 @@ inline void InputTreeBase::Init(TTree *tree)
    fChain->SetBranchAddress("sj1CSVAntiTopTagged", &sj1CSVAntiTopTagged, &b_sj1CSVAntiTopTagged);
    fChain->SetBranchAddress("hadronFlavourSJ0AntiTopTagged", &hadronFlavourSJ0AntiTopTagged, &b_hadronFlavourSJ0AntiTopTagged);
    fChain->SetBranchAddress("hadronFlavourSJ1AntiTopTagged", &hadronFlavourSJ1AntiTopTagged, &b_hadronFlavourSJ1AntiTopTagged);
-   fChain->SetBranchAddress("sj0ptAntiTopTagged", &sj0ptAntiTopTagged, &b_sj0ptAntiTopTagged);
-   fChain->SetBranchAddress("sj1ptAntiTopTagged", &sj1ptAntiTopTagged, &b_sj1ptAntiTopTagged);
-   fChain->SetBranchAddress("sj0etaAntiTopTagged", &sj0etaAntiTopTagged, &b_sj0etaAntiTopTagged);
-   fChain->SetBranchAddress("sj1etaAntiTopTagged", &sj1etaAntiTopTagged, &b_sj1etaAntiTopTagged);
-   fChain->SetBranchAddress("sj0phiAntiTopTagged", &sj0phiAntiTopTagged, &b_sj0phiAntiTopTagged);
-   fChain->SetBranchAddress("sj1phiAntiTopTagged", &sj1phiAntiTopTagged, &b_sj1phiAntiTopTagged);
-   fChain->SetBranchAddress("sj0EnergyAntiTopTagged", &sj0EnergyAntiTopTagged, &b_sj0EnergyAntiTopTagged);
-   fChain->SetBranchAddress("sj1EnergyAntiTopTagged", &sj1EnergyAntiTopTagged, &b_sj1EnergyAntiTopTagged);
    fChain->SetBranchAddress("idxZTagged", &idxZTagged, &b_idxZTagged);
    fChain->SetBranchAddress("ptZTagged", &ptZTagged, &b_ptZTagged);
    fChain->SetBranchAddress("etaZTagged", &etaZTagged, &b_etaZTagged);
@@ -1132,14 +795,6 @@ inline void InputTreeBase::Init(TTree *tree)
    fChain->SetBranchAddress("sj1CSVZTagged", &sj1CSVZTagged, &b_sj1CSVZTagged);
    fChain->SetBranchAddress("hadronFlavourSJ0ZTagged", &hadronFlavourSJ0ZTagged, &b_hadronFlavourSJ0ZTagged);
    fChain->SetBranchAddress("hadronFlavourSJ1ZTagged", &hadronFlavourSJ1ZTagged, &b_hadronFlavourSJ1ZTagged);
-   fChain->SetBranchAddress("sj0ptZTagged", &sj0ptZTagged, &b_sj0ptZTagged);
-   fChain->SetBranchAddress("sj1ptZTagged", &sj1ptZTagged, &b_sj1ptZTagged);
-   fChain->SetBranchAddress("sj0etaZTagged", &sj0etaZTagged, &b_sj0etaZTagged);
-   fChain->SetBranchAddress("sj1etaZTagged", &sj1etaZTagged, &b_sj1etaZTagged);
-   fChain->SetBranchAddress("sj0phiZTagged", &sj0phiZTagged, &b_sj0phiZTagged);
-   fChain->SetBranchAddress("sj1phiZTagged", &sj1phiZTagged, &b_sj1phiZTagged);
-   fChain->SetBranchAddress("sj0EnergyZTagged", &sj0EnergyZTagged, &b_sj0EnergyZTagged);
-   fChain->SetBranchAddress("sj1EnergyZTagged", &sj1EnergyZTagged, &b_sj1EnergyZTagged);
    fChain->SetBranchAddress("idxAntiZTagged", &idxAntiZTagged, &b_idxAntiZTagged);
    fChain->SetBranchAddress("ptAntiZTagged", &ptAntiZTagged, &b_ptAntiZTagged);
    fChain->SetBranchAddress("etaAntiZTagged", &etaAntiZTagged, &b_etaAntiZTagged);
@@ -1158,42 +813,6 @@ inline void InputTreeBase::Init(TTree *tree)
    fChain->SetBranchAddress("sj1CSVAntiZTagged", &sj1CSVAntiZTagged, &b_sj1CSVAntiZTagged);
    fChain->SetBranchAddress("hadronFlavourSJ0AntiZTagged", &hadronFlavourSJ0AntiZTagged, &b_hadronFlavourSJ0AntiZTagged);
    fChain->SetBranchAddress("hadronFlavourSJ1AntiZTagged", &hadronFlavourSJ1AntiZTagged, &b_hadronFlavourSJ1AntiZTagged);
-   fChain->SetBranchAddress("sj0ptAntiZTagged", &sj0ptAntiZTagged, &b_sj0ptAntiZTagged);
-   fChain->SetBranchAddress("sj1ptAntiZTagged", &sj1ptAntiZTagged, &b_sj1ptAntiZTagged);
-   fChain->SetBranchAddress("sj0etaAntiZTagged", &sj0etaAntiZTagged, &b_sj0etaAntiZTagged);
-   fChain->SetBranchAddress("sj1etaAntiZTagged", &sj1etaAntiZTagged, &b_sj1etaAntiZTagged);
-   fChain->SetBranchAddress("sj0phiAntiZTagged", &sj0phiAntiZTagged, &b_sj0phiAntiZTagged);
-   fChain->SetBranchAddress("sj1phiAntiZTagged", &sj1phiAntiZTagged, &b_sj1phiAntiZTagged);
-   fChain->SetBranchAddress("sj0EnergyAntiZTagged", &sj0EnergyAntiZTagged, &b_sj0EnergyAntiZTagged);
-   fChain->SetBranchAddress("sj1EnergyAntiZTagged", &sj1EnergyAntiZTagged, &b_sj1EnergyAntiZTagged);
-   fChain->SetBranchAddress("idxEl", &idxEl, &b_idxEl);
-   fChain->SetBranchAddress("ptEl", &ptEl, &b_ptEl);
-   fChain->SetBranchAddress("etaEl", &etaEl, &b_etaEl);
-   fChain->SetBranchAddress("phiEl", &phiEl, &b_phiEl);
-   fChain->SetBranchAddress("EEl", &EEl, &b_EEl);
-   fChain->SetBranchAddress("IsoDREl", &IsoDREl, &b_IsoDREl);
-   fChain->SetBranchAddress("dR_Iso2DEl", &dR_Iso2DEl, &b_dR_Iso2DEl);
-   fChain->SetBranchAddress("ptrel_Iso2DEl", &ptrel_Iso2DEl, &b_ptrel_Iso2DEl);
-   fChain->SetBranchAddress("IsoDRAfterIso2DEl", &IsoDRAfterIso2DEl, &b_IsoDRAfterIso2DEl);
-   fChain->SetBranchAddress("idxCleanedEl", &idxCleanedEl, &b_idxCleanedEl);
-   fChain->SetBranchAddress("ptCleanedEl", &ptCleanedEl, &b_ptCleanedEl);
-   fChain->SetBranchAddress("etaCleanedEl", &etaCleanedEl, &b_etaCleanedEl);
-   fChain->SetBranchAddress("phiCleanedEl", &phiCleanedEl, &b_phiCleanedEl);
-   fChain->SetBranchAddress("ECleanedEl", &ECleanedEl, &b_ECleanedEl);
-   fChain->SetBranchAddress("idxMu", &idxMu, &b_idxMu);
-   fChain->SetBranchAddress("ptMu", &ptMu, &b_ptMu);
-   fChain->SetBranchAddress("etaMu", &etaMu, &b_etaMu);
-   fChain->SetBranchAddress("phiMu", &phiMu, &b_phiMu);
-   fChain->SetBranchAddress("EMu", &EMu, &b_EMu);
-   fChain->SetBranchAddress("IsoDRMu", &IsoDRMu, &b_IsoDRMu);
-   fChain->SetBranchAddress("dR_Iso2DMu", &dR_Iso2DMu, &b_dR_Iso2DMu);
-   fChain->SetBranchAddress("ptrel_Iso2DMu", &ptrel_Iso2DMu, &b_ptrel_Iso2DMu);
-   fChain->SetBranchAddress("IsoDRAfterIso2DMu", &IsoDRAfterIso2DMu, &b_IsoDRAfterIso2DMu);
-   fChain->SetBranchAddress("idxCleanedMu", &idxCleanedMu, &b_idxCleanedMu);
-   fChain->SetBranchAddress("ptCleanedMu", &ptCleanedMu, &b_ptCleanedMu);
-   fChain->SetBranchAddress("etaCleanedMu", &etaCleanedMu, &b_etaCleanedMu);
-   fChain->SetBranchAddress("phiCleanedMu", &phiCleanedMu, &b_phiCleanedMu);
-   fChain->SetBranchAddress("ECleanedMu", &ECleanedMu, &b_ECleanedMu);
    Notify();
 }
 

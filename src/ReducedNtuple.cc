@@ -116,6 +116,16 @@ void ReducedNtuple::InitOutputTree(){
   m_Tree->Branch("mass_q", &m_mass_q);
 
   m_Tree->Branch("EtaMax", &m_EtaMax);
+
+  m_Tree->Branch("pT_ele_clean", &m_pT_ele_clean);
+  m_Tree->Branch("eta_ele_clean", &m_eta_ele_clean);
+  m_Tree->Branch("phi_ele_clean", &m_phi_ele_clean);
+  m_Tree->Branch("E_ele_clean", &m_E_ele_clean);
+
+  m_Tree->Branch("pT_mu_clean", &m_pT_mu_clean);
+  m_Tree->Branch("eta_mu_clean", &m_eta_mu_clean);
+  m_Tree->Branch("phi_mu_clean", &m_phi_mu_clean);
+  m_Tree->Branch("E_mu_clean", &m_E_mu_clean);
 }
 
 void ReducedNtuple::FillOutputTree(){
@@ -361,6 +371,32 @@ void ReducedNtuple::FillOutputTree(){
     m_cosTq = Top.Vect().Unit().Dot( fjet.Vect().Unit() );
   } else {
     m_cosTq = 0;
+  }
+
+  // leptons
+  m_pT_ele_clean.clear();
+  m_eta_ele_clean.clear();
+  m_phi_ele_clean.clear();
+  m_E_ele_clean.clear();
+  m_pT_mu_clean.clear();
+  m_eta_mu_clean.clear();
+  m_phi_mu_clean.clear();
+  m_E_mu_clean.clear();
+
+  int Nele = ptCleanedEl->size();
+  for(int i = 0; i < Nele; i++){
+    m_pT_ele_clean.push_back(ptCleanedEl->at(i));
+    m_eta_ele_clean.push_back(etaCleanedEl->at(i));
+    m_phi_ele_clean.push_back(phiCleanedEl->at(i));
+    m_E_ele_clean.push_back(ECleanedEl->at(i));
+  }
+  
+  int Nmu = ptCleanedMu->size();
+  for(int i = 0; i < Nmu; i++){
+    m_pT_mu_clean.push_back(ptCleanedMu->at(i));
+    m_eta_mu_clean.push_back(etaCleanedMu->at(i));
+    m_phi_mu_clean.push_back(phiCleanedMu->at(i));
+    m_E_mu_clean.push_back(ECleanedMu->at(i));
   }
 
   if(m_Tree)
