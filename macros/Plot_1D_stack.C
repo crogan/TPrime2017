@@ -107,26 +107,26 @@ void Plot_1D_stack(){
   g_Color.push_back(kMagenta+1);
   ihist++;
 
-  g_File.push_back("signal/TbtH_1500_LH.root");
-  g_Hist.push_back(ihist);
-  g_Title.push_back("TbtH LH M_{T'} = 1.5 TeV");
-  g_Bkg.push_back(false);
-  g_Color.push_back(kBlue+1);
-  ihist++;
+  // g_File.push_back("signal/TbtH_1500_LH.root");
+  // g_Hist.push_back(ihist);
+  // g_Title.push_back("TbtH LH M_{T'} = 1.5 TeV");
+  // g_Bkg.push_back(false);
+  // g_Color.push_back(kBlue+1);
+  // ihist++;
 
   g_File.push_back("signal/TbtH_1800_LH.root");
   g_Hist.push_back(ihist);
   g_Title.push_back("TbtH LH M_{T'} = 1.8 TeV");
   g_Bkg.push_back(false);
-  g_Color.push_back(kGreen+1);
+  g_Color.push_back(kRed+1);
   ihist++;
 
-  //  g_File.push_back("signal/TttH_1200_RH.root");
-  // g_Hist.push_back(ihist);
-  // g_Title.push_back("TttH RH M_{T'} = 1.2 TeV");
-  // g_Bkg.push_back(false);
-  // g_Color.push_back(kMagenta+1);
-  // ihist++;
+   g_File.push_back("signal/TttH_1200_RH.root");
+  g_Hist.push_back(ihist);
+  g_Title.push_back("TttH RH M_{T'} = 1.2 TeV");
+  g_Bkg.push_back(false);
+  g_Color.push_back(kBlue+1);
+  ihist++;
 
   // g_File.push_back("signal/TttH_1500_RH.root");
   // g_Hist.push_back(ihist);
@@ -149,13 +149,13 @@ void Plot_1D_stack(){
   int Nsample = g_File.size();
   int Nhist = ihist;
 
-  g_Path = "/Users/crogan/Dropbox/SAMPLES/Tprime/TPrime_0p1/";
-  g_PlotTitle = "Region D (0p1)";
+  g_Path = "/Users/crogan/Dropbox/SAMPLES/Tprime/TPrime_0p3/";
+  g_PlotTitle = "Region D Selection";
   g_Lumi = 36;
 
-  g_Xname = "M_{T'}";
-  g_Xmin = 750.;
-  g_Xmax = 3000.;
+  g_Xname = "#Delta R (lep, Higgs)";
+  g_Xmin = 0.;
+  g_Xmax = 5.;
 
   g_NX = 50;
 
@@ -199,7 +199,26 @@ void Plot_1D_stack(){
       double RPTtop = base->pT_top / (base->pT_top + base->M_Tp);
       double RPThiggs = base->pT_higgs / (base->pT_higgs + base->M_Tp);
 
-      hist[g_Hist[s]]->Fill(RPThiggs, weight*g_Lumi);
+      bool lveto  = false;
+      TLorentzVector LEP(0.,0.,0.,0.);
+      
+      if(base->pT_mu_clean->size() > 0 && base->pT_mu_clean->at(0) >= 55.){
+	lveto = true;
+	LEP.SetPtEtaPhiE(base->pT_mu_clean->at(0),
+			 base->eta_mu_clean->at(0),
+			 base->phi_mu_clean->at(0),
+			 base->E_mu_clean->at(0));
+      }
+      if(base->pT_ele_clean->size() > 0 && base->pT_ele_clean->at(0) >= LEP.Pt()){
+	lveto = true;
+	LEP.SetPtEtaPhiE(base->pT_ele_clean->at(0),
+			 base->eta_ele_clean->at(0),
+			 base->phi_ele_clean->at(0),
+			 base->E_ele_clean->at(0));
+      }
+
+      if(lveto)
+	hist[g_Hist[s]]->Fill(LEP.DeltaR(T), weight*g_Lumi);
 
       //hist[g_Hist[s]]->Fill(fabs(q.Rapidity()-Tp.Rapidity()), weight*g_Lumi);
 
