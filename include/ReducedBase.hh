@@ -1,8 +1,8 @@
 //////////////////////////////////////////////////////////
 // This class has been automatically generated on
-// Sat Sep 30 19:49:30 2017 by ROOT version 5.34/34
+// Thu Oct  5 21:48:45 2017 by ROOT version 5.34/34
 // from TTree TPrime/TPrime
-// found on file: TTJets.root
+// found on file: TbtH_1200_LH.root
 //////////////////////////////////////////////////////////
 
 #ifndef ReducedBase_h
@@ -16,7 +16,6 @@
 #include <vector>
 
 // Fixed size dimensions of array or collections stored in the TTree if any.
-using namespace std;
 
 class ReducedBase {
 public :
@@ -81,6 +80,14 @@ public :
    Float_t         phi_q;
    Float_t         mass_q;
    Float_t         EtaMax;
+   vector<float>   *pT_ele_clean;
+   vector<float>   *eta_ele_clean;
+   vector<float>   *phi_ele_clean;
+   vector<float>   *E_ele_clean;
+   vector<float>   *pT_mu_clean;
+   vector<float>   *eta_mu_clean;
+   vector<float>   *phi_mu_clean;
+   vector<float>   *E_mu_clean;
 
    // List of branches
    TBranch        *b_weight;   //!
@@ -140,6 +147,14 @@ public :
    TBranch        *b_phi_q;   //!
    TBranch        *b_mass_q;   //!
    TBranch        *b_EtaMax;   //!
+   TBranch        *b_pT_ele_clean;   //!
+   TBranch        *b_eta_ele_clean;   //!
+   TBranch        *b_phi_ele_clean;   //!
+   TBranch        *b_E_ele_clean;   //!
+   TBranch        *b_pT_mu_clean;   //!
+   TBranch        *b_eta_mu_clean;   //!
+   TBranch        *b_phi_mu_clean;   //!
+   TBranch        *b_E_mu_clean;   //!
 
    ReducedBase(TTree *tree=0);
    virtual ~ReducedBase();
@@ -158,9 +173,9 @@ inline ReducedBase::ReducedBase(TTree *tree) : fChain(0)
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
    if (tree == 0) {
-      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("TTJets.root");
+      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("TbtH_1200_LH.root");
       if (!f || !f->IsOpen()) {
-         f = new TFile("TTJets.root");
+         f = new TFile("TbtH_1200_LH.root");
       }
       f->GetObject("TPrime",tree);
 
@@ -208,6 +223,14 @@ inline void ReducedBase::Init(TTree *tree)
    eta_extrajet = 0;
    phi_extrajet = 0;
    mass_extrajet = 0;
+   pT_ele_clean = 0;
+   eta_ele_clean = 0;
+   phi_ele_clean = 0;
+   E_ele_clean = 0;
+   pT_mu_clean = 0;
+   eta_mu_clean = 0;
+   phi_mu_clean = 0;
+   E_mu_clean = 0;
    // Set branch addresses and branch pointers
    if (!tree) return;
    fChain = tree;
@@ -242,7 +265,7 @@ inline void ReducedBase::Init(TTree *tree)
    fChain->SetBranchAddress("phi_higgs_sj0", &phi_higgs_sj0, &b_phi_higgs_sj0);
    fChain->SetBranchAddress("mass_higgs_sj0", &mass_higgs_sj0, &b_mass_higgs_sj0);
    fChain->SetBranchAddress("pT_higgs_sj1", &pT_higgs_sj1, &b_pT_higgs_sj1);
-//    fChain->SetBranchAddress("pT_higgs_sj1", &pT_higgs_sj1, &b_pT_higgs_sj1);
+   fChain->SetBranchAddress("eta_higgs_sj1", &eta_higgs_sj1, &b_eta_higgs_sj1);
    fChain->SetBranchAddress("phi_higgs_sj1", &phi_higgs_sj1, &b_phi_higgs_sj1);
    fChain->SetBranchAddress("mass_higgs_sj1", &mass_higgs_sj1, &b_mass_higgs_sj1);
    fChain->SetBranchAddress("pT_extrajet", &pT_extrajet, &b_pT_extrajet);
@@ -271,6 +294,14 @@ inline void ReducedBase::Init(TTree *tree)
    fChain->SetBranchAddress("phi_q", &phi_q, &b_phi_q);
    fChain->SetBranchAddress("mass_q", &mass_q, &b_mass_q);
    fChain->SetBranchAddress("EtaMax", &EtaMax, &b_EtaMax);
+   fChain->SetBranchAddress("pT_ele_clean", &pT_ele_clean, &b_pT_ele_clean);
+   fChain->SetBranchAddress("eta_ele_clean", &eta_ele_clean, &b_eta_ele_clean);
+   fChain->SetBranchAddress("phi_ele_clean", &phi_ele_clean, &b_phi_ele_clean);
+   fChain->SetBranchAddress("E_ele_clean", &E_ele_clean, &b_E_ele_clean);
+   fChain->SetBranchAddress("pT_mu_clean", &pT_mu_clean, &b_pT_mu_clean);
+   fChain->SetBranchAddress("eta_mu_clean", &eta_mu_clean, &b_eta_mu_clean);
+   fChain->SetBranchAddress("phi_mu_clean", &phi_mu_clean, &b_phi_mu_clean);
+   fChain->SetBranchAddress("E_mu_clean", &E_mu_clean, &b_E_mu_clean);
    Notify();
 }
 
@@ -299,4 +330,3 @@ inline Int_t ReducedBase::Cut(Long64_t entry)
 // returns -1 otherwise.
    return 1;
 }
-

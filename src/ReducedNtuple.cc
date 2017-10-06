@@ -116,6 +116,16 @@ void ReducedNtuple::InitOutputTree(){
   m_Tree->Branch("mass_q", &m_mass_q);
 
   m_Tree->Branch("EtaMax", &m_EtaMax);
+
+  m_Tree->Branch("pT_ele_clean", &m_pT_ele_clean);
+  m_Tree->Branch("eta_ele_clean", &m_eta_ele_clean);
+  m_Tree->Branch("phi_ele_clean", &m_phi_ele_clean);
+  m_Tree->Branch("E_ele_clean", &m_E_ele_clean);
+
+  m_Tree->Branch("pT_mu_clean", &m_pT_mu_clean);
+  m_Tree->Branch("eta_mu_clean", &m_eta_mu_clean);
+  m_Tree->Branch("phi_mu_clean", &m_phi_mu_clean);
+  m_Tree->Branch("E_mu_clean", &m_E_mu_clean);
 }
 
 void ReducedNtuple::FillOutputTree(){
@@ -166,7 +176,7 @@ void ReducedNtuple::FillOutputTree(){
 			etaHTagged->at(h),
 			phiHTagged->at(h),
 			MHTagged->at(h) );
-      if(FatJets[ijet].DeltaR(Higgs) < 0.1){
+      if(FatJets[ijet].DeltaR(Higgs) < 0.0001){
 	ihiggs[ijet] = h;
 	break;
       }
@@ -178,7 +188,7 @@ void ReducedNtuple::FillOutputTree(){
 			etaTopTagged->at(t),
 			phiTopTagged->at(t),
 			MTopTagged->at(t) );
-      if(FatJets[ijet].DeltaR(Top) < 0.1){
+      if(FatJets[ijet].DeltaR(Top) < 0.0001){
 	itop[ijet] = t;
 	break;
       }
@@ -195,7 +205,6 @@ void ReducedNtuple::FillOutputTree(){
     ihiggs[1] = 1;
     itop[1] = -1;
     ihiggs[0] = -1;
-    
   } else {
     if( itop[1] >= 0 && ihiggs[0] >= 0 ){
       ih = ihiggs[0];
@@ -204,11 +213,18 @@ void ReducedNtuple::FillOutputTree(){
       ihiggs[1] = -1;
       itop[1] = 1;
       ihiggs[0] = 1;
-    
     } else {
       return;
     }
   }
+  Higgs.SetPtEtaPhiM( ptHTagged->at(ih), 
+		      etaHTagged->at(ih),
+		      phiHTagged->at(ih),
+		      MHTagged->at(ih) );
+  Top.SetPtEtaPhiM( ptTopTagged->at(it), 
+		    etaTopTagged->at(it),
+		    phiTopTagged->at(it),
+		    MTopTagged->at(it) );
 
   m_pT_top   = Top.Pt();
   m_eta_top  = Top.Eta();
@@ -340,20 +356,47 @@ void ReducedNtuple::FillOutputTree(){
   H1->SetLabFrameFourVector(Higgs1);
   if(!LAB->AnalyzeEvent()) cout << "Something went wrong..." << endl;
 
-  m_cosTp = Tp->GetCosDecayAngle();
+  //m_cosTp = Tp->GetCosDecayAngle();
   m_cosH  = H->GetCosDecayAngle();
   m_cosT  = T->GetCosDecayAngle();
   m_dphiTH = T->GetDeltaPhiDecayPlanes(*H);
   m_dphiTpH = Tp->GetDeltaPhiDecayPlanes(*H);
   m_dphiTpT = Tp->GetDeltaPhiDecayPlanes(*T);
 
+  CMboost = (Higgs+Top).BoostVector();
+  Top.Boost(-CMboost);
+  m_cosTp = Top.Vect().Unit().Dot(-CMboost.Unit());
   if(ExtraJets.size() > 0){
-    CMboost = (Higgs+Top).BoostVector();
-    Top.Boost(-CMboost);
     fjet.Boost(-CMboost);
     m_cosTq = Top.Vect().Unit().Dot( fjet.Vect().Unit() );
   } else {
     m_cosTq = 0;
+  }
+
+  // leptons
+  m_pT_ele_clean.clear();
+  m_eta_ele_clean.clear();
+  m_phi_ele_clean.clear();
+  m_E_ele_clean.clear();
+  m_pT_mu_clean.clear();
+  m_eta_mu_clean.clear();
+  m_phi_mu_clean.clear();
+  m_E_mu_clean.clear();
+
+  int Nele = ptCleanedEl->size();
+  for(int i = 0; i < Nele; i++){
+    m_pT_ele_clean.push_back(ptCleanedEl->at(i));
+    m_eta_ele_clean.push_back(etaCleanedEl->at(i));
+    m_phi_ele_clean.push_back(phiCleanedEl->at(i));
+    m_E_ele_clean.push_back(ECleanedEl->at(i));
+  }
+  
+  int Nmu = ptCleanedMu->size();
+  for(int i = 0; i < Nmu; i++){
+    m_pT_mu_clean.push_back(ptCleanedMu->at(i));
+    m_eta_mu_clean.push_back(etaCleanedMu->at(i));
+    m_phi_mu_clean.push_back(phiCleanedMu->at(i));
+    m_E_mu_clean.push_back(ECleanedMu->at(i));
   }
 
   if(m_Tree)

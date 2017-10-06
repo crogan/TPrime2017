@@ -156,6 +156,7 @@ void Plot_1D_stack(){
   g_Xname = "M_{T'}";
   g_Xmin = 750.;
   g_Xmax = 3000.;
+
   g_NX = 50;
 
 
@@ -179,8 +180,8 @@ void Plot_1D_stack(){
       if(e%(max(1,Nentry/10)) == 0)
 	cout << "event " << e << " | " << Nentry << endl;
 
-      if(base->N_extra < 1)
-      	continue;
+      // if(base->N_extra < 1)
+      // 	continue;
 
       // if(fabs(base->eta_q) < 2.4)
       // 	continue;
@@ -194,7 +195,12 @@ void Plot_1D_stack(){
       TLorentzVector q;
       q.SetPtEtaPhiM( base->pT_q, base->eta_q, base->phi_q, base->mass_q );
       
-      hist[g_Hist[s]]->Fill(base->M_Tp, weight*g_Lumi);
+
+      double RPTtop = base->pT_top / (base->pT_top + base->M_Tp);
+      double RPThiggs = base->pT_higgs / (base->pT_higgs + base->M_Tp);
+
+      hist[g_Hist[s]]->Fill(RPThiggs, weight*g_Lumi);
+
       //hist[g_Hist[s]]->Fill(fabs(q.Rapidity()-Tp.Rapidity()), weight*g_Lumi);
 
     }

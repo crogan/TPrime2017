@@ -44,9 +44,48 @@ void Plot_1D_norm(){
   setstyle(0);
 
   //g_PlotTitle = "Baseline Selection";
-  g_PlotTitle = "TbtH LH M_{T'} = 1.2 TeV";
+  g_PlotTitle = "Region D (#epsilon_{top} = 3.0)";
 
   int ihist = 0;
+
+  /*
+  g_File.push_back("TPrime_3p0/bkg/QCDPt.root");
+  g_Hist.push_back(ihist);
+  g_Title.push_back("QCD multijets");
+  g_Bkg.push_back(true);
+  ihist++;
+  
+  g_File.push_back("TPrime_3p0/bkg/TTJets.root");
+  g_Hist.push_back(ihist);
+  g_File.push_back("TPrime_3p0/bkg/ttHJets.root");
+  g_Hist.push_back(ihist);
+  g_File.push_back("TPrime_3p0/bkg/ttWJets.root");
+  g_Hist.push_back(ihist);
+  g_File.push_back("TPrime_3p0/bkg/ttZJets.root");
+  g_Hist.push_back(ihist);
+  g_Title.push_back("t #bar{t} + X");
+  g_Bkg.push_back(true);
+  ihist++;
+ 
+
+  g_File.push_back("TPrime_3p0/signal/TbtH_1200_LH.root");
+  g_Hist.push_back(ihist);
+  g_Title.push_back("TbtH LH M_{T'} = 1.2 TeV");
+  g_Bkg.push_back(false);
+  ihist++;
+
+  g_File.push_back("TPrime_3p0/signal/TbtH_1500_LH.root");
+  g_Hist.push_back(ihist);
+  g_Title.push_back("TbtH LH M_{T'} = 1.5 TeV");
+  g_Bkg.push_back(false);
+  ihist++;
+
+  g_File.push_back("TPrime_3p0/signal/TbtH_1800_LH.root");
+  g_Hist.push_back(ihist);
+  g_Title.push_back("TbtH LH M_{T'} = 1.8 TeV");
+  g_Bkg.push_back(false);
+  ihist++;
+  */
 
   /*
   g_File.push_back("TPrime_0p1/signal/TbtH_1200_LH.root");
@@ -126,6 +165,7 @@ void Plot_1D_norm(){
   ihist++;
   */
 
+  
   g_File.push_back("TPrime_3p0/signal/TbtH_1200_LH.root");
   g_Hist.push_back(ihist);
   g_Title.push_back("TbtH LH");
@@ -149,6 +189,7 @@ void Plot_1D_norm(){
   g_Title.push_back("TttH RH");
   g_Bkg.push_back(false);
   ihist++;
+  
 
   int Nsample = g_File.size();
   int Nhist = ihist;
@@ -185,7 +226,10 @@ void Plot_1D_norm(){
       // if(base->dphiISRI < 3.0)
       // 	continue;
  
-      hist[g_Hist[s]]->Fill(base->cosH, base->weight);
+      double RPTtop = base->pT_top / (base->pT_top + base->M_Tp);
+      double RPThiggs = base->pT_higgs / (base->pT_higgs + base->M_Tp);
+
+      hist[g_Hist[s]]->Fill(base->cosT, base->weight);
 
     }
 
@@ -236,6 +280,7 @@ void Plot_1D_norm(){
   hist[imax]->GetYaxis()->SetLabelFont(132);
   hist[imax]->GetYaxis()->SetLabelSize(0.05);
   hist[imax]->GetYaxis()->SetTitle("a. u.");
+  hist[imax]->GetYaxis()->SetRangeUser(0., hist[imax]->GetMaximum()*1.1);
   //hist[imax]->GetYaxis()->SetTitle(yaxis);
   //hist[imax]->GetYaxis()->SetTitle("N_{evt} / fb^{-1}");
   int Ntype[3];

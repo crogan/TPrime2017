@@ -88,6 +88,17 @@ private:
   float m_Tm_CM;
   float m_TT_CM;
 
+  // leptons
+  vector<float> m_pT_ele_clean;
+  vector<float> m_eta_ele_clean;
+  vector<float> m_phi_ele_clean;
+  vector<float> m_E_ele_clean;
+
+  vector<float> m_pT_mu_clean;
+  vector<float> m_eta_mu_clean;
+  vector<float> m_phi_mu_clean;
+  vector<float> m_E_mu_clean;
+
   // RestFrames stuff
   LabRecoFrame*       LAB;
   DecayRecoFrame*     Tp;
