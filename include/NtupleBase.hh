@@ -14,10 +14,18 @@ public:
 
 protected:
   TTree* m_Tree;
+  
+  TTree* m_EvtTree;
+  double m_EvtTotal;
+  double m_EvtSample;
+  double m_EvtPreselection;
+  double m_EvtSelected;
 
 private:
   virtual void InitOutputTree() = 0;
   virtual void FillOutputTree() = 0;
+  
+  
 
 };
 

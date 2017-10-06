@@ -78,7 +78,7 @@ void PlotSampleEff(){
 
   int Nfile = g_Files.size();
 
-  string g_Path = "/Users/crogan/Dropbox/SAMPLES/Tprime/TPrime_1p0/signal/";
+  string g_Path = "/Users/crogan/Dropbox/SAMPLES/Tprime/TPrime_0p1/signal/";
 
   TH1D* h_NUM[3];
   TH1D* h_DEN[3];
@@ -108,6 +108,9 @@ void PlotSampleEff(){
       base->GetEntry(e);
 
       if(base->N_extra < 1)
+       	continue;
+
+      if(fabs(base->eta_q) < 2.4)
        	continue;
 
       for(int i = 0; i < 3; i++)
@@ -203,6 +206,7 @@ void PlotSampleEff(){
   h_NUM[0]->GetYaxis()->SetLabelFont(132);
   h_NUM[0]->GetYaxis()->SetLabelSize(0.05);
   h_NUM[0]->GetYaxis()->SetTitle("1 - #epsilon lepton veto [w/ #Delta R (lep, Higgs) > 1]");
+  //h_NUM[0]->GetYaxis()->SetTitle("1 - #epsilon lepton veto");
   h_NUM[0]->GetYaxis()->SetRangeUser(0., 1.);
   for(int i = 0; i < 3; i++)
     gr[i]->Draw("P same");

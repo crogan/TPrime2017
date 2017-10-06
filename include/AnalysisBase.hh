@@ -34,6 +34,7 @@ public:
 
 protected:
   virtual double GetEventWeight();
+  double GetXSEC(){ return m_XSEC; }
 
 
 private:

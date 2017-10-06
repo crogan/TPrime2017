@@ -133,10 +133,6 @@ void ReducedNtuple::FillOutputTree(){
   m_weight = GetEventWeight();
   m_NPV = SelectedEvent_npv;
   m_NPU = SelectedEvent_npuTrue; 
-  m_isA = SelectedEvent_isRegionA;
-  m_isB = SelectedEvent_isRegionB;
-  m_isC = SelectedEvent_isRegionC;
-  m_isD = SelectedEvent_isRegionD;
 
   vector<TLorentzVector> Jets; 
   GetJets(Jets, 30.); 
@@ -155,6 +151,8 @@ void ReducedNtuple::FillOutputTree(){
   // trigger preselection
   if(FatJets[0].Pt()+FatJets[1].Pt() < 850.)
     return;
+
+  m_EvtPreselection += m_weight; 
 
   // need to match higgs/top to lead AK8's
   int ihiggs[2];
@@ -195,6 +193,16 @@ void ReducedNtuple::FillOutputTree(){
     }
   }
 
+  m_isA = SelectedEvent_isRegionA;
+  m_isB = SelectedEvent_isRegionB;
+  m_isC = SelectedEvent_isRegionC;
+  m_isD = SelectedEvent_isRegionD;
+
+  // m_isA = false;
+  // m_isB = false;
+  // m_isC = false;
+  // m_isD = false;
+
   // make sure there is a good Higgs/top combo
   int ih = -1;
   int it = -1;
@@ -205,6 +213,7 @@ void ReducedNtuple::FillOutputTree(){
     ihiggs[1] = 1;
     itop[1] = -1;
     ihiggs[0] = -1;
+    m_isA = true;
   } else {
     if( itop[1] >= 0 && ihiggs[0] >= 0 ){
       ih = ihiggs[0];
@@ -213,10 +222,12 @@ void ReducedNtuple::FillOutputTree(){
       ihiggs[1] = -1;
       itop[1] = 1;
       ihiggs[0] = 1;
+      m_isA = true;
     } else {
       return;
     }
   }
+
   Higgs.SetPtEtaPhiM( ptHTagged->at(ih), 
 		      etaHTagged->at(ih),
 		      phiHTagged->at(ih),
@@ -398,6 +409,8 @@ void ReducedNtuple::FillOutputTree(){
     m_phi_mu_clean.push_back(phiCleanedMu->at(i));
     m_E_mu_clean.push_back(ECleanedMu->at(i));
   }
+
+  m_EvtSelected += m_weight;
 
   if(m_Tree)
     m_Tree->Fill();
