@@ -39,8 +39,8 @@ using namespace RestFrames;
 void Plot_2D(){
   RestFrames::SetStyle();
 
-  g_File.push_back("bkg/QCDPt.root");
-  g_PlotTitle = "QCD multijets";
+  // g_File.push_back("bkg/QCDPt.root");
+  // g_PlotTitle = "QCD multijets";
   
   // g_File.push_back("bkg/TTJets.root");
   // g_File.push_back("bkg/ttHJets.root");
@@ -73,8 +73,8 @@ void Plot_2D(){
   // g_File.push_back("signal/TbtH_1200_LH.root");
   // g_PlotTitle = "TbtH LH M_{T'} = 1.2 TeV";
 
-  // g_File.push_back("signal/TbtH_1500_LH.root");
-  // g_PlotTitle = "TbtH LH M_{T'} = 1.5 TeV";
+  g_File.push_back("signal/TbtH_1500_LH.root");
+  g_PlotTitle = "TbtH LH M_{T'} = 1.5 TeV";
 
   // g_File.push_back("signal/TbtH_1800_LH.root");
   // g_PlotTitle = "TbtH LH M_{T'} = 1.8 TeV";
@@ -104,11 +104,11 @@ void Plot_2D(){
   string g_Label = "p_{T}^{ ISR} > 400 GeV";
 
   g_Xname = "R_{ISR}";
-  g_Xmin = 0.;
+  g_Xmin = -1.;
   g_Xmax = 1.; 
   g_NX = 30;
   g_Yname = "PTISR";
-  g_Ymin = 0.;
+  g_Ymin = -1.;
   g_Ymax = 1.;
   g_NY = 30.;
 
@@ -154,7 +154,7 @@ void Plot_2D(){
       double v2 = (mycos+base->cosTq)/(2. - fabs(mycos-base->cosTq));
       double v3 = sqrt(v1*v1+v2*v2)/sqrt(2);
       
-      hist->Fill(base->pT_higgs / (base->pT_higgs+base->M_Tp), v2, base->weight);
+      hist->Fill(base->cosTp, base->cosTq, base->weight);
       //hist->Fill(fabs(q.Rapidity()-Tp.Rapidity()), base->M_Tp, base->weight);
     }
 

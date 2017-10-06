@@ -149,13 +149,13 @@ void Plot_1D_stack(){
   int Nsample = g_File.size();
   int Nhist = ihist;
 
-  g_Path = "/Users/crogan/Dropbox/SAMPLES/Tprime/TPrime_0p3/";
+  g_Path = "/Users/crogan/Dropbox/SAMPLES/Tprime/TPrime_0p1/";
   g_PlotTitle = "Region D (0p1)";
   g_Lumi = 36;
 
-  g_Xname = "R_{ISR}";
-  g_Xmin = 0.;
-  g_Xmax = 5.5;
+  g_Xname = "M_{T'}";
+  g_Xmin = 750.;
+  g_Xmax = 3000.;
   g_NX = 50;
 
 
@@ -182,7 +182,7 @@ void Plot_1D_stack(){
       if(base->N_extra < 1)
       	continue;
 
-      // if(base->M_Tp < 1200.)
+      // if(fabs(base->eta_q) < 2.4)
       // 	continue;
 
       double weight = fabs(base->weight);
@@ -194,8 +194,8 @@ void Plot_1D_stack(){
       TLorentzVector q;
       q.SetPtEtaPhiM( base->pT_q, base->eta_q, base->phi_q, base->mass_q );
       
-      //hist[g_Hist[s]]->Fill(base->cosH, weight*g_Lumi);
-      hist[g_Hist[s]]->Fill(fabs(q.Rapidity()-Tp.Rapidity()), weight*g_Lumi);
+      hist[g_Hist[s]]->Fill(base->M_Tp, weight*g_Lumi);
+      //hist[g_Hist[s]]->Fill(fabs(q.Rapidity()-Tp.Rapidity()), weight*g_Lumi);
 
     }
 
