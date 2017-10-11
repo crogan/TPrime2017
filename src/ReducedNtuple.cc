@@ -95,6 +95,7 @@ void ReducedNtuple::InitOutputTree(){
   m_Tree->Branch("eta_extrajet", &m_eta_extrajet);
   m_Tree->Branch("phi_extrajet", &m_phi_extrajet);
   m_Tree->Branch("mass_extrajet", &m_mass_extrajet);
+  m_Tree->Branch("CSV_extrajet", &m_CSV_extrajet);
  
   // pre-calc variables
   m_Tree->Branch("M_Tp", &m_M_Tp);
@@ -335,6 +336,7 @@ void ReducedNtuple::FillOutputTree(){
     m_eta_extrajet.push_back(Jets[i].Eta());
     m_phi_extrajet.push_back(Jets[i].Phi());
     m_mass_extrajet.push_back(Jets[i].M());
+    m_CSV_extrajet.push_back(csvAK4->at(i));
     if(fabs(Jets[i].Eta()) > fabs(m_eta_q)){
       fjet = Jets[i];
       m_eta_q = Jets[i].Eta();

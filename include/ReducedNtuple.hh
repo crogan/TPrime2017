@@ -66,6 +66,7 @@ private:
   vector<float> m_eta_extrajet;
   vector<float> m_phi_extrajet;
   vector<float> m_mass_extrajet;
+  vector<float> m_CSV_extrajet;
  
   float m_M_extra;
   int m_N_extra;
