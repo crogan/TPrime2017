@@ -65,6 +65,13 @@ void ReducedNtuple::InitOutputTree(){
   m_Tree->Branch("phi_higgs", &m_phi_higgs);
   m_Tree->Branch("mass_higgs", &m_mass_higgs);
 
+  m_Tree->Branch("tau1_top", &m_tau1_top);
+  m_Tree->Branch("tau2_top", &m_tau2_top);
+  m_Tree->Branch("tau3_top", &m_tau3_top);
+  m_Tree->Branch("tau1_higgs", &m_tau1_higgs);
+  m_Tree->Branch("tau2_higgs", &m_tau2_higgs);
+  m_Tree->Branch("tau3_higgs", &m_tau3_higgs);
+
   // subjet 4-vectors ("0" is leading CSV score from each)
   m_Tree->Branch("pT_top_sj0", &m_pT_top_sj0);
   m_Tree->Branch("eta_top_sj0", &m_eta_top_sj0);
@@ -246,6 +253,13 @@ void ReducedNtuple::FillOutputTree(){
   m_phi_higgs  = Higgs.Phi();
   m_mass_higgs = Higgs.M();
 
+  m_tau1_top = tau1TopTagged->at(it);
+  m_tau2_top = tau2TopTagged->at(it);
+  m_tau3_top = tau3TopTagged->at(it);
+  m_tau1_higgs = tau1HTagged->at(ih);
+  m_tau2_higgs = tau2HTagged->at(ih);
+  m_tau3_higgs = tau3HTagged->at(ih);
+
   m_M_Tp  = (Higgs+Top).M();
   m_pT_Tp = (Higgs+Top).Pt();
 
@@ -311,8 +325,10 @@ void ReducedNtuple::FillOutputTree(){
     if(fabs(Jets[i].Eta()) > fabs(m_EtaMax))
       m_EtaMax = Jets[i].Eta();
 
-    if(Jets[i].DeltaR( FatJets[0] ) < 1. ||
-       Jets[i].DeltaR( FatJets[1] ) < 1.) continue;
+    // NOTE: extra jets are _all_ jets in this run
+    // if(Jets[i].DeltaR( FatJets[0] ) < 1. ||
+    //    Jets[i].DeltaR( FatJets[1] ) < 1.) continue;
+
     ExtraJets.push_back(Jets[i]);
     AllJets += Jets[i];
     m_pT_extrajet.push_back(Jets[i].Pt());
