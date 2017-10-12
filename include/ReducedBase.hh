@@ -1,8 +1,8 @@
 //////////////////////////////////////////////////////////
 // This class has been automatically generated on
-// Thu Oct  5 21:48:45 2017 by ROOT version 5.34/34
+// Wed Oct 11 20:45:28 2017 by ROOT version 5.34/34
 // from TTree TPrime/TPrime
-// found on file: TbtH_1200_LH.root
+// found on file: TTJets.root
 //////////////////////////////////////////////////////////
 
 #ifndef ReducedBase_h
@@ -14,6 +14,8 @@
 
 // Header file for the classes stored in the TTree if any.
 #include <vector>
+
+using namespace std;
 
 // Fixed size dimensions of array or collections stored in the TTree if any.
 
@@ -38,6 +40,12 @@ public :
    Float_t         eta_higgs;
    Float_t         phi_higgs;
    Float_t         mass_higgs;
+   Float_t         tau1_top;
+   Float_t         tau2_top;
+   Float_t         tau3_top;
+   Float_t         tau1_higgs;
+   Float_t         tau2_higgs;
+   Float_t         tau3_higgs;
    Float_t         pT_top_sj0;
    Float_t         eta_top_sj0;
    Float_t         phi_top_sj0;
@@ -58,6 +66,7 @@ public :
    vector<float>   *eta_extrajet;
    vector<float>   *phi_extrajet;
    vector<float>   *mass_extrajet;
+   vector<float>   *CSV_extrajet;
    Float_t         M_Tp;
    Float_t         pT_Tp;
    Float_t         cosTp;
@@ -105,6 +114,12 @@ public :
    TBranch        *b_eta_higgs;   //!
    TBranch        *b_phi_higgs;   //!
    TBranch        *b_mass_higgs;   //!
+   TBranch        *b_tau1_top;   //!
+   TBranch        *b_tau2_top;   //!
+   TBranch        *b_tau3_top;   //!
+   TBranch        *b_tau1_higgs;   //!
+   TBranch        *b_tau2_higgs;   //!
+   TBranch        *b_tau3_higgs;   //!
    TBranch        *b_pT_top_sj0;   //!
    TBranch        *b_eta_top_sj0;   //!
    TBranch        *b_phi_top_sj0;   //!
@@ -125,6 +140,7 @@ public :
    TBranch        *b_eta_extrajet;   //!
    TBranch        *b_phi_extrajet;   //!
    TBranch        *b_mass_extrajet;   //!
+   TBranch        *b_CSV_extrajet;   //!
    TBranch        *b_M_Tp;   //!
    TBranch        *b_pT_Tp;   //!
    TBranch        *b_cosTp;   //!
@@ -173,9 +189,9 @@ inline ReducedBase::ReducedBase(TTree *tree) : fChain(0)
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
    if (tree == 0) {
-      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("TbtH_1200_LH.root");
+      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("TTJets.root");
       if (!f || !f->IsOpen()) {
-         f = new TFile("TbtH_1200_LH.root");
+         f = new TFile("TTJets.root");
       }
       f->GetObject("TPrime",tree);
 
@@ -223,6 +239,7 @@ inline void ReducedBase::Init(TTree *tree)
    eta_extrajet = 0;
    phi_extrajet = 0;
    mass_extrajet = 0;
+   CSV_extrajet = 0;
    pT_ele_clean = 0;
    eta_ele_clean = 0;
    phi_ele_clean = 0;
@@ -252,6 +269,12 @@ inline void ReducedBase::Init(TTree *tree)
    fChain->SetBranchAddress("eta_higgs", &eta_higgs, &b_eta_higgs);
    fChain->SetBranchAddress("phi_higgs", &phi_higgs, &b_phi_higgs);
    fChain->SetBranchAddress("mass_higgs", &mass_higgs, &b_mass_higgs);
+   fChain->SetBranchAddress("tau1_top", &tau1_top, &b_tau1_top);
+   fChain->SetBranchAddress("tau2_top", &tau2_top, &b_tau2_top);
+   fChain->SetBranchAddress("tau3_top", &tau3_top, &b_tau3_top);
+   fChain->SetBranchAddress("tau1_higgs", &tau1_higgs, &b_tau1_higgs);
+   fChain->SetBranchAddress("tau2_higgs", &tau2_higgs, &b_tau2_higgs);
+   fChain->SetBranchAddress("tau3_higgs", &tau3_higgs, &b_tau3_higgs);
    fChain->SetBranchAddress("pT_top_sj0", &pT_top_sj0, &b_pT_top_sj0);
    fChain->SetBranchAddress("eta_top_sj0", &eta_top_sj0, &b_eta_top_sj0);
    fChain->SetBranchAddress("phi_top_sj0", &phi_top_sj0, &b_phi_top_sj0);
@@ -272,6 +295,7 @@ inline void ReducedBase::Init(TTree *tree)
    fChain->SetBranchAddress("eta_extrajet", &eta_extrajet, &b_eta_extrajet);
    fChain->SetBranchAddress("phi_extrajet", &phi_extrajet, &b_phi_extrajet);
    fChain->SetBranchAddress("mass_extrajet", &mass_extrajet, &b_mass_extrajet);
+   fChain->SetBranchAddress("CSV_extrajet", &CSV_extrajet, &b_CSV_extrajet);
    fChain->SetBranchAddress("M_Tp", &M_Tp, &b_M_Tp);
    fChain->SetBranchAddress("pT_Tp", &pT_Tp, &b_pT_Tp);
    fChain->SetBranchAddress("cosTp", &cosTp, &b_cosTp);
