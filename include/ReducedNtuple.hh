@@ -43,6 +43,11 @@ private:
   float m_tau2_higgs;
   float m_tau3_higgs;
 
+  float m_mass_softdrop_top;
+  float m_mass_softdrop_higgs;
+  float m_mass_pruned_top;
+  float m_mass_pruned_higgs;
+
   // subjet 4-vectors ("0" is leading CSV score from each)
   float m_pT_top_sj0;
   float m_eta_top_sj0;

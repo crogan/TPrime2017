@@ -65,6 +65,11 @@ void ReducedNtuple::InitOutputTree(){
   m_Tree->Branch("phi_higgs", &m_phi_higgs);
   m_Tree->Branch("mass_higgs", &m_mass_higgs);
 
+  m_Tree->Branch("mass_softdrop_top", &m_mass_softdrop_top);
+  m_Tree->Branch("mass_softdrop_higgs", &m_mass_softdrop_higgs);
+  m_Tree->Branch("mass_pruned_top", &m_mass_pruned_top);
+  m_Tree->Branch("mass_pruned_higgs", &m_mass_pruned_higgs);
+
   m_Tree->Branch("tau1_top", &m_tau1_top);
   m_Tree->Branch("tau2_top", &m_tau2_top);
   m_Tree->Branch("tau3_top", &m_tau3_top);
@@ -260,6 +265,11 @@ void ReducedNtuple::FillOutputTree(){
   m_tau1_higgs = tau1HTagged->at(ih);
   m_tau2_higgs = tau2HTagged->at(ih);
   m_tau3_higgs = tau3HTagged->at(ih);
+
+  m_mass_softdrop_top   = SoftDropMassTopTagged->at(it);
+  m_mass_softdrop_higgs = SoftDropMassHTagged->at(ih);
+  m_mass_pruned_top   = PrunedMassTopTagged->at(it);
+  m_mass_pruned_higgs = PrunedMassHTagged->at(ih);
 
   m_M_Tp  = (Higgs+Top).M();
   m_pT_Tp = (Higgs+Top).Pt();
