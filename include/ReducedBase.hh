@@ -1,8 +1,8 @@
 //////////////////////////////////////////////////////////
 // This class has been automatically generated on
-// Wed Oct 11 20:45:28 2017 by ROOT version 5.34/34
+// Thu Oct 12 21:12:38 2017 by ROOT version 5.34/34
 // from TTree TPrime/TPrime
-// found on file: TTJets.root
+// found on file: TbtH_1200_LH.root
 //////////////////////////////////////////////////////////
 
 #ifndef ReducedBase_h
@@ -40,6 +40,10 @@ public :
    Float_t         eta_higgs;
    Float_t         phi_higgs;
    Float_t         mass_higgs;
+   Float_t         mass_softdrop_top;
+   Float_t         mass_softdrop_higgs;
+   Float_t         mass_pruned_top;
+   Float_t         mass_pruned_higgs;
    Float_t         tau1_top;
    Float_t         tau2_top;
    Float_t         tau3_top;
@@ -114,6 +118,10 @@ public :
    TBranch        *b_eta_higgs;   //!
    TBranch        *b_phi_higgs;   //!
    TBranch        *b_mass_higgs;   //!
+   TBranch        *b_mass_softdrop_top;   //!
+   TBranch        *b_mass_softdrop_higgs;   //!
+   TBranch        *b_mass_pruned_top;   //!
+   TBranch        *b_mass_pruned_higgs;   //!
    TBranch        *b_tau1_top;   //!
    TBranch        *b_tau2_top;   //!
    TBranch        *b_tau3_top;   //!
@@ -189,9 +197,9 @@ inline ReducedBase::ReducedBase(TTree *tree) : fChain(0)
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
    if (tree == 0) {
-      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("TTJets.root");
+      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("TbtH_1200_LH.root");
       if (!f || !f->IsOpen()) {
-         f = new TFile("TTJets.root");
+         f = new TFile("TbtH_1200_LH.root");
       }
       f->GetObject("TPrime",tree);
 
@@ -269,6 +277,10 @@ inline void ReducedBase::Init(TTree *tree)
    fChain->SetBranchAddress("eta_higgs", &eta_higgs, &b_eta_higgs);
    fChain->SetBranchAddress("phi_higgs", &phi_higgs, &b_phi_higgs);
    fChain->SetBranchAddress("mass_higgs", &mass_higgs, &b_mass_higgs);
+   fChain->SetBranchAddress("mass_softdrop_top", &mass_softdrop_top, &b_mass_softdrop_top);
+   fChain->SetBranchAddress("mass_softdrop_higgs", &mass_softdrop_higgs, &b_mass_softdrop_higgs);
+   fChain->SetBranchAddress("mass_pruned_top", &mass_pruned_top, &b_mass_pruned_top);
+   fChain->SetBranchAddress("mass_pruned_higgs", &mass_pruned_higgs, &b_mass_pruned_higgs);
    fChain->SetBranchAddress("tau1_top", &tau1_top, &b_tau1_top);
    fChain->SetBranchAddress("tau2_top", &tau2_top, &b_tau2_top);
    fChain->SetBranchAddress("tau3_top", &tau3_top, &b_tau3_top);

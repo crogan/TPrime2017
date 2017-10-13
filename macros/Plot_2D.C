@@ -42,11 +42,11 @@ void Plot_2D(){
   // g_File.push_back("bkg/QCDPt.root");
   // g_PlotTitle = "QCD multijets";
   
-  g_File.push_back("bkg/TTJets.root");
-  g_File.push_back("bkg/ttHJets.root");
-  g_File.push_back("bkg/ttWJets.root");
-  g_File.push_back("bkg/ttZJets.root");
-  g_PlotTitle = "t #bar{t} + X";
+  // g_File.push_back("bkg/TTJets.root");
+  // g_File.push_back("bkg/ttHJets.root");
+  // g_File.push_back("bkg/ttWJets.root");
+  // g_File.push_back("bkg/ttZJets.root");
+  // g_PlotTitle = "t #bar{t} + X";
 
   // g_File.push_back("bkg/ST_antitop.root");
   // g_Hist.push_back(ihist);
@@ -73,11 +73,11 @@ void Plot_2D(){
   // g_File.push_back("signal/TbtH_1200_LH.root");
   // g_PlotTitle = "TbtH LH M_{T'} = 1.2 TeV";
 
-  g_File.push_back("signal/TbtH_1500_LH.root");
-  g_PlotTitle = "TbtH LH M_{T'} = 1.5 TeV";
+  // g_File.push_back("signal/TbtH_1500_LH.root");
+  // g_PlotTitle = "TbtH LH M_{T'} = 1.5 TeV";
 
-  // g_File.push_back("signal/TbtH_1800_LH.root");
-  // g_PlotTitle = "TbtH LH M_{T'} = 1.8 TeV";
+  g_File.push_back("signal/TbtH_1800_LH.root");
+  g_PlotTitle = "TbtH LH M_{T'} = 1.8 TeV";
  
   // g_File.push_back("signal/TttH_1200_RH.root");
   // g_PlotTitle = "TttH RH M_{T'} = 1.2 TeV";
@@ -98,20 +98,20 @@ void Plot_2D(){
 
   int Nsample = g_File.size();
 
-  g_Path = "/Users/crogan/Dropbox/SAMPLES/Tprime/TPrime_0p1/";
+  g_Path = "/Users/crogan/Dropbox/SAMPLES/Tprime/";
   
   //string g_Label = "No selection";
-  string g_Label = "Region D (#epsilon_{top} = 3.0)";
+  string g_Label = "Region D (#epsilon_{top} = 0.3)";
 
 
-  g_Xname = "(cos #theta_{T'}-cos #theta_{T,q}) / (2 - |cos #theta_{T'}+cos #theta_{T,q}})";
-  g_Xmin = -1.;
-  g_Xmax = 1.; 
+  g_Xname = "#Delta R(j, H)";
+  g_Xmin = 0.;
+  g_Xmax = 3.; 
   g_NX = 30;
-  g_Yname = "(cos #theta_{T'}+cos #theta_{T,q}) / (2 - |cos #theta_{T'}-cos #theta_{T,q}})";
+  g_Yname = "#Delta R(j, T)";
 
-  g_Ymin = -1.;
-  g_Ymax = 1.;
+  g_Ymin = 0.;
+  g_Ymax = 4.;
   g_NY = 30.;
 
   TH2D* hist = new TH2D("hist","hist",
@@ -128,6 +128,9 @@ void Plot_2D(){
     for(int e = 0; e < Nentry; e++){
       base->GetEntry(e);
 
+      if(base->tau3_top/base->tau2_top > 0.57)
+      	continue;
+      
       if(base->N_extra < 1)
        	continue;
 
@@ -155,8 +158,16 @@ void Plot_2D(){
       double v1 = (mycos-base->cosTq)/(2. - fabs(mycos+base->cosTq));
       double v2 = (mycos+base->cosTq)/(2. - fabs(mycos-base->cosTq));
       double v3 = sqrt(v1*v1+v2*v2)/sqrt(2);
-      
-      hist->Fill(base->cosTp, base->cosTq, base->weight);
+
+      int Nj = base->pT_extrajet->size();
+      for(int j = 0; j < Nj; j++){
+	TLorentzVector jet;
+	jet.SetPtEtaPhiM(base->pT_extrajet->at(j),
+			 base->eta_extrajet->at(j),
+			 base->phi_extrajet->at(j),
+			 base->mass_extrajet->at(j));
+	hist->Fill(jet.DeltaR(H), jet.DeltaR(T), base->weight);
+      }
 
       //hist->Fill(fabs(q.Rapidity()-Tp.Rapidity()), base->M_Tp, base->weight);
     }
