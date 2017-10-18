@@ -107,12 +107,12 @@ void Plot_1D_stack(){
   g_Color.push_back(kMagenta+1);
   ihist++;
 
-  // g_File.push_back("signal/TbtH_1500_LH.root");
-  // g_Hist.push_back(ihist);
-  // g_Title.push_back("TbtH LH M_{T'} = 1.5 TeV");
-  // g_Bkg.push_back(false);
-  // g_Color.push_back(kBlue+1);
-  // ihist++;
+  g_File.push_back("signal/TbtH_1500_LH.root");
+  g_Hist.push_back(ihist);
+  g_Title.push_back("TbtH LH M_{T'} = 1.5 TeV");
+  g_Bkg.push_back(false);
+  g_Color.push_back(kBlue+1);
+  ihist++;
 
   g_File.push_back("signal/TbtH_1800_LH.root");
   g_Hist.push_back(ihist);
@@ -121,12 +121,12 @@ void Plot_1D_stack(){
   g_Color.push_back(kRed+1);
   ihist++;
 
-   g_File.push_back("signal/TttH_1200_RH.root");
-  g_Hist.push_back(ihist);
-  g_Title.push_back("TttH RH M_{T'} = 1.2 TeV");
-  g_Bkg.push_back(false);
-  g_Color.push_back(kBlue+1);
-  ihist++;
+  //  g_File.push_back("signal/TttH_1200_RH.root");
+  // g_Hist.push_back(ihist);
+  // g_Title.push_back("TttH RH M_{T'} = 1.2 TeV");
+  // g_Bkg.push_back(false);
+  // g_Color.push_back(kBlue+1);
+  // ihist++;
 
   // g_File.push_back("signal/TttH_1500_RH.root");
   // g_Hist.push_back(ihist);
@@ -149,13 +149,13 @@ void Plot_1D_stack(){
   int Nsample = g_File.size();
   int Nhist = ihist;
 
-  g_Path = "/Users/crogan/Dropbox/SAMPLES/Tprime/TPrime_0p3/";
+  g_Path = "/Users/crogan/Dropbox/SAMPLES/Tprime/";
   g_PlotTitle = "Region D Selection";
   g_Lumi = 36;
 
-  g_Xname = "#Delta R (lep, Higgs)";
+  g_Xname = "tau32";
   g_Xmin = 0.;
-  g_Xmax = 5.;
+  g_Xmax = 1.;
 
   g_NX = 50;
 
@@ -185,6 +185,9 @@ void Plot_1D_stack(){
 
       // if(fabs(base->eta_q) < 2.4)
       // 	continue;
+
+       if(base->tau3_top/base->tau2_top > 0.5)
+      	continue;
 
       double weight = fabs(base->weight);
 
@@ -218,7 +221,7 @@ void Plot_1D_stack(){
       }
 
       if(lveto)
-	hist[g_Hist[s]]->Fill(LEP.DeltaR(T), weight*g_Lumi);
+	hist[g_Hist[s]]->Fill(base->tau3_higgs/base->tau2_higgs, weight*g_Lumi);
 
       //hist[g_Hist[s]]->Fill(fabs(q.Rapidity()-Tp.Rapidity()), weight*g_Lumi);
 

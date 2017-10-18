@@ -88,7 +88,7 @@ void PlotSampleBkg(){
 
   string g_Path = "/Users/crogan/Dropbox/SAMPLES/Tprime/signal/";
 
-  int Nhist = 4; // different types of MTprime calc
+  int Nhist = 5; // different types of MTprime calc
 
   
   vector<vector<float> > vMT;

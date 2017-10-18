@@ -41,7 +41,7 @@ int style_list[4][10];
 
 void setstyle(int istyle);
 
-double MTprime(TLorentzVector Top, TLorentzVector Higgs, int type = 0);
+double MTprime(TLorentzVector Top, TLorentzVector Higgs, int type = 0, float mTsoft = 175., float mHsoft = 125.);
 double g_mHiggs;
 double g_mTop;
 
@@ -64,14 +64,14 @@ void Plot_MTprime(){
   // g_File.push_back("signal/TbtH_1200_LH.root");
   // g_PlotTitle = "TbtH LH M_{T'} = 1.2 TeV";
 
-  // g_File.push_back("signal/TttH_1200_RH.root");
-  // g_PlotTitle = "TttH RH M_{T'} = 1.2 TeV";
+  g_File.push_back("signal/TttH_1200_RH.root");
+  g_PlotTitle = "TttH RH M_{T'} = 1.2 TeV";
 
   // g_File.push_back("signal/TbtH_1500_LH.root");
   // g_PlotTitle = "TbtH LH M_{T'} = 1.5 TeV";
 
-  g_File.push_back("signal/TttH_1500_RH.root");
-  g_PlotTitle = "TttH RH M_{T'} = 1.5 TeV";
+  // g_File.push_back("signal/TttH_1500_RH.root");
+  // g_PlotTitle = "TttH RH M_{T'} = 1.5 TeV";
 
   // g_File.push_back("signal/TbtH_1500_LH.root");
   // g_Hist.push_back(ihist);
@@ -96,14 +96,14 @@ void Plot_MTprime(){
   g_Path = "/Users/crogan/Dropbox/SAMPLES/Tprime/";
   
   g_Xname = "M_{T'} alternatives";
-  g_Xmin = 1050.;
-  g_Xmax = 1750.;
+  g_Xmin = 850.;
+  g_Xmax = 1450.;
 
   // g_Xmin = 0.;
   // g_Xmax = 1.;
   g_NX = 40;
 
-  int Nhist = 4;
+  int Nhist = 5;
 
   TH1D* hist[Nhist];
   vector<vector<float> > vMT;
@@ -143,7 +143,7 @@ void Plot_MTprime(){
 			  base->mass_higgs );
 
       for(int h = 0; h < Nhist; h++){
-	double MT = MTprime(Top, Higgs, h);
+	double MT = MTprime(Top, Higgs, h, base->mass_softdrop_top, base->mass_softdrop_higgs);
 	hist[h]->Fill(MT, base->weight);
 	vMT[h].push_back(MT);
 	//hist[h]->Fill(base->tau3_top/base->tau2_top, base->weight);
@@ -229,8 +229,12 @@ void Plot_MTprime(){
   leg->SetShadowColor(kWhite);
   leg->AddEntry(hist[0], "M_{T'} default", "l");
   leg->AddEntry(hist[1], "#tilde{M}_{T'}", "l");
-  leg->AddEntry(hist[2], "fixed p_{top/Higgs}", "l");
-  leg->AddEntry(hist[3], "fixed E_{top/Higgs}", "l");
+  leg->AddEntry(hist[2], "M_{T'}(m_{soft})", "l");
+  leg->AddEntry(hist[3], "#tilde{M}_{T'}(m_{soft})", "l");
+  leg->AddEntry(hist[4], "#tilde{M}_{T'} \"hybrid\"", "l");
+  // leg->AddEntry(hist[1], "#tilde{M}_{T'}", "l");
+  // leg->AddEntry(hist[2], "fixed p_{top/Higgs}", "l");
+  // leg->AddEntry(hist[3], "fixed E_{top/Higgs}", "l");
   leg->SetLineColor(kWhite);
   leg->SetFillColor(kWhite);
   leg->SetShadowColor(kWhite);
@@ -450,13 +454,40 @@ void setstyle(int istyle) {
 	
 }
 
-double MTprime(TLorentzVector Top, TLorentzVector Higgs, int type){
+double MTprime(TLorentzVector Top, TLorentzVector Higgs, int type, float mTsoft, float mHsoft){
   if(type == 0){
     return (Top+Higgs).M();
   }
   if(type == 1){
     return (Top+Higgs).M() - Top.M() - Higgs.M() + g_mHiggs + g_mTop;
   }
+  if(type == 2){
+    Top.SetPtEtaPhiM( Top.Pt(),
+		      Top.Eta(),
+		      Top.Phi(),
+		      mTsoft );
+    Higgs.SetPtEtaPhiM( Higgs.Pt(),
+			Higgs.Eta(),
+			Higgs.Phi(),
+			mHsoft );
+    return (Top+Higgs).M();
+  }
+  if(type == 3){
+    Top.SetPtEtaPhiM( Top.Pt(),
+		      Top.Eta(),
+		      Top.Phi(),
+		      mTsoft );
+    Higgs.SetPtEtaPhiM( Higgs.Pt(),
+			Higgs.Eta(),
+			Higgs.Phi(),
+			mHsoft );
+    return (Top+Higgs).M() - Top.M() - Higgs.M() + g_mHiggs + g_mTop;
+  }
+  if(type == 4){
+    return (Top+Higgs).M() - mTsoft - mHsoft + g_mHiggs + g_mTop;
+  }
+
+  /*
   if(type == 2){
     Top.SetPtEtaPhiM( Top.Pt(), Top.Eta(), Top.Phi(), g_mTop);
     Higgs.SetPtEtaPhiM( Higgs.Pt(), Higgs.Eta(), Higgs.Phi(), g_mHiggs);
@@ -478,6 +509,9 @@ double MTprime(TLorentzVector Top, TLorentzVector Higgs, int type){
     Higgs.Boost(-boost);
     return sqrt(Top.P()*Top.P()+g_mTop*g_mTop)+sqrt(Higgs.P()*Higgs.P()+g_mHiggs*g_mHiggs);
   }
+  */
+  
+
 
 }
 

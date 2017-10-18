@@ -23,7 +23,7 @@
 #include "include/ReducedBase.hh"
 #include "include/EventCount.hh"
 
-double MTprime(TLorentzVector Top, TLorentzVector Higgs, int type = 0);
+double MTprime(TLorentzVector Top, TLorentzVector Higgs, int type = 0, float mTsoft = 175., float mHsoft = 125.);
 double g_mHiggs;
 double g_mTop;
 
@@ -44,46 +44,46 @@ void PlotSampleWidth(){
   
   vector<string> g_Files;
 
-  // g_Files.push_back("TbtH_800_LH.root");
-  // g_Files.push_back("TbtH_800_RH.root");
-  // g_Files.push_back("TbtH_900_LH.root");
-  // g_Files.push_back("TbtH_900_RH.root");
-  // g_Files.push_back("TbtH_1000_LH.root");
-  // g_Files.push_back("TbtH_1000_RH.root");
-  // g_Files.push_back("TbtH_1100_LH.root");
-  // g_Files.push_back("TbtH_1100_RH.root");
-  // g_Files.push_back("TbtH_1200_LH.root");
-  // g_Files.push_back("TbtH_1200_RH.root");
-  // g_Files.push_back("TbtH_1300_LH.root");
-  // g_Files.push_back("TbtH_1300_RH.root");
-  // g_Files.push_back("TbtH_1400_LH.root");
-  // g_Files.push_back("TbtH_1400_RH.root");
-  // g_Files.push_back("TbtH_1500_LH.root");
-  // g_Files.push_back("TbtH_1500_RH.root");
-  // g_Files.push_back("TbtH_1700_LH.root");
-  // g_Files.push_back("TbtH_1700_RH.root");
-  // g_Files.push_back("TbtH_1800_LH.root");
-  // g_Files.push_back("TbtH_1800_RH.root");
+  g_Files.push_back("TbtH_800_LH.root");
+  g_Files.push_back("TbtH_800_RH.root");
+  g_Files.push_back("TbtH_900_LH.root");
+  g_Files.push_back("TbtH_900_RH.root");
+  g_Files.push_back("TbtH_1000_LH.root");
+  g_Files.push_back("TbtH_1000_RH.root");
+  g_Files.push_back("TbtH_1100_LH.root");
+  g_Files.push_back("TbtH_1100_RH.root");
+  g_Files.push_back("TbtH_1200_LH.root");
+  g_Files.push_back("TbtH_1200_RH.root");
+  g_Files.push_back("TbtH_1300_LH.root");
+  g_Files.push_back("TbtH_1300_RH.root");
+  g_Files.push_back("TbtH_1400_LH.root");
+  g_Files.push_back("TbtH_1400_RH.root");
+  g_Files.push_back("TbtH_1500_LH.root");
+  g_Files.push_back("TbtH_1500_RH.root");
+  g_Files.push_back("TbtH_1700_LH.root");
+  g_Files.push_back("TbtH_1700_RH.root");
+  g_Files.push_back("TbtH_1800_LH.root");
+  g_Files.push_back("TbtH_1800_RH.root");
 
-  g_Files.push_back("TttH_800_LH.root");
-  g_Files.push_back("TttH_800_RH.root");
-  g_Files.push_back("TttH_900_RH.root");
-  g_Files.push_back("TttH_1000_LH.root");
-  g_Files.push_back("TttH_1000_RH.root");
-  g_Files.push_back("TttH_1100_LH.root");
-  g_Files.push_back("TttH_1100_RH.root");
-  g_Files.push_back("TttH_1200_LH.root");
-  g_Files.push_back("TttH_1200_RH.root");
-  g_Files.push_back("TttH_1300_LH.root");
-  g_Files.push_back("TttH_1300_RH.root");
-  g_Files.push_back("TttH_1400_LH.root");
-  g_Files.push_back("TttH_1400_RH.root");
-  g_Files.push_back("TttH_1500_LH.root");
-  g_Files.push_back("TttH_1500_RH.root");
-  g_Files.push_back("TttH_1700_LH.root");
-  g_Files.push_back("TttH_1700_RH.root");
-  g_Files.push_back("TttH_1800_LH.root");
-  g_Files.push_back("TttH_1800_RH.root");
+  // g_Files.push_back("TttH_800_LH.root");
+  // g_Files.push_back("TttH_800_RH.root");
+  // g_Files.push_back("TttH_900_RH.root");
+  // g_Files.push_back("TttH_1000_LH.root");
+  // g_Files.push_back("TttH_1000_RH.root");
+  // g_Files.push_back("TttH_1100_LH.root");
+  // g_Files.push_back("TttH_1100_RH.root");
+  // g_Files.push_back("TttH_1200_LH.root");
+  // g_Files.push_back("TttH_1200_RH.root");
+  // g_Files.push_back("TttH_1300_LH.root");
+  // g_Files.push_back("TttH_1300_RH.root");
+  // g_Files.push_back("TttH_1400_LH.root");
+  // g_Files.push_back("TttH_1400_RH.root");
+  // g_Files.push_back("TttH_1500_LH.root");
+  // g_Files.push_back("TttH_1500_RH.root");
+  // g_Files.push_back("TttH_1700_LH.root");
+  // g_Files.push_back("TttH_1700_RH.root");
+  // g_Files.push_back("TttH_1800_LH.root");
+  // g_Files.push_back("TttH_1800_RH.root");
 
   int Nfile = g_Files.size();
 
@@ -135,7 +135,7 @@ void PlotSampleWidth(){
 			  base->mass_higgs );
       
       for(int h = 0; h < Nhist; h++){
-	double MT = MTprime(Top, Higgs, h);
+	double MT = MTprime(Top, Higgs, h, base->mass_softdrop_top, base->mass_softdrop_higgs);
 	vMT[h].push_back(MT);
 	mean[h][f] += MT;
       }
@@ -251,9 +251,13 @@ void PlotSampleWidth(){
   leg->SetLineColor(kWhite);
   leg->SetShadowColor(kWhite);
   leg->AddEntry(gr[0][0], "M_{T'} default", "p");
-  leg->AddEntry(gr[1][0], "#tilde{M}_{T'}", "p");
-  leg->AddEntry(gr[2][0], "fixed p_{top/Higgs}", "p");
-  leg->AddEntry(gr[3][0], "fixed E_{top/Higgs}", "p");
+  leg->AddEntry(gr[1][0], "#tilde{M}_{T'}", "l");
+  leg->AddEntry(gr[2][0], "M_{T'}(m_{soft})", "l");
+  leg->AddEntry(gr[3][0], "#tilde{M}_{T'}(m_{soft})", "l");
+  leg->AddEntry(gr[4][0], "#tilde{M}_{T'} \"hybrid\"", "l");
+  // leg->AddEntry(gr[1][0], "#tilde{M}_{T'}", "p");
+  // leg->AddEntry(gr[2][0], "fixed p_{top/Higgs}", "p");
+  // leg->AddEntry(gr[3][0], "fixed E_{top/Higgs}", "p");
   leg->SetLineColor(kWhite);
   leg->SetFillColor(kWhite);
   leg->SetShadowColor(kWhite);
@@ -280,13 +284,40 @@ void PlotSampleWidth(){
   
 }
 
-double MTprime(TLorentzVector Top, TLorentzVector Higgs, int type){
+double MTprime(TLorentzVector Top, TLorentzVector Higgs, int type, float mTsoft, float mHsoft){
   if(type == 0){
     return (Top+Higgs).M();
   }
   if(type == 1){
     return (Top+Higgs).M() - Top.M() - Higgs.M() + g_mHiggs + g_mTop;
   }
+  if(type == 2){
+    Top.SetPtEtaPhiM( Top.Pt(),
+		      Top.Eta(),
+		      Top.Phi(),
+		      mTsoft );
+    Higgs.SetPtEtaPhiM( Higgs.Pt(),
+			Higgs.Eta(),
+			Higgs.Phi(),
+			mHsoft );
+    return (Top+Higgs).M();
+  }
+  if(type == 3){
+    Top.SetPtEtaPhiM( Top.Pt(),
+		      Top.Eta(),
+		      Top.Phi(),
+		      mTsoft );
+    Higgs.SetPtEtaPhiM( Higgs.Pt(),
+			Higgs.Eta(),
+			Higgs.Phi(),
+			mHsoft );
+    return (Top+Higgs).M() - Top.M() - Higgs.M() + g_mHiggs + g_mTop;
+  }
+  if(type == 4){
+    return (Top+Higgs).M() - mTsoft - mHsoft + g_mHiggs + g_mTop;
+  }
+
+  /*
   if(type == 2){
     Top.SetPtEtaPhiM( Top.Pt(), Top.Eta(), Top.Phi(), g_mTop);
     Higgs.SetPtEtaPhiM( Higgs.Pt(), Higgs.Eta(), Higgs.Phi(), g_mHiggs);
@@ -308,6 +339,9 @@ double MTprime(TLorentzVector Top, TLorentzVector Higgs, int type){
     Higgs.Boost(-boost);
     return sqrt(Top.P()*Top.P()+g_mTop*g_mTop)+sqrt(Higgs.P()*Higgs.P()+g_mHiggs*g_mHiggs);
   }
+  */
+  
+
 
 }
 

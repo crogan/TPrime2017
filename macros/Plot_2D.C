@@ -42,11 +42,11 @@ void Plot_2D(){
   // g_File.push_back("bkg/QCDPt.root");
   // g_PlotTitle = "QCD multijets";
   
-  // g_File.push_back("bkg/TTJets.root");
-  // g_File.push_back("bkg/ttHJets.root");
-  // g_File.push_back("bkg/ttWJets.root");
-  // g_File.push_back("bkg/ttZJets.root");
-  // g_PlotTitle = "t #bar{t} + X";
+  g_File.push_back("bkg/TTJets.root");
+  g_File.push_back("bkg/ttHJets.root");
+  g_File.push_back("bkg/ttWJets.root");
+  g_File.push_back("bkg/ttZJets.root");
+  g_PlotTitle = "t #bar{t} + X";
 
   // g_File.push_back("bkg/ST_antitop.root");
   // g_Hist.push_back(ihist);
@@ -76,8 +76,8 @@ void Plot_2D(){
   // g_File.push_back("signal/TbtH_1500_LH.root");
   // g_PlotTitle = "TbtH LH M_{T'} = 1.5 TeV";
 
-  g_File.push_back("signal/TbtH_1800_LH.root");
-  g_PlotTitle = "TbtH LH M_{T'} = 1.8 TeV";
+  // g_File.push_back("signal/TbtH_1800_LH.root");
+  // g_PlotTitle = "TbtH LH M_{T'} = 1.8 TeV";
  
   // g_File.push_back("signal/TttH_1200_RH.root");
   // g_PlotTitle = "TttH RH M_{T'} = 1.2 TeV";
