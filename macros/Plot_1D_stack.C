@@ -100,47 +100,47 @@ void Plot_1D_stack(){
   // ihist++;
 
  
-  g_File.push_back("signal/TbtH_1200_LH.root");
-  g_Hist.push_back(ihist);
-  g_Title.push_back("TbtH LH M_{T'} = 1.2 TeV");
-  g_Bkg.push_back(false);
-  g_Color.push_back(kMagenta+1);
-  ihist++;
+  // g_File.push_back("signal/TbtH_1200_LH.root");
+  // g_Hist.push_back(ihist);
+  // g_Title.push_back("TbtH LH M_{T'} = 1.2 TeV");
+  // g_Bkg.push_back(false);
+  // g_Color.push_back(kMagenta+1);
+  // ihist++;
 
-  g_File.push_back("signal/TbtH_1500_LH.root");
+  // g_File.push_back("signal/TbtH_1500_LH.root");
+  // g_Hist.push_back(ihist);
+  // g_Title.push_back("TbtH LH M_{T'} = 1.5 TeV");
+  // g_Bkg.push_back(false);
+  // g_Color.push_back(kBlue+1);
+  // ihist++;
+
+  // g_File.push_back("signal/TbtH_1800_LH.root");
+  // g_Hist.push_back(ihist);
+  // g_Title.push_back("TbtH LH M_{T'} = 1.8 TeV");
+  // g_Bkg.push_back(false);
+  // g_Color.push_back(kRed+1);
+  // ihist++;
+
+   g_File.push_back("signal/TttH_1200_RH.root");
   g_Hist.push_back(ihist);
-  g_Title.push_back("TbtH LH M_{T'} = 1.5 TeV");
+  g_Title.push_back("TttH RH M_{T'} = 1.2 TeV");
   g_Bkg.push_back(false);
   g_Color.push_back(kBlue+1);
   ihist++;
 
-  g_File.push_back("signal/TbtH_1800_LH.root");
+  g_File.push_back("signal/TttH_1500_RH.root");
   g_Hist.push_back(ihist);
-  g_Title.push_back("TbtH LH M_{T'} = 1.8 TeV");
+  g_Title.push_back("TttH RH M_{T'} = 1.5 TeV");
   g_Bkg.push_back(false);
   g_Color.push_back(kRed+1);
   ihist++;
 
-  //  g_File.push_back("signal/TttH_1200_RH.root");
-  // g_Hist.push_back(ihist);
-  // g_Title.push_back("TttH RH M_{T'} = 1.2 TeV");
-  // g_Bkg.push_back(false);
-  // g_Color.push_back(kBlue+1);
-  // ihist++;
-
-  // g_File.push_back("signal/TttH_1500_RH.root");
-  // g_Hist.push_back(ihist);
-  // g_Title.push_back("TttH RH M_{T'} = 1.5 TeV");
-  // g_Bkg.push_back(false);
-  // g_Color.push_back(kBlue+1);
-  // ihist++;
-
-  // g_File.push_back("signal/TttH_1800_RH.root");
-  // g_Hist.push_back(ihist);
-  // g_Title.push_back("TttH RH M_{T'} = 1.8 TeV");
-  // g_Bkg.push_back(false);
-  // g_Color.push_back(kGreen+1);
-  // ihist++;
+  g_File.push_back("signal/TttH_1800_RH.root");
+  g_Hist.push_back(ihist);
+  g_Title.push_back("TttH RH M_{T'} = 1.8 TeV");
+  g_Bkg.push_back(false);
+  g_Color.push_back(kMagenta+1);
+  ihist++;
 
   
  
@@ -150,14 +150,14 @@ void Plot_1D_stack(){
   int Nhist = ihist;
 
   g_Path = "/Users/crogan/Dropbox/SAMPLES/Tprime/";
-  g_PlotTitle = "Region D Selection";
+  g_PlotTitle = "Region D Strawberry";
   g_Lumi = 36;
 
-  g_Xname = "tau32";
-  g_Xmin = 0.;
-  g_Xmax = 1.;
+  g_Xname = "#tilde{M}_{T'} [GeV]";
+  g_Xmin = 750.;
+  g_Xmax = 2500.;
 
-  g_NX = 50;
+  g_NX = 32;
 
 
   TH1D* hist[Nhist];
@@ -180,14 +180,7 @@ void Plot_1D_stack(){
       if(e%(max(1,Nentry/10)) == 0)
 	cout << "event " << e << " | " << Nentry << endl;
 
-      // if(base->N_extra < 1)
-      // 	continue;
-
-      // if(fabs(base->eta_q) < 2.4)
-      // 	continue;
-
-       if(base->tau3_top/base->tau2_top > 0.5)
-      	continue;
+  
 
       double weight = fabs(base->weight);
 
@@ -205,25 +198,87 @@ void Plot_1D_stack(){
       bool lveto  = false;
       TLorentzVector LEP(0.,0.,0.,0.);
       
-      if(base->pT_mu_clean->size() > 0 && base->pT_mu_clean->at(0) >= 55.){
-	lveto = true;
-	LEP.SetPtEtaPhiE(base->pT_mu_clean->at(0),
-			 base->eta_mu_clean->at(0),
-			 base->phi_mu_clean->at(0),
-			 base->E_mu_clean->at(0));
+      // if(base->pT_mu_clean->size() > 0 && base->pT_mu_clean->at(0) >= 55.){
+      // 	lveto = true;
+      // 	LEP.SetPtEtaPhiE(base->pT_mu_clean->at(0),
+      // 			 base->eta_mu_clean->at(0),
+      // 			 base->phi_mu_clean->at(0),
+      // 			 base->E_mu_clean->at(0));
+      // }
+      // if(base->pT_ele_clean->size() > 0 && base->pT_ele_clean->at(0) >= LEP.Pt()){
+      // 	lveto = true;
+      // 	LEP.SetPtEtaPhiE(base->pT_ele_clean->at(0),
+      // 			 base->eta_ele_clean->at(0),
+      // 			 base->phi_ele_clean->at(0),
+      // 			 base->E_ele_clean->at(0));
+      // }
+
+      // if(lveto)
+      // 	hist[g_Hist[s]]->Fill(base->tau3_higgs/base->tau2_higgs, weight*g_Lumi);
+
+      int Nj = base->pT_extrajet->size();
+      int Nextra = 0;
+      int Nbtag = 0;
+      vector<TLorentzVector> jets;
+      double maxEta = 0;
+      TLorentzVector bjet;
+      double bjetCSV = 0.;
+      bool Hveto = false;
+      for(int j = 0; j < Nj; j++){
+	TLorentzVector jet;
+	jet.SetPtEtaPhiM(base->pT_extrajet->at(j),
+			 base->eta_extrajet->at(j),
+			 base->phi_extrajet->at(j),
+			 base->mass_extrajet->at(j));
+	 if(jet.DeltaR(H) > 0.55 && jet.DeltaR(H) < 0.85) Hveto = true;
+	if(jet.DeltaR(H) < 1.1 || jet.DeltaR(T) < 1.1) continue;
+	Nextra++;
+	jets.push_back(jet);
+	if(fabs(jet.Eta()) > maxEta)
+	  maxEta = fabs(jet.Eta());
+	if(base->CSV_extrajet->at(j) > 0.8484)
+	  Nbtag++;
+	if(base->CSV_extrajet->at(j) > bjetCSV){
+	  bjetCSV = base->CSV_extrajet->at(j);
+	  bjet = jet;
+	}
       }
-      if(base->pT_ele_clean->size() > 0 && base->pT_ele_clean->at(0) >= LEP.Pt()){
-	lveto = true;
-	LEP.SetPtEtaPhiE(base->pT_ele_clean->at(0),
-			 base->eta_ele_clean->at(0),
-			 base->phi_ele_clean->at(0),
-			 base->E_ele_clean->at(0));
+      double dRapidity = 0;
+      double dbEta = 0;
+      for(int i = 0; i < Nextra; i++){
+	 if(fabs(jets[i].Eta() - bjet.Eta()) > dbEta){
+	   dbEta = fabs(jets[i].Eta() - bjet.Eta());
+	 }
+	for(int j = i+1; j < Nextra; j++)
+	  if(fabs(jets[i].Eta()-jets[j].Eta()) > dRapidity)
+	    dRapidity = fabs(jets[i].Eta()-jets[j].Eta());
       }
 
-      if(lveto)
-	hist[g_Hist[s]]->Fill(base->tau3_higgs/base->tau2_higgs, weight*g_Lumi);
+      
+      // vanilla selection
+      // if(base->tau3_top/base->tau2_top > 0.5)
+      // 	continue;
+      // if(Nextra < 1)
+      // 	continue;
+      // if(maxEta < 2.4)
+      // 	continue;
 
-      //hist[g_Hist[s]]->Fill(fabs(q.Rapidity()-Tp.Rapidity()), weight*g_Lumi);
+       // Chocolate selection
+      if(base->tau3_top/base->tau2_top > 0.57)
+	continue;
+      if(Nextra < 4)
+	continue;
+      if(Nbtag < 1)
+      	continue;
+       if(Hveto)
+       	continue;
+      if(dRapidity < 3.5)
+	continue;
+
+
+      double MT = Tp.M() - T.M() - H.M() + 300.;
+      if(weight*g_Lumi > 3.) continue;
+      hist[g_Hist[s]]->Fill(MT, weight*g_Lumi);
 
     }
 

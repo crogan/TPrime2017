@@ -41,37 +41,39 @@ int style_list[4][10];
 
 void setstyle(int istyle);
 
-double MTprime(TLorentzVector Top, TLorentzVector Higgs, int type = 0);
-double g_mHiggs;
-double g_mTop;
-
-std::pair<float,float> GetInterval(vector<float>& MT, float sigma);
-
-void Plot_Intervals(){
+void Plot_1D_avg(){
   setstyle(0);
 
-  g_mHiggs = 125.;
-  g_mTop   = 175.;
+  //g_PlotTitle = "Baseline Selection";
+  g_PlotTitle = "Region D (#epsilon_{top} = 3.0)";
+
+  int ihist = 0;
+
   
-  vector<int> g_Color;
-  g_Color.push_back(kBlue+2);
-  g_Color.push_back(kRed+2);
-  g_Color.push_back(kGreen+2);
-  g_Color.push_back(kMagenta+2);
-  g_Color.push_back(kCyan+2);
-  g_Color.push_back(kOrange+2);
+  g_File.push_back("bkg/QCDPt.root");
+  g_Hist.push_back(ihist);
+  g_Title.push_back("QCD multijets");
+  g_Bkg.push_back(true);
+  ihist++;
   
-  // g_File.push_back("signal/TbtH_1200_LH.root");
-  // g_PlotTitle = "TbtH LH M_{T'} = 1.2 TeV";
+  g_File.push_back("bkg/TTJets.root");
+  g_Hist.push_back(ihist);
+  g_File.push_back("bkg/ttHJets.root");
+  g_Hist.push_back(ihist);
+  g_File.push_back("bkg/ttWJets.root");
+  g_Hist.push_back(ihist);
+  g_File.push_back("bkg/ttZJets.root");
+  g_Hist.push_back(ihist);
+  g_Title.push_back("t #bar{t} + X");
+  g_Bkg.push_back(true);
+  ihist++;
+ 
 
-  // g_File.push_back("signal/TttH_1200_RH.root");
-  // g_PlotTitle = "TttH RH M_{T'} = 1.2 TeV";
-
-  // g_File.push_back("signal/TbtH_1500_LH.root");
-  // g_PlotTitle = "TbtH LH M_{T'} = 1.5 TeV";
-
-  g_File.push_back("signal/TttH_1500_RH.root");
-  g_PlotTitle = "TttH RH M_{T'} = 1.5 TeV";
+  g_File.push_back("signal/TbtH_1200_LH.root");
+  g_Hist.push_back(ihist);
+  g_Title.push_back("TbtH LH M_{T'} = 1.2 TeV");
+  g_Bkg.push_back(false);
+  ihist++;
 
   // g_File.push_back("signal/TbtH_1500_LH.root");
   // g_Hist.push_back(ihist);
@@ -79,88 +81,148 @@ void Plot_Intervals(){
   // g_Bkg.push_back(false);
   // ihist++;
 
-  // g_File.push_back("signal/TbtH_1800_LH.root");
+  g_File.push_back("signal/TbtH_1800_LH.root");
+  g_Hist.push_back(ihist);
+  g_Title.push_back("TbtH LH M_{T'} = 1.8 TeV");
+  g_Bkg.push_back(false);
+  ihist++;
+
+  g_File.push_back("signal/TttH_1200_RH.root");
+  g_Hist.push_back(ihist);
+  g_Title.push_back("TttH RH M_{T'} = 1.2 TeV");
+  g_Bkg.push_back(false);
+  ihist++;
+
+  g_File.push_back("signal/TttH_1800_RH.root");
+  g_Hist.push_back(ihist);
+  g_Title.push_back("TttH RH M_{T'} = 1.8 TeV");
+  g_Bkg.push_back(false);
+  ihist++;
+  
+
+  /*
+  g_File.push_back("TPrime_0p1/signal/TbtH_1200_LH.root");
+  g_Hist.push_back(ihist);
+  g_Title.push_back("#epsilon_{top} = 0.1");
+  g_Bkg.push_back(false);
+  ihist++;
+
+  g_File.push_back("TPrime_0p3/signal/TbtH_1200_LH.root");
+  g_Hist.push_back(ihist);
+  g_Title.push_back("#epsilon_{top} = 0.3");
+  g_Bkg.push_back(false);
+  ihist++;
+
+  g_File.push_back("TPrime_1p0/signal/TbtH_1200_LH.root");
+  g_Hist.push_back(ihist);
+  g_Title.push_back("#epsilon_{top} = 1.0");
+  g_Bkg.push_back(false);
+  ihist++;
+
+  g_File.push_back("TPrime_3p0/signal/TbtH_1200_LH.root");
+  g_Hist.push_back(ihist);
+  g_Title.push_back("#epsilon_{top} = 3.0");
+  g_Bkg.push_back(false);
+  ihist++;
+  */
+
+  /*
+  g_File.push_back("TPrime_0p1/signal/TbtH_1500_LH.root");
+  g_Hist.push_back(ihist);
+  g_Title.push_back("#epsilon_{top} = 0.1");
+  g_Bkg.push_back(false);
+  ihist++;
+
+  g_File.push_back("TPrime_0p3/signal/TbtH_1500_LH.root");
+  g_Hist.push_back(ihist);
+  g_Title.push_back("#epsilon_{top} = 0.3");
+  g_Bkg.push_back(false);
+  ihist++;
+
+  g_File.push_back("TPrime_1p0/signal/TbtH_1500_LH.root");
+  g_Hist.push_back(ihist);
+  g_Title.push_back("#epsilon_{top} = 1.0");
+  g_Bkg.push_back(false);
+  ihist++;
+
+  g_File.push_back("TPrime_3p0/signal/TbtH_1500_LH.root");
+  g_Hist.push_back(ihist);
+  g_Title.push_back("#epsilon_{top} = 3.0");
+  g_Bkg.push_back(false);
+  ihist++;
+  */
+
+  /*
+  g_File.push_back("TPrime_0p1/signal/TttH_1500_RH.root");
+  g_Hist.push_back(ihist);
+  g_Title.push_back("#epsilon_{top} = 0.1");
+  g_Bkg.push_back(false);
+  ihist++;
+
+  g_File.push_back("TPrime_0p3/signal/TttH_1500_RH.root");
+  g_Hist.push_back(ihist);
+  g_Title.push_back("#epsilon_{top} = 0.3");
+  g_Bkg.push_back(false);
+  ihist++;
+
+  g_File.push_back("TPrime_1p0/signal/TttH_1500_RH.root");
+  g_Hist.push_back(ihist);
+  g_Title.push_back("#epsilon_{top} = 1.0");
+  g_Bkg.push_back(false);
+  ihist++;
+
+  g_File.push_back("TPrime_3p0/signal/TttH_1500_RH.root");
+  g_Hist.push_back(ihist);
+  g_Title.push_back("#epsilon_{top} = 3.0");
+  g_Bkg.push_back(false);
+  ihist++;
+  */
+
+  
+  // g_File.push_back("TPrime_3p0/signal/TbtH_1200_LH.root");
   // g_Hist.push_back(ihist);
-  // g_Title.push_back("TbtH LH M_{T'} = 1.8 TeV");
+  // g_Title.push_back("TbtH LH");
   // g_Bkg.push_back(false);
   // ihist++;
 
-  // g_File.push_back("signal/TttH_1200_RH.root");
+  // g_File.push_back("TPrime_3p0/signal/TbtH_1200_RH.root");
+  // g_Hist.push_back(ihist);
+  // g_Title.push_back("TbtH RH");
+  // g_Bkg.push_back(false);
+  // ihist++;
+
+  // g_File.push_back("TPrime_3p0/signal/TttH_1200_LH.root");
+  // g_Hist.push_back(ihist);
+  // g_Title.push_back("TttH LH");
+  // g_Bkg.push_back(false);
+  // ihist++;
+
+  // g_File.push_back("TPrime_3p0/signal/TttH_1200_RH.root");
   // g_Hist.push_back(ihist);
   // g_Title.push_back("TttH RH");
   // g_Bkg.push_back(false);
   // ihist++;
   
+
   int Nsample = g_File.size();
+  int Nhist = ihist;
 
   g_Path = "/Users/crogan/Dropbox/SAMPLES/Tprime/";
   
-  g_Xname = "M_{T'} alternatives";
-  g_Xmin = 1000.;
-  g_Xmax = 1850.;
-
-  // g_Xmin = 0.;
-  // g_Xmax = 1.;
-  g_NX = 64;
-
-  int Nhist = 5;
+  //g_Xname = "N_{jet}^{ V_{S}}";
+  g_Xname = "#Delta R around Higgs [#Delta R(j, T) > 1.2]";
+  g_Xmin = 0.65;
+  g_Xmax = 1.5;
+  g_NX = 40;
 
   TH1D* hist[Nhist];
-  vector<vector<float> > vMT;
+  double NTOT[Nhist];
   for(int i = 0; i < Nhist; i++){
-    vMT.push_back(vector<float>());
     hist[i] = new TH1D(("h"+to_string(i)).c_str(),
 		       ("h"+to_string(i)).c_str(),
 		       g_NX,g_Xmin,g_Xmax);
+    NTOT[i] = 0.;
   }
-
-  
-  for(int s = 0; s < Nsample; s++){
-    TChain* chain = new TChain("TPrime");
-    chain->Add((g_Path+g_File[s]).c_str());
-
-    ReducedBase* base = new ReducedBase(chain);
-
-    int Nentry = base->fChain->GetEntries();
-
-    cout << "Sample " << s << " | " << Nsample << endl;
-    for(int e = 0; e < Nentry; e++){
-      base->GetEntry(e);
-      if(e%(max(1,Nentry/10)) == 0)
-	cout << "event " << e << " | " << Nentry << endl;
-
-      if(base->tau3_top/base->tau2_top > 0.6)
-	continue;
-
-      TLorentzVector Top, Higgs;
-      Top.SetPtEtaPhiM( base->pT_top,
-			base->eta_top,
-			base->phi_top,
-			base->mass_top );
-      Higgs.SetPtEtaPhiM( base->pT_higgs,
-			  base->eta_higgs,
-			  base->phi_higgs,
-			  base->mass_higgs );
-
-      
-      double MT = MTprime(Top, Higgs, 0);
-      hist[0]->Fill(MT, base->weight);
-      vMT[0].push_back(MT);
-      //hist[h]->Fill(base->tau3_top/base->tau2_top, base->weight);
-
-    }
-
-    delete base;
-    delete chain;
-  }
-
-  vector<pair<float,float> > intervals;
-  
-  sort(vMT[0].begin(),vMT[0].end());
-  intervals.push_back(GetInterval(vMT[0], 0.5));
-  intervals.push_back(GetInterval(vMT[0], 1.));
-  intervals.push_back(GetInterval(vMT[0], 1.5));
-  intervals.push_back(GetInterval(vMT[0], 2.0));
 
   for(int s = 0; s < Nsample; s++){
     TChain* chain = new TChain("TPrime");
@@ -176,37 +238,48 @@ void Plot_Intervals(){
       if(e%(max(1,Nentry/10)) == 0)
 	cout << "event " << e << " | " << Nentry << endl;
 
-      if(base->tau3_top/base->tau2_top > 0.6)
-	continue;
+      // if(base->dphiISRI < 3.0)
+      // 	continue;
 
-      TLorentzVector Top, Higgs;
-      Top.SetPtEtaPhiM( base->pT_top,
-			base->eta_top,
-			base->phi_top,
-			base->mass_top );
-      Higgs.SetPtEtaPhiM( base->pT_higgs,
-			  base->eta_higgs,
-			  base->phi_higgs,
-			  base->mass_higgs );
+      if(base->tau3_top/base->tau2_top > 0.57)
+      	continue;
 
+       TLorentzVector H,T;
+      H.SetPtEtaPhiM( base->pT_higgs, base->eta_higgs, base->phi_higgs, base->mass_higgs );
+      T.SetPtEtaPhiM( base->pT_top, base->eta_top, base->phi_top, base->mass_top );
+      TLorentzVector Tp = H+T;
       
-      double MT = MTprime(Top, Higgs, 0);
-      for(int i = 0; i < 4; i++){
-	if(MT >= intervals[i].first && MT <= intervals[i].second)
-	  hist[i+1]->Fill(MT, base->weight);
+      double RPTtop = base->pT_top / (base->pT_top + base->M_Tp);
+      double RPThiggs = base->pT_higgs / (base->pT_higgs + base->M_Tp);
+
+      // hist[g_Hist[s]]->Fill(base->cosT, base->weight);
+
+      int Nj = base->pT_extrajet->size();
+      
+      NTOT[g_Hist[s]] += base->weight;
+      for(int j = 0; j < Nj; j++){
+	TLorentzVector jet;
+	jet.SetPtEtaPhiM(base->pT_extrajet->at(j),
+			 base->eta_extrajet->at(j),
+			 base->phi_extrajet->at(j),
+			 base->mass_extrajet->at(j));
+	if(jet.DeltaR(T) < 1.2 || jet.DeltaR(H) < g_Xmin) continue;
+	for(int b = 0; b < g_NX; b++)
+	  if( jet.DeltaR(H) <= hist[g_Hist[s]]->GetXaxis()->GetBinLowEdge(b+1) )
+	    hist[g_Hist[s]]->Fill(hist[g_Hist[s]]->GetBinCenter(b+1), base->weight);
       }
-      //hist[h]->Fill(base->tau3_top/base->tau2_top, base->weight);
 
     }
 
     delete base;
     delete chain;
   }
-    
+  
   double max = -1.;
   int imax = -1;
-  for(int i = Nhist-1; i >= 0; i--){
-    hist[i]->Scale(1./hist[0]->Integral());
+  for(int i = 0; i < Nhist; i++){
+    cout << hist[i]->Integral() << " bla" << endl;
+    hist[i]->Scale(1./NTOT[i]);
     if(hist[i]->GetMaximum() > max){
       max = hist[i]->GetMaximum();
       imax = i;
@@ -230,52 +303,45 @@ void Plot_Intervals(){
   can->SetGridy();
   can->Draw();
   can->cd();
-  hist[0]->Draw();
-  hist[0]->GetXaxis()->CenterTitle();
-  hist[0]->GetXaxis()->SetTitleFont(132);
-  hist[0]->GetXaxis()->SetTitleSize(0.06);
-  hist[0]->GetXaxis()->SetTitleOffset(1.06);
-  hist[0]->GetXaxis()->SetLabelFont(132);
-  hist[0]->GetXaxis()->SetLabelSize(0.05);
-  hist[0]->GetXaxis()->SetTitle(g_Xname.c_str());
-  hist[0]->GetYaxis()->CenterTitle();
-  hist[0]->GetYaxis()->SetTitleFont(132);
-  hist[0]->GetYaxis()->SetTitleSize(0.06);
-  hist[0]->GetYaxis()->SetTitleOffset(1.);
-  hist[0]->GetYaxis()->SetLabelFont(132);
-  hist[0]->GetYaxis()->SetLabelSize(0.05);
-  hist[0]->GetYaxis()->SetTitle("a. u.");
-  hist[0]->GetYaxis()->SetRangeUser(0.0001, hist[0]->GetMaximum()*1.1);
-  //hist[0]->GetYaxis()->SetTitle(yaxis);
-  //hist[0]->GetYaxis()->SetTitle("N_{evt} / fb^{-1}");
+  hist[imax]->Draw();
+  hist[imax]->GetXaxis()->CenterTitle();
+  hist[imax]->GetXaxis()->SetTitleFont(132);
+  hist[imax]->GetXaxis()->SetTitleSize(0.06);
+  hist[imax]->GetXaxis()->SetTitleOffset(1.06);
+  hist[imax]->GetXaxis()->SetLabelFont(132);
+  hist[imax]->GetXaxis()->SetLabelSize(0.05);
+  hist[imax]->GetXaxis()->SetTitle(g_Xname.c_str());
+  hist[imax]->GetYaxis()->CenterTitle();
+  hist[imax]->GetYaxis()->SetTitleFont(132);
+  hist[imax]->GetYaxis()->SetTitleSize(0.06);
+  hist[imax]->GetYaxis()->SetTitleOffset(1.);
+  hist[imax]->GetYaxis()->SetLabelFont(132);
+  hist[imax]->GetYaxis()->SetLabelSize(0.05);
+  hist[imax]->GetYaxis()->SetTitle("average number of jets");
+  hist[imax]->GetYaxis()->SetRangeUser(0., hist[imax]->GetMaximum()*1.1);
+  //hist[imax]->GetYaxis()->SetTitle(yaxis);
+  //hist[imax]->GetYaxis()->SetTitle("N_{evt} / fb^{-1}");
   int Ntype[3];
 
-  hist[0]->SetLineColor(kBlack);
-  hist[0]->SetLineWidth(3);
-  hist[0]->SetMarkerColor(kBlack);
-  hist[0]->SetMarkerSize(0);
-  hist[0]->SetFillColor(kWhite);
-  
-  for(int i = Nhist-1; i >= 1; i--){
-    hist[i]->SetLineColor(g_Color[i-1]);
-    hist[i]->SetLineWidth(2);
-    hist[i]->SetMarkerColor(g_Color[i-1]);
+  Ntype[0] = 0;
+  for(int i = 0; i < Nhist; i++){
+    hist[i]->SetLineColor(1393+2*Ntype[0]);
+    hist[i]->SetLineWidth(3);
+    hist[i]->SetMarkerColor(1393+2*Ntype[0]);
     hist[i]->SetMarkerSize(0);
-    hist[i]->SetFillColor(g_Color[i-1]-10);
-    //hist[i]->SetFillStyle(3001);
+    hist[i]->SetFillColor(kWhite);
+    Ntype[0]++;
     hist[i]->Draw("SAME");
   }
 
-  TLegend* leg = new TLegend(0.1588,0.68,0.3946,0.8947);
+  TLegend* leg = new TLegend(0.688,0.22,0.93,0.42);
   leg->SetTextFont(132);
   leg->SetTextSize(0.045);
   leg->SetFillColor(kWhite);
   leg->SetLineColor(kWhite);
   leg->SetShadowColor(kWhite);
-  leg->AddEntry(hist[1], "#pm 0.5 #sigma");
-  leg->AddEntry(hist[2], "#pm 1.0 #sigma");
-  leg->AddEntry(hist[3], "#pm 1.5 #sigma");
-  leg->AddEntry(hist[4], "#pm 2.0 #sigma");
+  for(int i = 0; i < Nhist; i++)
+    leg->AddEntry(hist[i],g_Title[i].c_str());
   leg->SetLineColor(kWhite);
   leg->SetFillColor(kWhite);
   leg->SetShadowColor(kWhite);
@@ -493,75 +559,4 @@ void setstyle(int istyle) {
     style_list[2][1] = 5;
   }
 	
-}
-
-double MTprime(TLorentzVector Top, TLorentzVector Higgs, int type){
-  if(type == 0){
-    return (Top+Higgs).M();
-  }
-  if(type == 1){
-    return (Top+Higgs).M() - Top.M() - Higgs.M() + g_mHiggs + g_mTop;
-  }
-  if(type == 2){
-    Top.SetPtEtaPhiM( Top.Pt(), Top.Eta(), Top.Phi(), g_mTop);
-    Higgs.SetPtEtaPhiM( Higgs.Pt(), Higgs.Eta(), Higgs.Phi(), g_mHiggs);
-    return (Top+Higgs).M();
-  }
-  if(type == 3){
-    double Ptop = sqrt(Top.E()*Top.E() - g_mTop*g_mTop);
-    Top.SetPtEtaPhiE( Top.Pt()*Ptop/Top.P(), Top.Eta(), Top.Phi(), Top.E());
-    double Phiggs = sqrt(Higgs.E()*Higgs.E() - g_mHiggs*g_mHiggs);
-    Higgs.SetPtEtaPhiE( Higgs.Pt()*Phiggs/Higgs.P(), Higgs.Eta(), Higgs.Phi(), Higgs.E());
-    return (Top+Higgs).M();
-  }
-  if(type == 4){
-    return ((g_mTop/Top.M())*Top+(g_mHiggs/Higgs.M())*Higgs).M();
-  }
-  if(type == 5){
-    TVector3 boost = (Top+Higgs).BoostVector();
-    Top.Boost(-boost);
-    Higgs.Boost(-boost);
-    return sqrt(Top.P()*Top.P()+g_mTop*g_mTop)+sqrt(Higgs.P()*Higgs.P()+g_mHiggs*g_mHiggs);
-  }
-
-}
-
-std::pair<float,float> GetInterval(vector<float>& MT, float sigma){
-  double P = TMath::Erf(sigma/sqrt(2.));
-  int N = MT.size();
-
-  double Dmin = fabs(MT[N-1]-MT[0]);
-  int imin = 0;
-  for(int i = 0; i < N-1; i++)
-    if(fabs(MT[i+1]-MT[i]) < Dmin){
-      Dmin = fabs(MT[i+1]-MT[i]);
-      imin = i;
-    }
-
-  int jmin = imin+1;
-  int interval = N*P-2;
-  while(interval > 0){
-    if(imin == 0){
-      interval--;
-      jmin++;
-      continue;
-    }
-    if(jmin == N-1){
-      interval--;
-      imin--;
-      continue;
-    }
-    if( fabs(MT[imin]-MT[imin-1]) < fabs(MT[jmin+1]-MT[jmin]) ){
-      interval--;
-      imin--;
-      continue;
-    } else {
-      interval--;
-      jmin++;
-      continue;
-    }
-  }
-
-  pair<float,float> ret(MT[imin],MT[jmin]);
-  return ret;
 }

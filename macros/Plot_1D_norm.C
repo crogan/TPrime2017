@@ -15,6 +15,7 @@
 #include <TColorWheel.h>
 #include <TH1D.h>
 #include <TStyle.h>
+#include <TLorentzVector.h>
 
 #include "include/ReducedBase.hh"
 
@@ -32,7 +33,7 @@ string g_PlotTitle;
 string g_Xname;
 double g_Xmin;
 double g_Xmax;
-double g_NX;
+int g_NX;
 
 TColor *icolor[9][2];
 int color_list[4][10];
@@ -44,48 +45,54 @@ void Plot_1D_norm(){
   setstyle(0);
 
   //g_PlotTitle = "Baseline Selection";
-  g_PlotTitle = "Region D (#epsilon_{top} = 3.0)";
+  g_PlotTitle = "Region D (#epsilon_{top} = 0.3)";
 
   int ihist = 0;
 
-  /*
-  g_File.push_back("TPrime_3p0/bkg/QCDPt.root");
+  
+  g_File.push_back("bkg/QCDPt.root");
   g_Hist.push_back(ihist);
   g_Title.push_back("QCD multijets");
   g_Bkg.push_back(true);
   ihist++;
   
-  g_File.push_back("TPrime_3p0/bkg/TTJets.root");
+  g_File.push_back("bkg/TTJets.root");
   g_Hist.push_back(ihist);
-  g_File.push_back("TPrime_3p0/bkg/ttHJets.root");
+  g_File.push_back("bkg/ttHJets.root");
   g_Hist.push_back(ihist);
-  g_File.push_back("TPrime_3p0/bkg/ttWJets.root");
+  g_File.push_back("bkg/ttWJets.root");
   g_Hist.push_back(ihist);
-  g_File.push_back("TPrime_3p0/bkg/ttZJets.root");
+  g_File.push_back("bkg/ttZJets.root");
   g_Hist.push_back(ihist);
   g_Title.push_back("t #bar{t} + X");
   g_Bkg.push_back(true);
   ihist++;
  
 
-  g_File.push_back("TPrime_3p0/signal/TbtH_1200_LH.root");
+  g_File.push_back("signal/TbtH_1200_LH.root");
   g_Hist.push_back(ihist);
   g_Title.push_back("TbtH LH M_{T'} = 1.2 TeV");
   g_Bkg.push_back(false);
   ihist++;
 
-  g_File.push_back("TPrime_3p0/signal/TbtH_1500_LH.root");
-  g_Hist.push_back(ihist);
-  g_Title.push_back("TbtH LH M_{T'} = 1.5 TeV");
-  g_Bkg.push_back(false);
-  ihist++;
-
-  g_File.push_back("TPrime_3p0/signal/TbtH_1800_LH.root");
+  g_File.push_back("signal/TbtH_1800_LH.root");
   g_Hist.push_back(ihist);
   g_Title.push_back("TbtH LH M_{T'} = 1.8 TeV");
   g_Bkg.push_back(false);
   ihist++;
-  */
+
+  g_File.push_back("signal/TttH_1200_RH.root");
+  g_Hist.push_back(ihist);
+  g_Title.push_back("TttH RH M_{T'} = 1.2 TeV");
+  g_Bkg.push_back(false);
+  ihist++;
+  
+  g_File.push_back("signal/TttH_1800_RH.root");
+  g_Hist.push_back(ihist);
+  g_Title.push_back("TttH RH M_{T'} = 1.8 TeV");
+  g_Bkg.push_back(false);
+  ihist++;
+  
 
   /*
   g_File.push_back("TPrime_0p1/signal/TbtH_1200_LH.root");
@@ -166,29 +173,29 @@ void Plot_1D_norm(){
   */
 
   
-  g_File.push_back("TPrime_3p0/signal/TbtH_1200_LH.root");
-  g_Hist.push_back(ihist);
-  g_Title.push_back("TbtH LH");
-  g_Bkg.push_back(false);
-  ihist++;
+  // g_File.push_back("TPrime_3p0/signal/TbtH_1200_LH.root");
+  // g_Hist.push_back(ihist);
+  // g_Title.push_back("TbtH LH");
+  // g_Bkg.push_back(false);
+  // ihist++;
 
-  g_File.push_back("TPrime_3p0/signal/TbtH_1200_RH.root");
-  g_Hist.push_back(ihist);
-  g_Title.push_back("TbtH RH");
-  g_Bkg.push_back(false);
-  ihist++;
+  // g_File.push_back("TPrime_3p0/signal/TbtH_1200_RH.root");
+  // g_Hist.push_back(ihist);
+  // g_Title.push_back("TbtH RH");
+  // g_Bkg.push_back(false);
+  // ihist++;
 
-  g_File.push_back("TPrime_3p0/signal/TttH_1200_LH.root");
-  g_Hist.push_back(ihist);
-  g_Title.push_back("TttH LH");
-  g_Bkg.push_back(false);
-  ihist++;
+  // g_File.push_back("TPrime_3p0/signal/TttH_1200_LH.root");
+  // g_Hist.push_back(ihist);
+  // g_Title.push_back("TttH LH");
+  // g_Bkg.push_back(false);
+  // ihist++;
 
-  g_File.push_back("TPrime_3p0/signal/TttH_1200_RH.root");
-  g_Hist.push_back(ihist);
-  g_Title.push_back("TttH RH");
-  g_Bkg.push_back(false);
-  ihist++;
+  // g_File.push_back("TPrime_3p0/signal/TttH_1200_RH.root");
+  // g_Hist.push_back(ihist);
+  // g_Title.push_back("TttH RH");
+  // g_Bkg.push_back(false);
+  // ihist++;
   
 
   int Nsample = g_File.size();
@@ -197,10 +204,10 @@ void Plot_1D_norm(){
   g_Path = "/Users/crogan/Dropbox/SAMPLES/Tprime/";
   
   //g_Xname = "N_{jet}^{ V_{S}}";
-  g_Xname = "cos #theta_{T'}";
-  g_Xmin = -1.;
-  g_Xmax = 1.;
-  g_NX = 30;
+  g_Xname = "Number of extra jets (#Delta R(j, H/T) > 1.2)";
+  g_Xmin = -0.5;
+  g_Xmax = 2.5;
+  g_NX = 3;
 
 
   TH1D* hist[Nhist];
@@ -225,12 +232,62 @@ void Plot_1D_norm(){
 
       // if(base->dphiISRI < 3.0)
       // 	continue;
- 
+
+      // if(base->tau3_top/base->tau2_top > 0.57)
+      // 	continue;
+
+       TLorentzVector H,T;
+      H.SetPtEtaPhiM( base->pT_higgs, base->eta_higgs, base->phi_higgs, base->mass_higgs );
+      T.SetPtEtaPhiM( base->pT_top, base->eta_top, base->phi_top, base->mass_top );
+      TLorentzVector Tp = H+T;
+      
       double RPTtop = base->pT_top / (base->pT_top + base->M_Tp);
       double RPThiggs = base->pT_higgs / (base->pT_higgs + base->M_Tp);
 
-      hist[g_Hist[s]]->Fill(base->cosT, base->weight);
+      // hist[g_Hist[s]]->Fill(base->cosT, base->weight);
 
+      int Nj = base->pT_extrajet->size();
+      int Nextra = 0;
+      int Nbtag = 0;
+      vector<TLorentzVector> jets;
+      double maxEta = 0;
+      TLorentzVector bjet;
+      double bjetCSV = 0.;
+      for(int j = 0; j < Nj; j++){
+	TLorentzVector jet;
+	jet.SetPtEtaPhiM(base->pT_extrajet->at(j),
+			 base->eta_extrajet->at(j),
+			 base->phi_extrajet->at(j),
+			 base->mass_extrajet->at(j));
+	if(jet.DeltaR(H) < 1.2 || jet.DeltaR(T) < 1.2) continue;
+	Nextra++;
+	jets.push_back(jet);
+	if(fabs(jet.Eta()) > maxEta)
+	  maxEta = fabs(jet.Eta());
+	if(base->CSV_extrajet->at(j) > 0.8484)
+	  Nbtag++;
+	if(base->CSV_extrajet->at(j) > bjetCSV){
+	  bjetCSV = base->CSV_extrajet->at(j);
+	  bjet = jet;
+     }
+	//hist[g_Hist[s]]->Fill(jet.DeltaR(T), base->weight);
+      }
+      if(Nextra > 1)
+      	for(int i = 0; i < min(Nbtag,g_NX); i++)
+      	  hist[g_Hist[s]]->Fill(i, base->weight);
+
+      double dRapidity = 0;
+      double dbEta = 0;
+      for(int i = 0; i < Nextra; i++){
+	 if(fabs(jets[i].Eta() - bjet.Eta()) > dbEta){
+	   dbEta = fabs(jets[i].Eta() - bjet.Eta());
+	 }
+	for(int j = i+1; j < Nextra; j++)
+	  if(fabs(jets[i].Eta()-jets[j].Eta()) > dRapidity)
+	    dRapidity = fabs(jets[i].Eta()-jets[j].Eta());
+      }
+      // if(Nextra > 1)
+      // 	hist[g_Hist[s]]->Fill(N, base->weight);
     }
 
     delete base;
@@ -241,7 +298,8 @@ void Plot_1D_norm(){
   int imax = -1;
   for(int i = 0; i < Nhist; i++){
     cout << hist[i]->Integral() << " bla" << endl;
-    hist[i]->Scale(1./hist[i]->Integral());
+    //hist[i]->Scale(1./hist[i]->Integral());
+    hist[i]->Scale(1./hist[i]->GetMaximum());
     if(hist[i]->GetMaximum() > max){
       max = hist[i]->GetMaximum();
       imax = i;
@@ -265,6 +323,11 @@ void Plot_1D_norm(){
   can->SetGridy();
   can->Draw();
   can->cd();
+  for(int i = 0; i < hist[imax]->GetNbinsX(); i++){
+    char* sbin = new char[20];
+    sprintf(sbin,"#geq %d", i);
+    hist[imax]->GetXaxis()->SetBinLabel(i+1,sbin);
+  }
   hist[imax]->Draw();
   hist[imax]->GetXaxis()->CenterTitle();
   hist[imax]->GetXaxis()->SetTitleFont(132);

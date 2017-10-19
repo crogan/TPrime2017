@@ -64,40 +64,22 @@ void Plot_MTprime(){
   // g_File.push_back("signal/TbtH_1200_LH.root");
   // g_PlotTitle = "TbtH LH M_{T'} = 1.2 TeV";
 
-  g_File.push_back("signal/TttH_1200_RH.root");
-  g_PlotTitle = "TttH RH M_{T'} = 1.2 TeV";
+  // g_File.push_back("signal/TttH_1200_RH.root");
+  // g_PlotTitle = "TttH RH M_{T'} = 1.2 TeV";
 
   // g_File.push_back("signal/TbtH_1500_LH.root");
   // g_PlotTitle = "TbtH LH M_{T'} = 1.5 TeV";
 
-  // g_File.push_back("signal/TttH_1500_RH.root");
-  // g_PlotTitle = "TttH RH M_{T'} = 1.5 TeV";
-
-  // g_File.push_back("signal/TbtH_1500_LH.root");
-  // g_Hist.push_back(ihist);
-  // g_Title.push_back("TbtH LH M_{T'} = 1.5 TeV");
-  // g_Bkg.push_back(false);
-  // ihist++;
-
-  // g_File.push_back("signal/TbtH_1800_LH.root");
-  // g_Hist.push_back(ihist);
-  // g_Title.push_back("TbtH LH M_{T'} = 1.8 TeV");
-  // g_Bkg.push_back(false);
-  // ihist++;
-
-  // g_File.push_back("signal/TttH_1200_RH.root");
-  // g_Hist.push_back(ihist);
-  // g_Title.push_back("TttH RH");
-  // g_Bkg.push_back(false);
-  // ihist++;
+  g_File.push_back("signal/TttH_1500_RH.root");
+  g_PlotTitle = "TttH RH M_{T'} = 1.5 TeV";
   
   int Nsample = g_File.size();
 
   g_Path = "/Users/crogan/Dropbox/SAMPLES/Tprime/";
   
   g_Xname = "M_{T'} alternatives";
-  g_Xmin = 850.;
-  g_Xmax = 1450.;
+  g_Xmin = 1050.;
+  g_Xmax = 1750.;
 
   // g_Xmin = 0.;
   // g_Xmax = 1.;
@@ -521,12 +503,13 @@ std::pair<float,float> GetInterval(vector<float>& MT, float sigma){
 
   double Dmin = fabs(MT[N-1]-MT[0]);
   int imin = 0;
-  for(int i = 0; i < N-1; i++)
-    if(fabs(MT[i+1]-MT[i]) < Dmin){
-      Dmin = fabs(MT[i+1]-MT[i]);
-      imin = i;
-    }
-
+  // for(int i = 0; i < N-1; i++)
+  //   if(fabs(MT[i+1]-MT[i]) < Dmin){
+  //     Dmin = fabs(MT[i+1]-MT[i]);
+  //     imin = i;
+  //   }
+  
+  imin = N/2;
   int jmin = imin+1;
   int interval = N*P-2;
   while(interval > 0){

@@ -70,10 +70,10 @@ void OptimizationBase<Base>::Loop(int Njob, int ijob){
       bool fail = false;
       for(int i = 0; i < m_N_Cut; i++){
 	int sev = key%m_CutN[i];
-	if(sev >= sev_max[i]){
-	  fail = true;
-	  break;
-	}
+	// if(sev >= sev_max[i]){
+	//   fail = true;
+	//   break;
+	// }
 	key /= m_CutN[i];
 	m_CutVal[i] = m_CutMin[i] + (m_CutMax[i]-m_CutMin[i])/double(m_CutN[i])*double(sev);
       }

@@ -42,11 +42,11 @@ void Plot_2D(){
   // g_File.push_back("bkg/QCDPt.root");
   // g_PlotTitle = "QCD multijets";
   
-  g_File.push_back("bkg/TTJets.root");
-  g_File.push_back("bkg/ttHJets.root");
-  g_File.push_back("bkg/ttWJets.root");
-  g_File.push_back("bkg/ttZJets.root");
-  g_PlotTitle = "t #bar{t} + X";
+  // g_File.push_back("bkg/TTJets.root");
+  // g_File.push_back("bkg/ttHJets.root");
+  // g_File.push_back("bkg/ttWJets.root");
+  // g_File.push_back("bkg/ttZJets.root");
+  // g_PlotTitle = "t #bar{t} + X";
 
   // g_File.push_back("bkg/ST_antitop.root");
   // g_Hist.push_back(ihist);
@@ -76,8 +76,8 @@ void Plot_2D(){
   // g_File.push_back("signal/TbtH_1500_LH.root");
   // g_PlotTitle = "TbtH LH M_{T'} = 1.5 TeV";
 
-  // g_File.push_back("signal/TbtH_1800_LH.root");
-  // g_PlotTitle = "TbtH LH M_{T'} = 1.8 TeV";
+  g_File.push_back("signal/TbtH_1800_LH.root");
+  g_PlotTitle = "TbtH LH M_{T'} = 1.8 TeV";
  
   // g_File.push_back("signal/TttH_1200_RH.root");
   // g_PlotTitle = "TttH RH M_{T'} = 1.2 TeV";
@@ -104,11 +104,11 @@ void Plot_2D(){
   string g_Label = "Region D (#epsilon_{top} = 0.3)";
 
 
-  g_Xname = "#Delta R(j, H)";
+  g_Xname = "#Delta R(j, H), all AK4 jets";
   g_Xmin = 0.;
   g_Xmax = 3.; 
   g_NX = 30;
-  g_Yname = "#Delta R(j, T)";
+  g_Yname = "#Delta R(j, T), all AK4 jets";
 
   g_Ymin = 0.;
   g_Ymax = 4.;
@@ -226,7 +226,7 @@ void Plot_2D(){
 
     l.SetTextSize(0.04);
     l.SetTextFont(132);
-    l.DrawLatex(0.64,0.04,g_Label.c_str());
+    l.DrawLatex(0.74,0.04,g_Label.c_str());
 
 
 }

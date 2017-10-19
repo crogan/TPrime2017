@@ -22,7 +22,7 @@
 #include "include/ReducedBase.hh"
 #include "include/EventCount.hh"
 
-double MTprime(TLorentzVector Top, TLorentzVector Higgs, int type = 0);
+double MTprime(TLorentzVector Top, TLorentzVector Higgs, int type = 0, float mTsoft = 175., float mHsoft = 125.);
 double g_mHiggs;
 double g_mTop;
 
@@ -134,7 +134,7 @@ void PlotSampleBkg(){
 			  base->mass_higgs );
       
       for(int h = 0; h < Nhist; h++){
-	double MT = MTprime(Top, Higgs, h);
+	double MT = MTprime(Top, Higgs, h, base->mass_softdrop_top, base->mass_softdrop_higgs);
 	vMT[h].push_back(MT);
 	mean[h][f] += MT;
       }
@@ -207,7 +207,7 @@ void PlotSampleBkg(){
 			  base->mass_higgs );
       
       for(int h = 0; h < Nhist; h++){
-	double MT = MTprime(Top, Higgs, h);
+	double MT = MTprime(Top, Higgs, h, base->mass_softdrop_top, base->mass_softdrop_higgs);
 
 	for(int f = 0; f < Nfile; f++){
 	  for(int s = 0; s < 3; s++){
@@ -237,18 +237,18 @@ void PlotSampleBkg(){
       gr[h][s] = (TGraph*) new TGraph(Nfile, x[h], y[h][s]);
       if(s == 0){
 	gr[h][s]->SetLineWidth(0);
-	gr[h][s]->SetMarkerSize(1);
+	gr[h][s]->SetMarkerSize(1.1);
 	gr[h][s]->SetMarkerStyle(3);
       }
       if(s == 1){
 	gr[h][s]->SetLineWidth(0);
-	gr[h][s]->SetMarkerSize(1);
-	gr[h][s]->SetMarkerStyle(3);
+	gr[h][s]->SetMarkerSize(1.1);
+	gr[h][s]->SetMarkerStyle(22);
       }
       if(s == 2){
 	gr[h][s]->SetLineWidth(0);
-	gr[h][s]->SetMarkerSize(1);
-	gr[h][s]->SetMarkerStyle(3);
+	gr[h][s]->SetMarkerSize(1.1);
+	gr[h][s]->SetMarkerStyle(23);
       }
       gr[h][s]->SetMarkerColor(g_Color[h]);
       gr[h][s]->SetLineColor(g_Color[h]);
@@ -296,7 +296,7 @@ void PlotSampleBkg(){
   hist->GetYaxis()->SetTitle("< N_{B} > in 1 #sigma relative to default M_{T'}");
   hist->GetYaxis()->SetRangeUser(0., 70.);
   for(int i = 0; i < Nhist; i++)
-    gr[i][2]->Draw("P same");
+    gr[i][1]->Draw("P same");
  
 
   TLatex l;
@@ -318,8 +318,13 @@ void PlotSampleBkg(){
   leg->SetShadowColor(kWhite);
   leg->AddEntry(gr[0][0], "M_{T'} default", "p");
   leg->AddEntry(gr[1][0], "#tilde{M}_{T'}", "p");
-  leg->AddEntry(gr[2][0], "fixed p_{top/Higgs}", "p");
-  leg->AddEntry(gr[3][0], "fixed E_{top/Higgs}", "p");
+  leg->AddEntry(gr[2][0], "M_{T'}(m_{soft})", "p");
+  leg->AddEntry(gr[3][0], "#tilde{M}_{T'}(m_{soft})", "p");
+  leg->AddEntry(gr[4][0], "#tilde{M}_{T'} \"hybrid\"", "p");
+  
+  // leg->AddEntry(gr[1][0], "#tilde{M}_{T'}", "p");
+  // leg->AddEntry(gr[2][0], "fixed p_{top/Higgs}", "p");
+  // leg->AddEntry(gr[3][0], "fixed E_{top/Higgs}", "p");
   leg->SetLineColor(kWhite);
   leg->SetFillColor(kWhite);
   leg->SetShadowColor(kWhite);
@@ -328,13 +333,40 @@ void PlotSampleBkg(){
   
 }
 
-double MTprime(TLorentzVector Top, TLorentzVector Higgs, int type){
+double MTprime(TLorentzVector Top, TLorentzVector Higgs, int type, float mTsoft, float mHsoft){
   if(type == 0){
     return (Top+Higgs).M();
   }
   if(type == 1){
     return (Top+Higgs).M() - Top.M() - Higgs.M() + g_mHiggs + g_mTop;
   }
+  if(type == 2){
+    Top.SetPtEtaPhiM( Top.Pt(),
+		      Top.Eta(),
+		      Top.Phi(),
+		      mTsoft );
+    Higgs.SetPtEtaPhiM( Higgs.Pt(),
+			Higgs.Eta(),
+			Higgs.Phi(),
+			mHsoft );
+    return (Top+Higgs).M();
+  }
+  if(type == 3){
+    Top.SetPtEtaPhiM( Top.Pt(),
+		      Top.Eta(),
+		      Top.Phi(),
+		      mTsoft );
+    Higgs.SetPtEtaPhiM( Higgs.Pt(),
+			Higgs.Eta(),
+			Higgs.Phi(),
+			mHsoft );
+    return (Top+Higgs).M() - Top.M() - Higgs.M() + g_mHiggs + g_mTop;
+  }
+  if(type == 4){
+    return (Top+Higgs).M() - mTsoft - mHsoft + g_mHiggs + g_mTop;
+  }
+
+  /*
   if(type == 2){
     Top.SetPtEtaPhiM( Top.Pt(), Top.Eta(), Top.Phi(), g_mTop);
     Higgs.SetPtEtaPhiM( Higgs.Pt(), Higgs.Eta(), Higgs.Phi(), g_mHiggs);
@@ -356,6 +388,9 @@ double MTprime(TLorentzVector Top, TLorentzVector Higgs, int type){
     Higgs.Boost(-boost);
     return sqrt(Top.P()*Top.P()+g_mTop*g_mTop)+sqrt(Higgs.P()*Higgs.P()+g_mHiggs*g_mHiggs);
   }
+  */
+  
+
 
 }
 
@@ -365,12 +400,13 @@ std::pair<float,float> GetInterval(vector<float>& MT, float sigma){
 
   double Dmin = fabs(MT[N-1]-MT[0]);
   int imin = 0;
-  for(int i = 0; i < N-1; i++)
-    if(fabs(MT[i+1]-MT[i]) < Dmin){
-      Dmin = fabs(MT[i+1]-MT[i]);
-      imin = i;
-    }
+  // for(int i = 0; i < N-1; i++)
+  //   if(fabs(MT[i+1]-MT[i]) < Dmin){
+  //     Dmin = fabs(MT[i+1]-MT[i]);
+  //     imin = i;
+  //   }
 
+  imin = N/2;
   int jmin = imin+1;
   int interval = N*P-2;
   while(interval > 0){

@@ -44,52 +44,52 @@ void PlotSampleWidth(){
   
   vector<string> g_Files;
 
-  g_Files.push_back("TbtH_800_LH.root");
-  g_Files.push_back("TbtH_800_RH.root");
-  g_Files.push_back("TbtH_900_LH.root");
-  g_Files.push_back("TbtH_900_RH.root");
-  g_Files.push_back("TbtH_1000_LH.root");
-  g_Files.push_back("TbtH_1000_RH.root");
-  g_Files.push_back("TbtH_1100_LH.root");
-  g_Files.push_back("TbtH_1100_RH.root");
-  g_Files.push_back("TbtH_1200_LH.root");
-  g_Files.push_back("TbtH_1200_RH.root");
-  g_Files.push_back("TbtH_1300_LH.root");
-  g_Files.push_back("TbtH_1300_RH.root");
-  g_Files.push_back("TbtH_1400_LH.root");
-  g_Files.push_back("TbtH_1400_RH.root");
-  g_Files.push_back("TbtH_1500_LH.root");
-  g_Files.push_back("TbtH_1500_RH.root");
-  g_Files.push_back("TbtH_1700_LH.root");
-  g_Files.push_back("TbtH_1700_RH.root");
-  g_Files.push_back("TbtH_1800_LH.root");
-  g_Files.push_back("TbtH_1800_RH.root");
+  // g_Files.push_back("TbtH_800_LH.root");
+  // g_Files.push_back("TbtH_800_RH.root");
+  // g_Files.push_back("TbtH_900_LH.root");
+  // g_Files.push_back("TbtH_900_RH.root");
+  // g_Files.push_back("TbtH_1000_LH.root");
+  // g_Files.push_back("TbtH_1000_RH.root");
+  // g_Files.push_back("TbtH_1100_LH.root");
+  // g_Files.push_back("TbtH_1100_RH.root");
+  // g_Files.push_back("TbtH_1200_LH.root");
+  // g_Files.push_back("TbtH_1200_RH.root");
+  // g_Files.push_back("TbtH_1300_LH.root");
+  // g_Files.push_back("TbtH_1300_RH.root");
+  // g_Files.push_back("TbtH_1400_LH.root");
+  // g_Files.push_back("TbtH_1400_RH.root");
+  // g_Files.push_back("TbtH_1500_LH.root");
+  // g_Files.push_back("TbtH_1500_RH.root");
+  // g_Files.push_back("TbtH_1700_LH.root");
+  // g_Files.push_back("TbtH_1700_RH.root");
+  // g_Files.push_back("TbtH_1800_LH.root");
+  // g_Files.push_back("TbtH_1800_RH.root");
 
-  // g_Files.push_back("TttH_800_LH.root");
-  // g_Files.push_back("TttH_800_RH.root");
-  // g_Files.push_back("TttH_900_RH.root");
-  // g_Files.push_back("TttH_1000_LH.root");
-  // g_Files.push_back("TttH_1000_RH.root");
-  // g_Files.push_back("TttH_1100_LH.root");
-  // g_Files.push_back("TttH_1100_RH.root");
-  // g_Files.push_back("TttH_1200_LH.root");
-  // g_Files.push_back("TttH_1200_RH.root");
-  // g_Files.push_back("TttH_1300_LH.root");
-  // g_Files.push_back("TttH_1300_RH.root");
-  // g_Files.push_back("TttH_1400_LH.root");
-  // g_Files.push_back("TttH_1400_RH.root");
-  // g_Files.push_back("TttH_1500_LH.root");
-  // g_Files.push_back("TttH_1500_RH.root");
-  // g_Files.push_back("TttH_1700_LH.root");
-  // g_Files.push_back("TttH_1700_RH.root");
-  // g_Files.push_back("TttH_1800_LH.root");
-  // g_Files.push_back("TttH_1800_RH.root");
+  g_Files.push_back("TttH_800_LH.root");
+  g_Files.push_back("TttH_800_RH.root");
+  g_Files.push_back("TttH_900_RH.root");
+  g_Files.push_back("TttH_1000_LH.root");
+  g_Files.push_back("TttH_1000_RH.root");
+  g_Files.push_back("TttH_1100_LH.root");
+  g_Files.push_back("TttH_1100_RH.root");
+  g_Files.push_back("TttH_1200_LH.root");
+  g_Files.push_back("TttH_1200_RH.root");
+  g_Files.push_back("TttH_1300_LH.root");
+  g_Files.push_back("TttH_1300_RH.root");
+  g_Files.push_back("TttH_1400_LH.root");
+  g_Files.push_back("TttH_1400_RH.root");
+  g_Files.push_back("TttH_1500_LH.root");
+  g_Files.push_back("TttH_1500_RH.root");
+  g_Files.push_back("TttH_1700_LH.root");
+  g_Files.push_back("TttH_1700_RH.root");
+  g_Files.push_back("TttH_1800_LH.root");
+  g_Files.push_back("TttH_1800_RH.root");
 
   int Nfile = g_Files.size();
 
   string g_Path = "/Users/crogan/Dropbox/SAMPLES/Tprime/signal/";
 
-  int Nhist = 4; // different types of MTprime calc
+  int Nhist = 5; // different types of MTprime calc
 
   
   vector<vector<float> > vMT;
@@ -170,18 +170,18 @@ void PlotSampleWidth(){
       gr[h][s] = (TGraph*) new TGraph(Nfile, x[h], y[h][s]);
       if(s == 0){
 	gr[h][s]->SetLineWidth(0);
-	gr[h][s]->SetMarkerSize(1);
+	gr[h][s]->SetMarkerSize(1.1);
 	gr[h][s]->SetMarkerStyle(3);
       }
       if(s == 1){
 	gr[h][s]->SetLineWidth(0);
-	gr[h][s]->SetMarkerSize(1);
-	gr[h][s]->SetMarkerStyle(2);
+	gr[h][s]->SetMarkerSize(1.1);
+	gr[h][s]->SetMarkerStyle(22);
       }
       if(s == 2){
 	gr[h][s]->SetLineWidth(0);
-	gr[h][s]->SetMarkerSize(1);
-	gr[h][s]->SetMarkerStyle(5);
+	gr[h][s]->SetMarkerSize(1.2);
+	gr[h][s]->SetMarkerStyle(23);
       }
       gr[h][s]->SetMarkerColor(g_Color[h]);
       gr[h][s]->SetLineColor(g_Color[h]);
@@ -251,10 +251,10 @@ void PlotSampleWidth(){
   leg->SetLineColor(kWhite);
   leg->SetShadowColor(kWhite);
   leg->AddEntry(gr[0][0], "M_{T'} default", "p");
-  leg->AddEntry(gr[1][0], "#tilde{M}_{T'}", "l");
-  leg->AddEntry(gr[2][0], "M_{T'}(m_{soft})", "l");
-  leg->AddEntry(gr[3][0], "#tilde{M}_{T'}(m_{soft})", "l");
-  leg->AddEntry(gr[4][0], "#tilde{M}_{T'} \"hybrid\"", "l");
+  leg->AddEntry(gr[1][0], "#tilde{M}_{T'}", "p");
+  leg->AddEntry(gr[2][0], "M_{T'}(m_{soft})", "p");
+  leg->AddEntry(gr[3][0], "#tilde{M}_{T'}(m_{soft})", "p");
+  leg->AddEntry(gr[4][0], "#tilde{M}_{T'} \"hybrid\"", "p");
   // leg->AddEntry(gr[1][0], "#tilde{M}_{T'}", "p");
   // leg->AddEntry(gr[2][0], "fixed p_{top/Higgs}", "p");
   // leg->AddEntry(gr[3][0], "fixed E_{top/Higgs}", "p");
@@ -351,12 +351,12 @@ std::pair<float,float> GetInterval(vector<float>& MT, float sigma){
 
   double Dmin = fabs(MT[N-1]-MT[0]);
   int imin = 0;
-  for(int i = 0; i < N-1; i++)
-    if(fabs(MT[i+1]-MT[i]) < Dmin){
-      Dmin = fabs(MT[i+1]-MT[i]);
-      imin = i;
-    }
-
+  // for(int i = 0; i < N-1; i++)
+  //   if(fabs(MT[i+1]-MT[i]) < Dmin){
+  //     Dmin = fabs(MT[i+1]-MT[i]);
+  //     imin = i;
+  //   }
+  imin = N/2;
   int jmin = imin+1;
   int interval = N*P-2;
   while(interval > 0){

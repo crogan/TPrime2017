@@ -21,18 +21,18 @@ double g_minBKG;
 
 void PlotOpt(){
   // fixed background uncertainty (%)
-  g_deltaNbkg = 20.;
+  g_deltaNbkg = 25.;
   // integrated luminosity (fb^-1)
   g_lumi = 36.;
   // minimum number of expected background events
   g_minBKG = 1.;
 
-  TFile* input = new TFile("test_0p1.root","READ");
+  TFile* input = new TFile("Opt.root","READ");
 
-  double Sscale = 1.;
+  double Sscale = 3.;
   double Bscale = 1.;
 
-  string SignalModel = "TbtH_1200_LH";
+  string SignalModel = "TttH_1800_RH";
   string plot_title = "TbtH LH, m_{T'} = 1200 GeV";
 
   TTree* tree  = (TTree*) input->Get("optimization");
@@ -233,14 +233,14 @@ void PlotOpt(){
   
 }
 
-// double EvaluateMetric(double Nsig, double Nbkg){
-//   double Nobs = Nsig+Nbkg;
-//   double tau = 1./Nbkg/(g_deltaNbkg*g_deltaNbkg/10000.);
-//   double aux = Nbkg*tau;
-//   double Pvalue = TMath::BetaIncomplete(1./(1.+tau),Nobs,aux+1.);
-//   return sqrt(2.)*TMath::ErfcInverse(Pvalue*2);
-// }
-
 double EvaluateMetric(double Nsig, double Nbkg){
-  return Nsig / sqrt( Nbkg*Nbkg*g_deltaNbkg*g_deltaNbkg/10000. + Nbkg );
+  double Nobs = Nsig+Nbkg;
+  double tau = 1./Nbkg/(g_deltaNbkg*g_deltaNbkg/10000.);
+  double aux = Nbkg*tau;
+  double Pvalue = TMath::BetaIncomplete(1./(1.+tau),Nobs,aux+1.);
+  return sqrt(2.)*TMath::ErfcInverse(Pvalue*2);
 }
+
+// double EvaluateMetric(double Nsig, double Nbkg){
+//   return Nsig / sqrt( Nbkg*Nbkg*g_deltaNbkg*g_deltaNbkg/10000. + Nbkg );
+// }
