@@ -66,6 +66,11 @@ private:
   float m_phi_higgs_sj1;
   float m_mass_higgs_sj1;
 
+  float m_csv_top_sj0;
+  float m_csv_top_sj1;
+  float m_csv_higgs_sj0;
+  float m_csv_higgs_sj1;
+
   // extra-jet 4-vectors
   vector<float> m_pT_extrajet;
   vector<float> m_eta_extrajet;

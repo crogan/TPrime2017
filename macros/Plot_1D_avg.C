@@ -45,7 +45,7 @@ void Plot_1D_avg(){
   setstyle(0);
 
   //g_PlotTitle = "Baseline Selection";
-  g_PlotTitle = "Region D (#epsilon_{top} = 3.0)";
+  g_PlotTitle = "Region D (#epsilon_{top} = 0.3)";
 
   int ihist = 0;
 
@@ -210,10 +210,10 @@ void Plot_1D_avg(){
   g_Path = "/Users/crogan/Dropbox/SAMPLES/Tprime/";
   
   //g_Xname = "N_{jet}^{ V_{S}}";
-  g_Xname = "#Delta R around Higgs [#Delta R(j, T) > 1.2]";
-  g_Xmin = 0.65;
-  g_Xmax = 1.5;
-  g_NX = 40;
+  g_Xname = "#Delta R around top";
+  g_Xmin = 0.0;
+  g_Xmax = 4.5;
+  g_NX = 64;
 
   TH1D* hist[Nhist];
   double NTOT[Nhist];
@@ -263,9 +263,9 @@ void Plot_1D_avg(){
 			 base->eta_extrajet->at(j),
 			 base->phi_extrajet->at(j),
 			 base->mass_extrajet->at(j));
-	if(jet.DeltaR(T) < 1.2 || jet.DeltaR(H) < g_Xmin) continue;
+	//if(jet.DeltaR(T) < 1.2 || jet.DeltaR(H) < g_Xmin) continue;
 	for(int b = 0; b < g_NX; b++)
-	  if( jet.DeltaR(H) <= hist[g_Hist[s]]->GetXaxis()->GetBinLowEdge(b+1) )
+	  if( jet.DeltaR(T) <= hist[g_Hist[s]]->GetXaxis()->GetBinLowEdge(b+1) )
 	    hist[g_Hist[s]]->Fill(hist[g_Hist[s]]->GetBinCenter(b+1), base->weight);
       }
 

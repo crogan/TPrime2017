@@ -95,6 +95,11 @@ void ReducedNtuple::InitOutputTree(){
   m_Tree->Branch("phi_higgs_sj1", &m_phi_higgs_sj1);
   m_Tree->Branch("mass_higgs_sj1", &m_mass_higgs_sj1);
 
+  m_Tree->Branch("csv_top_sj0", &m_csv_top_sj0);
+  m_Tree->Branch("csv_top_sj1", &m_csv_top_sj1);
+  m_Tree->Branch("csv_higgs_sj0", &m_csv_higgs_sj0);
+  m_Tree->Branch("csv_higgs_sj1", &m_csv_higgs_sj1);
+
   // extra-jet 4-vectors
   m_Tree->Branch("pT_extrajet", &m_pT_extrajet);
   m_Tree->Branch("eta_extrajet", &m_eta_extrajet);
@@ -287,17 +292,26 @@ void ReducedNtuple::FillOutputTree(){
 		     sj1etaAK8->at(ijet),
 		     sj1phiAK8->at(ijet),
 		     sj1EnergyAK8->at(ijet) );
+    double csv1 = sj0CSVAK8->at(ijet);
+    double csv2 = sj1CSVAK8->at(ijet);
     if(sj0CSVAK8->at(ijet) < sj1CSVAK8->at(ijet)){
       TLorentzVector temp = j1;
+      double csvtemp = csv1;
       j1 = j2;
+      csv1 = csv2;
       j2 = temp;
+      csv2 = csvtemp;
     }
     if(ihiggs[ijet] > 0){
       Higgs0 = j1;
       Higgs1 = j2;
+      m_csv_higgs_sj0 = csv1;
+      m_csv_higgs_sj1 = csv2;
     } else {
       Top0 = j1;
       Top1 = j2;
+      m_csv_top_sj0 = csv1;
+      m_csv_top_sj1 = csv2;
     }
   }
 
