@@ -168,8 +168,8 @@ int TPrimeOptimization::EvaluateCuts(){
 		      m_Base->phi_extrajet->at(j),
 		      m_Base->mass_extrajet->at(j));
      if(jet.DeltaR(H) > 0.65 && jet.DeltaR(H) < 0.85) return icut;
-     if(jet.DeltaR(T) < 1.1 || jet.DeltaR(H) < 1.1) continue;
-     //if(jet.DeltaR(T) < m_CutVal[icut+1] || jet.DeltaR(H) < m_CutVal[icut+1]) continue;
+     //if(jet.DeltaR(T) < 1.1 || jet.DeltaR(H) < 1.1) continue;
+     if(jet.DeltaR(T) < m_CutVal[icut+1] || jet.DeltaR(H) < m_CutVal[icut+1]) continue;
      Nextra++;
      jets.push_back(jet);
      if(fabs(jet.Eta()) > MaxEta)
