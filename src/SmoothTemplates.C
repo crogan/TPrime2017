@@ -85,7 +85,7 @@ int main(int argc, char* argv[]) {
 	(name.find("TttZ") != string::npos)){
       TH1F* htemp = (TH1F*) F->Get(name.c_str());
       fout->cd();
-      //htemp->Write();
+      htemp->Write();
       htemp->Delete();
       link = link->Next();
       continue;
@@ -138,8 +138,8 @@ int main(int argc, char* argv[]) {
   int Nsyst = systnames.size();
   int Nreg  = regionnames.size();
 
-  for(int i = 0; i < Nsyst; i++)
-    cout << systnames[i] << endl;
+  // for(int i = 0; i < Nsyst; i++)
+  //   cout << systnames[i] << endl;
   
   map<string, map<string, TH1F*> > hist_TTJets;
   map<string, map<string, TH1F*> > hist_QCD;
@@ -227,7 +227,7 @@ int main(int argc, char* argv[]) {
     
     hist = hist_QCD["regionA"][systnames[s]];
     // exponential fit of tail to get starting values
-    hist->Fit(f_exp,"LLER");
+    hist->Fit(f_exp,"LLERQ");
 
     // initial values for fit
     f_nom->SetParameter(0, f_exp->GetParameter(1));
@@ -239,7 +239,7 @@ int main(int argc, char* argv[]) {
     for(int i = 0; i < 5; i++){
       f_nom->ReleaseParameter(i);
     }
-    TFitResultPtr result = hist->Fit("f_nom", "SLLER");
+    TFitResultPtr result = hist->Fit("f_nom", "SLLERQ");
 
     // set function parameters to result
     for(int i = 0; i < 5; i++){
@@ -275,7 +275,7 @@ int main(int argc, char* argv[]) {
 	continue;
       
       hist = hist_QCD[regionnames[r]][systnames[s]];
-      TFitResultPtr new_res = hist->Fit("f_nom", "SLLER");
+      TFitResultPtr new_res = hist->Fit("f_nom", "SLLERQ");
       
       f_nom->SetParameter(4, new_res->GetParams()[4]);
       Nbins = hist->GetNbinsX();
@@ -304,7 +304,7 @@ int main(int argc, char* argv[]) {
 	continue;
       
       hist = hist_Other[regionnames[r]][systnames[s]];
-      TFitResultPtr new_res = hist->Fit("f_nom", "SLLER");
+      TFitResultPtr new_res = hist->Fit("f_nom", "SLLERQ");
       
       f_nom->SetParameter(4, new_res->GetParams()[4]);
       Nbins = hist->GetNbinsX();
@@ -337,7 +337,7 @@ int main(int argc, char* argv[]) {
     
       hist = hist_TTJets[regionnames[r]][systnames[s]];
       // exponential fit of tail to get starting values
-      hist->Fit(f_exp,"LLER");
+      hist->Fit(f_exp,"LLERQ");
 
       // initial values for fit
       f_nom->SetParameter(0, f_exp->GetParameter(1));
@@ -349,7 +349,7 @@ int main(int argc, char* argv[]) {
       for(int i = 0; i < 5; i++){
 	f_nom->ReleaseParameter(i);
       }
-      TFitResultPtr result = hist->Fit("f_nom", "SLLER");
+      TFitResultPtr result = hist->Fit("f_nom", "SLLERQ");
 
       // set function parameters to result
       for(int i = 0; i < 5; i++){
