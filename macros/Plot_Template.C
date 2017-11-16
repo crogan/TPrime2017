@@ -45,8 +45,8 @@ void setstyle(int istyle);
 void Plot_Template(){
   setstyle(0);
 
-  bool DO_BAND = true;
-  int REBIN = 2;
+  bool DO_BAND = false;
+  int REBIN = 1;
   
   vector<int> g_Color;
   g_Color.push_back(kBlue+2);
@@ -57,7 +57,7 @@ void Plot_Template(){
   g_Color.push_back(kOrange+2);
 
   g_File.push_back("7Nov17/templates_topM_extraJetTwo_extraForwardJetOne_7Nov17.root");
-  g_Hist.push_back("MTP_regionB_QCD");
+  g_Hist.push_back("MTP_regionA_QCD");
   //g_PlotTitle = "t #bar{t}+jets Region A";
   g_PlotTitle = "QCD Region B";
   
