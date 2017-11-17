@@ -23,7 +23,7 @@ using namespace std;
 /// specified input files
 int main(int argc, char* argv[]) {
 
-  bool DO_ERR = true;
+  bool DO_ERR = false;
   
   /// Gets the list of input files and chains
   /// them into a single TChain
@@ -78,11 +78,22 @@ int main(int argc, char* argv[]) {
     }
 
     // pass these histograms through unchanged
-    if( (name.find("data") != string::npos) ||
-	(name.find("TbtH") != string::npos) ||
+    if( (name.find("TbtH") != string::npos) ||
 	(name.find("TbtZ") != string::npos) ||
 	(name.find("TttH") != string::npos) ||
 	(name.find("TttZ") != string::npos)){
+      TH1F* htemp = (TH1F*) F->Get(name.c_str());
+      fout->cd();
+      htemp->Write();
+      htemp->Delete();
+      link = link->Next();
+      continue;
+    }
+
+    // write data histograms unchanged but
+    // save for later use
+    if(name.find("data") != string::npos){
+      histonames.push_back(name);
       TH1F* htemp = (TH1F*) F->Get(name.c_str());
       fout->cd();
       htemp->Write();
@@ -104,7 +115,7 @@ int main(int argc, char* argv[]) {
     }
 
     // don't keep any region D "est" histograms
-    // for now (TODO -- get this right)
+    // going to remake these
     if(name.find("regionD_est") != string::npos){
       link = link->Next();
       continue;
@@ -141,6 +152,7 @@ int main(int argc, char* argv[]) {
   // for(int i = 0; i < Nsyst; i++)
   //   cout << systnames[i] << endl;
   
+  map<string, map<string, TH1F*> > hist_data;
   map<string, map<string, TH1F*> > hist_TTJets;
   map<string, map<string, TH1F*> > hist_QCD;
   map<string, map<string, TH1F*> > hist_Other;
@@ -175,6 +187,13 @@ int main(int argc, char* argv[]) {
     if(systname == "_lup")
       systname = "_lUp";
     
+    if(hname.find("data") != string::npos){
+      if(hist_data.count(sregion) == 0){
+	hist_data[sregion] = = new_hist;
+	continue;
+      }
+    }
+
     if(hname == "TTJets"){
       if(hist_TTJets.count(sregion) == 0)
 	hist_TTJets[sregion] = map<string, TH1F*>();
@@ -203,6 +222,7 @@ int main(int argc, char* argv[]) {
 
   systnames.pop_back(); // lup cludge
   systnames.push_back("");
+  Nsyst = systnames.size();
 
   TF1 *f_exp = new TF1("f_exp","[0]*exp([1]*x)", 1100., 2500);
   TF1 *f_nom = new TF1("f_nom", GausExp, 750., 3000., 5);

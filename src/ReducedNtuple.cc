@@ -166,9 +166,9 @@ void ReducedNtuple::FillOutputTree(){
   if(FatJets.size() < 2) 
     return; 
 
-  // trigger preselection
-  if(FatJets[0].Pt()+FatJets[1].Pt() < 850.)
-    return;
+  // // trigger preselection
+  // if(FatJets[0].Pt()+FatJets[1].Pt() < 850.)
+  //   return;
 
   m_EvtPreselection += m_weight; 
 
@@ -211,6 +211,16 @@ void ReducedNtuple::FillOutputTree(){
     }
   }
 
+  cout << SelectedEvent_trigBit->size() << " " << SelectedEvent_trigName->size() << endl;
+  int Ntrig = SelectedEvent_trigName->size();
+  for(int t = 0; t < Ntrig; t++){
+    cout << SelectedEvent_trigName->at(t) << endl;
+  }
+  cout << endl << endl;
+  
+// vector<double>  *SelectedEvent_trigBit;
+  // vector<string>  *SelectedEvent_trigName;
+
   m_isA = SelectedEvent_isRegionA;
   m_isB = SelectedEvent_isRegionB;
   m_isC = SelectedEvent_isRegionC;
@@ -231,7 +241,6 @@ void ReducedNtuple::FillOutputTree(){
     ihiggs[1] = 1;
     itop[1] = -1;
     ihiggs[0] = -1;
-    m_isA = true;
   } else {
     if( itop[1] >= 0 && ihiggs[0] >= 0 ){
       ih = ihiggs[0];
@@ -240,7 +249,6 @@ void ReducedNtuple::FillOutputTree(){
       ihiggs[1] = -1;
       itop[1] = 1;
       ihiggs[0] = 1;
-      m_isA = true;
     } else {
       return;
     }
