@@ -483,6 +483,7 @@ int main(int argc, char* argv[]) {
 	if(hist_QCD[regionnames[r]].count(systnames[s]) > 0){
 	  fout->cd();
 	  string histname = "MTP_"+regionnames[r]+"_QCD"+systnames[s];
+	  hist_QCD[regionnames[r]][systnames[s]]->GetFunction("f_nom")->Delete();
 	  hist_QCD[regionnames[r]][systnames[s]]->Write(histname.c_str());
 	}
       }
@@ -495,6 +496,7 @@ int main(int argc, char* argv[]) {
 	if(hist_TTJets[regionnames[r]].count(systnames[s]) > 0){
 	  fout->cd();
 	  string histname = "MTP_"+regionnames[r]+"_TTJets"+systnames[s];
+	  hist_TTJets[regionnames[r]][systnames[s]]->GetFunction("f_nom")->Delete();
 	  hist_TTJets[regionnames[r]][systnames[s]]->Write(histname.c_str());
 	}
       }
@@ -507,6 +509,7 @@ int main(int argc, char* argv[]) {
 	if(hist_Other[regionnames[r]].count(systnames[s]) > 0){
 	  fout->cd();
 	  string histname = "MTP_"+regionnames[r]+"_Other"+systnames[s];
+	  hist_Other[regionnames[r]][systnames[s]]->GetFunction("f_nom")->Delete();
 	  hist_Other[regionnames[r]][systnames[s]]->Write(histname.c_str());
 	}
       }							    
@@ -514,12 +517,11 @@ int main(int argc, char* argv[]) {
   }
 
    // Write estimated region D histograms 
- 
   for(int s = 0; s < Nsyst; s++){
     if(hist_QCD.count("regionB") > 0){
       if(hist_QCD["regionB"].count(systnames[s]) > 0){
 	TH1F* hist = hist_QCD["regionB"][systnames[s]];
-	hist->GetFunction("f_nom")->Delete();
+	//hist->GetFunction("f_nom")->Delete();
 	int Nbins = hist->GetNbinsX();
 	hist->Scale( hist_QCD["regionC"][systnames[s]]->Integral(1,Nbins)/
 		     hist_QCD["regionA"][systnames[s]]->Integral(1,Nbins) );
