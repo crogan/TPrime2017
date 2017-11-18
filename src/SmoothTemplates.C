@@ -23,7 +23,9 @@ using namespace std;
 /// specified input files
 int main(int argc, char* argv[]) {
 
-  bool DO_ERR = false;
+  // Set to false for quick debugging
+  // (then doesn't do bin-by-bin integrals for errors)
+  bool DO_ERR = true;
   
   /// Gets the list of input files and chains
   /// them into a single TChain
@@ -152,7 +154,7 @@ int main(int argc, char* argv[]) {
   // for(int i = 0; i < Nsyst; i++)
   //   cout << systnames[i] << endl;
   
-  map<string, map<string, TH1F*> > hist_data;
+  map<string, TH1F*> hist_data;
   map<string, map<string, TH1F*> > hist_TTJets;
   map<string, map<string, TH1F*> > hist_QCD;
   map<string, map<string, TH1F*> > hist_Other;
@@ -189,7 +191,7 @@ int main(int argc, char* argv[]) {
     
     if(hname.find("data") != string::npos){
       if(hist_data.count(sregion) == 0){
-	hist_data[sregion] = = new_hist;
+	hist_data[sregion] = new_hist;
 	continue;
       }
     }
@@ -240,12 +242,160 @@ int main(int argc, char* argv[]) {
 
   int Nbins;
   TH1F* hist = nullptr;
-  // QCD Region A Fits
+  // QCD Region A Fits used as seed to get Other
+  // Fits, and then new "smooth QCD" from data
+  for(int s = 0; s < Nsyst; s++){
+    if(hist_QCD["regionA"].count(systnames[s]) == 0)
+      continue;
+
+    cout << "Fitting initial QCD histogram for region A";
+    cout << " for systematic variation " << systnames[s] << endl;
+    
+    hist = hist_QCD["regionA"][systnames[s]];
+    // exponential fit of tail to get starting values
+    hist->Fit(f_exp,"LLERQ");
+
+    // initial values for fit
+    f_nom->SetParameter(0, f_exp->GetParameter(1));
+    f_nom->SetParameter(1, 1000.);
+    f_nom->SetParameter(2, 50.);
+    f_nom->SetParameter(3, 220.);
+    f_nom->SetParameter(4, f_exp->GetParameter(0));
+
+    for(int i = 0; i < 5; i++){
+      f_nom->ReleaseParameter(i);
+    }
+    TFitResultPtr result = hist->Fit("f_nom", "SLLERQ");
+
+    // set function parameters to result
+    for(int i = 0; i < 5; i++){
+      f_nom->SetParameter(i, result->GetParams()[i]);
+    }
+    
+    Nbins = hist->GetNbinsX();
+    for(int b = 0; b < Nbins; b++){
+      if(DO_ERR){
+	double x0 = hist->GetXaxis()->GetBinLowEdge(b+1);
+	double x1 = hist->GetXaxis()->GetBinUpEdge(b+1);
+	double val = f_nom->Integral(x0,x1);
+	hist->SetBinContent(b+1, val/(x1-x0));
+	double valerr = f_nom->IntegralError(x0,x1,result->GetParams(),
+					     result->GetCovarianceMatrix().GetMatrixArray());
+	hist->SetBinError(b+1, valerr/(x1-x0));
+      } else {
+	double xC = hist->GetXaxis()->GetBinCenter(b+1);
+	double val = f_nom->Eval(xC);
+	hist->SetBinContent(b+1, val);
+      }
+    }
+
+    for(int i = 0; i < 4; i++){
+      f_nom->FixParameter(i, result->GetParams()[i]);
+    }
+
+    // fix shape parameters while floating normalization for "Other" backgrounds
+    for(int r = 0; r < Nreg; r++){
+      if(hist_Other.count(regionnames[r]) == 0)
+	continue;
+      if(hist_Other[regionnames[r]].count(systnames[s]) == 0)
+	continue;
+
+      cout << "Using initial QCD region A shape for \"Other\"";
+      cout << " backgrounds for " << regionnames[r] <<" , " << systnames[s] << endl;
+      
+      hist = hist_Other[regionnames[r]][systnames[s]];
+      TFitResultPtr new_res = hist->Fit("f_nom", "SLLERQ");
+      
+      f_nom->SetParameter(4, new_res->GetParams()[4]);
+      Nbins = hist->GetNbinsX();
+      for(int b = 0; b < Nbins; b++){
+	if(DO_ERR){
+	  double x0 = hist->GetXaxis()->GetBinLowEdge(b+1);
+	  double x1 = hist->GetXaxis()->GetBinUpEdge(b+1);
+	  double val = f_nom->Integral(x0,x1);
+	  hist->SetBinContent(b+1, val/(x1-x0));
+	  double valerr = f_nom->IntegralError(x0,x1,new_res->GetParams(),
+					       new_res->GetCovarianceMatrix().GetMatrixArray());
+	  hist->SetBinError(b+1, valerr/(x1-x0));
+	} else {
+	  double xC = hist->GetXaxis()->GetBinCenter(b+1);
+	  double val = f_nom->Eval(xC);
+	  hist->SetBinContent(b+1, val);
+	}
+      }
+    }
+    
+  }
+
+  // TTJets all region fits
+  for(int r = 0; r < Nreg; r++){
+    if(hist_TTJets.count(regionnames[r]) == 0)
+      continue;
+    for(int s = 0; s < Nsyst; s++){
+      if(hist_TTJets[regionnames[r]].count(systnames[s]) == 0)
+	continue;
+
+      cout << "Creating TTJets template for ";
+      cout << regionnames[r] <<" , " << systnames[s] << endl;
+      
+      hist = hist_TTJets[regionnames[r]][systnames[s]];
+      // exponential fit of tail to get starting values
+      hist->Fit(f_exp,"LLERQ");
+
+      // initial values for fit
+      f_nom->SetParameter(0, f_exp->GetParameter(1));
+      f_nom->SetParameter(1, 1000.);
+      f_nom->SetParameter(2, 50.);
+      f_nom->SetParameter(3, 220.);
+      f_nom->SetParameter(4, f_exp->GetParameter(0));
+
+      for(int i = 0; i < 5; i++){
+	f_nom->ReleaseParameter(i);
+      }
+      TFitResultPtr result = hist->Fit("f_nom", "SLLERQ");
+
+      // set function parameters to result
+      for(int i = 0; i < 5; i++){
+	f_nom->SetParameter(i, result->GetParams()[i]);
+      }
+    
+      Nbins = hist->GetNbinsX();
+      for(int b = 0; b < Nbins; b++){
+	if(DO_ERR){
+	  double x0 = hist->GetXaxis()->GetBinLowEdge(b+1);
+	  double x1 = hist->GetXaxis()->GetBinUpEdge(b+1);
+	  double val = f_nom->Integral(x0,x1);
+	  hist->SetBinContent(b+1, val/(x1-x0));
+	  double valerr = f_nom->IntegralError(x0,x1,result->GetParams(),
+					       result->GetCovarianceMatrix().GetMatrixArray());
+	  hist->SetBinError(b+1, valerr/(x1-x0));
+	} else {
+	  double xC = hist->GetXaxis()->GetBinCenter(b+1);
+	  double val = f_nom->Eval(xC);
+	  hist->SetBinContent(b+1, val);
+	}
+      }
+    }
+  }
+
+  // Pass through QCD histograms again, getting
+  // new QCD for ABC from data/smoothed other backgrounds
   for(int s = 0; s < Nsyst; s++){
     if(hist_QCD["regionA"].count(systnames[s]) == 0)
       continue;
     
     hist = hist_QCD["regionA"][systnames[s]];
+
+     cout << "Recreating QCD histograms from data and smoothed";
+     cout << " other backgrounds for region A , " << systnames[s] << endl;
+    
+    // Reset QCD A histogram to get
+    // new one from data
+    hist->Reset();
+    hist->Add((TH1F*)hist_data["regionA"]);
+    hist->Add((TH1F*)hist_TTJets["regionA"][systnames[s]],-1.);
+    hist->Add((TH1F*)hist_Other["regionA"][systnames[s]],-1.);
+    
     // exponential fit of tail to get starting values
     hist->Fit(f_exp,"LLERQ");
 
@@ -293,135 +443,49 @@ int main(int argc, char* argv[]) {
 	continue;
       if(hist_QCD[regionnames[r]].count(systnames[s]) == 0)
 	continue;
+
+      cout << "Using initial QCD region A shape for QCD";
+      cout << " backgrounds for " << regionnames[r] <<" , " << systnames[s] << endl;
       
       hist = hist_QCD[regionnames[r]][systnames[s]];
+      hist->Reset();
+      hist->Add(hist_data[regionnames[r]]);
+      hist->Add(hist_TTJets[regionnames[r]][systnames[s]],-1.);
+      hist->Add(hist_Other[regionnames[r]][systnames[s]],-1.);
+
       TFitResultPtr new_res = hist->Fit("f_nom", "SLLERQ");
       
       f_nom->SetParameter(4, new_res->GetParams()[4]);
       Nbins = hist->GetNbinsX();
       for(int b = 0; b < Nbins; b++){
 	if(DO_ERR){
-	double x0 = hist->GetXaxis()->GetBinLowEdge(b+1);
-	double x1 = hist->GetXaxis()->GetBinUpEdge(b+1);
-	double val = f_nom->Integral(x0,x1);
-	hist->SetBinContent(b+1, val/(x1-x0));
-	double valerr = f_nom->IntegralError(x0,x1,new_res->GetParams(),
-					     new_res->GetCovarianceMatrix().GetMatrixArray());
-	hist->SetBinError(b+1, valerr/(x1-x0));
-      } else {
-	double xC = hist->GetXaxis()->GetBinCenter(b+1);
-	double val = f_nom->Eval(xC);
-	hist->SetBinContent(b+1, val);
+	  double x0 = hist->GetXaxis()->GetBinLowEdge(b+1);
+	  double x1 = hist->GetXaxis()->GetBinUpEdge(b+1);
+	  double val = f_nom->Integral(x0,x1);
+	  hist->SetBinContent(b+1, val/(x1-x0));
+	  double valerr = f_nom->IntegralError(x0,x1,new_res->GetParams(),
+					       new_res->GetCovarianceMatrix().GetMatrixArray());
+	  hist->SetBinError(b+1, valerr/(x1-x0));
+	} else {
+	  double xC = hist->GetXaxis()->GetBinCenter(b+1);
+	  double val = f_nom->Eval(xC);
+	  hist->SetBinContent(b+1, val);
+	}
       }
-      }
-    }
-
-    // fix shape parameters while floating normalization for "Other" backgrounds
-    for(int r = 0; r < Nreg; r++){
-      if(hist_Other.count(regionnames[r]) == 0)
-	continue;
-      if(hist_Other[regionnames[r]].count(systnames[s]) == 0)
-	continue;
-      
-      hist = hist_Other[regionnames[r]][systnames[s]];
-      TFitResultPtr new_res = hist->Fit("f_nom", "SLLERQ");
-      
-      f_nom->SetParameter(4, new_res->GetParams()[4]);
-      Nbins = hist->GetNbinsX();
-      for(int b = 0; b < Nbins; b++){
-	if(DO_ERR){
-	double x0 = hist->GetXaxis()->GetBinLowEdge(b+1);
-	double x1 = hist->GetXaxis()->GetBinUpEdge(b+1);
-	double val = f_nom->Integral(x0,x1);
-	hist->SetBinContent(b+1, val/(x1-x0));
-	double valerr = f_nom->IntegralError(x0,x1,new_res->GetParams(),
-					     new_res->GetCovarianceMatrix().GetMatrixArray());
-	hist->SetBinError(b+1, valerr/(x1-x0));
-      } else {
-	double xC = hist->GetXaxis()->GetBinCenter(b+1);
-	double val = f_nom->Eval(xC);
-	hist->SetBinContent(b+1, val);
-      }
-      }
-    }
-    
-  }
-
-  // TTJets all region fits
-  for(int r = 0; r < Nreg; r++){
-    if(hist_TTJets.count(regionnames[r]) == 0)
-      continue;
-    for(int s = 0; s < Nsyst; s++){
-      if(hist_TTJets[regionnames[r]].count(systnames[s]) == 0)
-	continue;
-    
-      hist = hist_TTJets[regionnames[r]][systnames[s]];
-      // exponential fit of tail to get starting values
-      hist->Fit(f_exp,"LLERQ");
-
-      // initial values for fit
-      f_nom->SetParameter(0, f_exp->GetParameter(1));
-      f_nom->SetParameter(1, 1000.);
-      f_nom->SetParameter(2, 50.);
-      f_nom->SetParameter(3, 220.);
-      f_nom->SetParameter(4, f_exp->GetParameter(0));
-
-      for(int i = 0; i < 5; i++){
-	f_nom->ReleaseParameter(i);
-      }
-      TFitResultPtr result = hist->Fit("f_nom", "SLLERQ");
-
-      // set function parameters to result
-      for(int i = 0; i < 5; i++){
-	f_nom->SetParameter(i, result->GetParams()[i]);
-      }
-    
-      Nbins = hist->GetNbinsX();
-      for(int b = 0; b < Nbins; b++){
-	if(DO_ERR){
-	double x0 = hist->GetXaxis()->GetBinLowEdge(b+1);
-	double x1 = hist->GetXaxis()->GetBinUpEdge(b+1);
-	double val = f_nom->Integral(x0,x1);
-	hist->SetBinContent(b+1, val/(x1-x0));
-	double valerr = f_nom->IntegralError(x0,x1,result->GetParams(),
-					     result->GetCovarianceMatrix().GetMatrixArray());
-	hist->SetBinError(b+1, valerr/(x1-x0));
-      } else {
-	double xC = hist->GetXaxis()->GetBinCenter(b+1);
-	double val = f_nom->Eval(xC);
-	hist->SetBinContent(b+1, val);
-      }
-      }
-    }
+    }    
   }
     
     
-    
-
-  // if(DO_BAND){
-  // int Nbins = hist[h]->GetNbinsX();
-  // for(int b = 0; b < Nbins; b++){
-  //   cout << "bin # " << b << endl;
-  //   double x0 = hist[h]->GetXaxis()->GetBinLowEdge(b+1);
-  //   double x1 = hist[h]->GetXaxis()->GetBinUpEdge(b+1);
-  //   double val = vfunc[h]->Integral(x0,x1);
-  //   double valerr = vfunc[h]->IntegralError(x0,x1,result->GetParams(),
-  //   		      result->GetCovarianceMatrix().GetMatrixArray());
-  //   //double valerr = 0;
-  //   hist_func[0][h]->SetBinContent(b+1, val/(x1-x0));
-  //   hist_func[0][h]->SetBinError(b+1, valerr/(x1-x0));
-  //   hist_func[1][h]->SetBinContent(b+1, (val+valerr)/(x1-x0));
-  //   hist_func[2][h]->SetBinContent(b+1, (val-valerr)/(x1-x0));
-  
+  // Write Histograms
   for(int r = 0; r < Nreg; r++){
     for(int s = 0; s < Nsyst; s++){
-  	if(hist_QCD.count(regionnames[r]) > 0){
-  	  if(hist_QCD[regionnames[r]].count(systnames[s]) > 0){
-  	    fout->cd();
-  	    string histname = "MTP_"+regionnames[r]+"_QCD"+systnames[s];
-  	    hist_QCD[regionnames[r]][systnames[s]]->Write(histname.c_str());
-  	  }
-  	}
+      if(hist_QCD.count(regionnames[r]) > 0){
+	if(hist_QCD[regionnames[r]].count(systnames[s]) > 0){
+	  fout->cd();
+	  string histname = "MTP_"+regionnames[r]+"_QCD"+systnames[s];
+	  hist_QCD[regionnames[r]][systnames[s]]->Write(histname.c_str());
+	}
+      }
     }
   }
 
@@ -439,15 +503,37 @@ int main(int argc, char* argv[]) {
   
   for(int r = 0; r < Nreg; r++){
     for(int s = 0; s < Nsyst; s++){
-  	if(hist_Other.count(regionnames[r]) > 0){
-  	  if(hist_Other[regionnames[r]].count(systnames[s]) > 0){
-  	    fout->cd();
-  	    string histname = "MTP_"+regionnames[r]+"_Other"+systnames[s];
-  	    hist_Other[regionnames[r]][systnames[s]]->Write(histname.c_str());
-  	  }
-  	}							    
+      if(hist_Other.count(regionnames[r]) > 0){
+	if(hist_Other[regionnames[r]].count(systnames[s]) > 0){
+	  fout->cd();
+	  string histname = "MTP_"+regionnames[r]+"_Other"+systnames[s];
+	  hist_Other[regionnames[r]][systnames[s]]->Write(histname.c_str());
+	}
+      }							    
     }
   }
+
+   // Write estimated region D histograms 
+ 
+  for(int s = 0; s < Nsyst; s++){
+    if(hist_QCD.count("regionB") > 0){
+      if(hist_QCD["regionB"].count(systnames[s]) > 0){
+	TH1F* hist = hist_QCD["regionB"][systnames[s]];
+	hist->GetFunction("f_nom")->Delete();
+	int Nbins = hist->GetNbinsX();
+	hist->Scale( hist_QCD["regionC"][systnames[s]]->Integral(1,Nbins)/
+		     hist_QCD["regionA"][systnames[s]]->Integral(1,Nbins) );
+	fout->cd();
+	string histname = "MTP_regionD_estQCD"+systnames[s];
+	hist->Write(histname.c_str());
+	hist->Add(hist_TTJets["regionD"][systnames[s]]);
+	hist->Add(hist_Other["regionD"][systnames[s]]);
+	histname = "MTP_regionD_estBackground"+systnames[s];
+	hist->Write(histname.c_str());
+      }
+    }
+  }
+  
 
      
  
