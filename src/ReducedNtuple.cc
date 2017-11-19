@@ -5,6 +5,19 @@ using namespace RestFrames;
 ReducedNtuple::ReducedNtuple(TTree* tree)
   : NtupleBase<InputTreeBase>(tree)
 {
+
+  m_SignalTriggerList.push_back("AK8PFJet360_TrimMass30_v");
+  m_SignalTriggerList.push_back("AK8DiPFJet280_200_TrimMass30_v");
+  m_SignalTriggerList.push_back("AK8PFHT700_TrimR0p1PT0p03Mass50_v");
+  m_SignalTriggerList.push_back("AK8PFJet450_v");
+  m_SignalTriggerList.push_back("PFHT800_v");
+  m_SignalTriggerList.push_back("AK8PFJet360_TrimMass30_v");
+  m_SignalTriggerList.push_back("AK8DiPFJet300_200_TrimMass30_v");
+  m_SignalTriggerList.push_back("AK8PFHT700_TrimR0p1PT0p03Mass50_v");
+  m_SignalTriggerList.push_back("AK8PFJet450_v");
+  m_SignalTriggerList.push_back("PFHT900_v");
+
+  m_N_SignalTriggerList = m_SignalTriggerList.size();
   
   LAB = new LabRecoFrame("LAB","lab");
   Tp = new DecayRecoFrame("Tp","T'");
@@ -54,6 +67,9 @@ void ReducedNtuple::InitOutputTree(){
   m_Tree->Branch("isB", &m_isB);
   m_Tree->Branch("isC", &m_isC);
   m_Tree->Branch("isD", &m_isD);
+
+  //trigger
+  m_Tree->Branch("SignalTrigger", &m_SignalTrigger);;
 
   // AK8 candidate 4-vectors
   m_Tree->Branch("pT_top", &m_pT_top);
@@ -170,6 +186,9 @@ void ReducedNtuple::FillOutputTree(){
   // if(FatJets[0].Pt()+FatJets[1].Pt() < 850.)
   //   return;
 
+  if(SelectedEvent_isRegionNotABCD)
+    return;
+  
   m_EvtPreselection += m_weight; 
 
   // need to match higgs/top to lead AK8's
@@ -180,30 +199,143 @@ void ReducedNtuple::FillOutputTree(){
     itop[i] = -1;
   }
 
+  m_isA = SelectedEvent_isRegionA;
+  m_isB = SelectedEvent_isRegionB;
+  m_isC = SelectedEvent_isRegionC;
+  m_isD = SelectedEvent_isRegionD;
+  
   TLorentzVector Higgs;
   TLorentzVector Top;
 
+  vector<double>* ptTop;
+  vector<double>* etaTop;
+  vector<double>* phiTop;
+  vector<double>* MTop;
+  vector<double>* tau1Top;
+  vector<double>* tau2Top;
+  vector<double>* tau3Top;
+  vector<double>* SoftDropMassTop;
+  vector<double>* PrunedMassTop;
+
+  vector<double>* ptH;
+  vector<double>* etaH;
+  vector<double>* phiH;
+  vector<double>* MH;
+  vector<double>* tau1H;
+  vector<double>* tau2H;
+  vector<double>* tau3H;
+  vector<double>* SoftDropMassH;
+  vector<double>* PrunedMassH;
+
+  if(!(m_isA || m_isB || m_isC || m_isD))
+     return;
+  
+  if(m_isA){
+    ptTop  = ptAntiTopTagged;
+    etaTop = etaAntiTopTagged;
+    phiTop = phiAntiTopTagged;
+    MTop   = MAntiTopTagged;
+    tau1Top = tau1AntiTopTagged;
+    tau2Top = tau2AntiTopTagged;
+    tau3Top = tau3AntiTopTagged;
+    SoftDropMassTop = SoftDropMassAntiTopTagged;
+    PrunedMassTop   = PrunedMassAntiTopTagged;
+
+    ptH  = ptAntiHTagged;
+    etaH = etaAntiHTagged;
+    phiH = phiAntiHTagged;
+    MH  = MAntiHTagged;
+    tau1H = tau1AntiHTagged;
+    tau2H = tau2AntiHTagged;
+    tau3H = tau3AntiHTagged;
+    SoftDropMassH = SoftDropMassAntiHTagged;
+    PrunedMassH   = PrunedMassAntiHTagged;
+  }
+  if(m_isB){
+    ptTop  = ptTopTagged;
+    etaTop = etaTopTagged;
+    phiTop = phiTopTagged;
+    MTop   = MTopTagged;
+    tau1Top = tau1TopTagged;
+    tau2Top = tau2TopTagged;
+    tau3Top = tau3TopTagged;
+    SoftDropMassTop = SoftDropMassTopTagged;
+    PrunedMassTop   = PrunedMassTopTagged;
+
+    ptH  = ptAntiHTagged;
+    etaH = etaAntiHTagged;
+    phiH = phiAntiHTagged;
+    MH  = MAntiHTagged;
+    tau1H = tau1AntiHTagged;
+    tau2H = tau2AntiHTagged;
+    tau3H = tau3AntiHTagged;
+    SoftDropMassH = SoftDropMassAntiHTagged;
+    PrunedMassH   = PrunedMassAntiHTagged;
+  }
+  if(m_isC){
+    ptTop  = ptAntiTopTagged;
+    etaTop = etaAntiTopTagged;
+    phiTop = phiAntiTopTagged;
+    MTop   = MAntiTopTagged;
+    tau1Top = tau1AntiTopTagged;
+    tau2Top = tau2AntiTopTagged;
+    tau3Top = tau3AntiTopTagged;
+    SoftDropMassTop = SoftDropMassAntiTopTagged;
+    PrunedMassTop   = PrunedMassAntiTopTagged;
+
+    ptH  = ptHTagged;
+    etaH = etaHTagged;
+    phiH = phiHTagged;
+    MH  = MHTagged;
+    tau1H = tau1HTagged;
+    tau2H = tau2HTagged;
+    tau3H = tau3HTagged;
+    SoftDropMassH = SoftDropMassHTagged;
+    PrunedMassH   = PrunedMassHTagged;
+  }
+  if(m_isD){
+    ptTop  = ptTopTagged;
+    etaTop = etaTopTagged;
+    phiTop = phiTopTagged;
+    MTop   = MTopTagged;
+    tau1Top = tau1TopTagged;
+    tau2Top = tau2TopTagged;
+    tau3Top = tau3TopTagged;
+    SoftDropMassTop = SoftDropMassTopTagged;
+    PrunedMassTop   = PrunedMassTopTagged;
+
+    ptH  = ptHTagged;
+    etaH = etaHTagged;
+    phiH = phiHTagged;
+    MH  = MHTagged;
+    tau1H = tau1HTagged;
+    tau2H = tau2HTagged;
+    tau3H = tau3HTagged;
+    SoftDropMassH = SoftDropMassHTagged;
+    PrunedMassH   = PrunedMassHTagged;
+  }
+  
   for(int ijet = 0; ijet < 2; ijet++){
     
     // loop through higgs tags
-    int NH = ptHTagged->size();
+    int NH = ptH->size();
     for(int h = 0; h < NH; h++){
-      Higgs.SetPtEtaPhiM( ptHTagged->at(h), 
-			etaHTagged->at(h),
-			phiHTagged->at(h),
-			MHTagged->at(h) );
+      Higgs.SetPtEtaPhiM( ptH->at(h), 
+			  etaH->at(h),
+			  phiH->at(h),
+			  MH->at(h) );
       if(FatJets[ijet].DeltaR(Higgs) < 0.0001){
 	ihiggs[ijet] = h;
 	break;
       }
     }
     // loop through top tags
-    int NT = ptTopTagged->size();
+    int NT = ptTop->size();
     for(int t = 0; t < NT; t++){
-      Top.SetPtEtaPhiM( ptTopTagged->at(t), 
-			etaTopTagged->at(t),
-			phiTopTagged->at(t),
-			MTopTagged->at(t) );
+      Top.SetPtEtaPhiM( ptTop->at(t), 
+			etaTop->at(t),
+			phiTop->at(t),
+			MTop->at(t) );
       if(FatJets[ijet].DeltaR(Top) < 0.0001){
 	itop[ijet] = t;
 	break;
@@ -211,20 +343,33 @@ void ReducedNtuple::FillOutputTree(){
     }
   }
 
-  cout << SelectedEvent_trigBit->size() << " " << SelectedEvent_trigName->size() << endl;
+  m_SignalTrigger = false;
+
   int Ntrig = SelectedEvent_trigName->size();
-  for(int t = 0; t < Ntrig; t++){
-    cout << SelectedEvent_trigName->at(t) << endl;
+  for(int s = 0; s < m_N_SignalTriggerList; s++){
+    for(int t = 0; t < Ntrig; t++){
+      if(SelectedEvent_trigName->at(t).find(m_SignalTriggerList[s]) != string::npos){
+	if(SelectedEvent_trigBit->at(t)){
+	  m_SignalTrigger = true;
+	  break;
+	}
+      }
+    }
+    if(m_SignalTrigger) break;
   }
-  cout << endl << endl;
+  
+  // int m_N_SignalTriggerList;
+  // vector<string> m_SignalTriggerList;
+  
+  // cout << SelectedEvent_trigBit->size() << " " << SelectedEvent_trigName->size() << endl;
+  // int Ntrig = SelectedEvent_trigName->size();
+  // for(int t = 0; t < Ntrig; t++){
+  //   cout << SelectedEvent_trigName->at(t) << endl;
+  // }
+  // cout << endl << endl;
   
 // vector<double>  *SelectedEvent_trigBit;
   // vector<string>  *SelectedEvent_trigName;
-
-  m_isA = SelectedEvent_isRegionA;
-  m_isB = SelectedEvent_isRegionB;
-  m_isC = SelectedEvent_isRegionC;
-  m_isD = SelectedEvent_isRegionD;
 
   // m_isA = false;
   // m_isB = false;
@@ -254,14 +399,26 @@ void ReducedNtuple::FillOutputTree(){
     }
   }
 
-  Higgs.SetPtEtaPhiM( ptHTagged->at(ih), 
-		      etaHTagged->at(ih),
-		      phiHTagged->at(ih),
-		      MHTagged->at(ih) );
-  Top.SetPtEtaPhiM( ptTopTagged->at(it), 
-		    etaTopTagged->at(it),
-		    phiTopTagged->at(it),
-		    MTopTagged->at(it) );
+  Higgs.SetPtEtaPhiM( ptH->at(ih), 
+		      etaH->at(ih),
+		      phiH->at(ih),
+		      MH->at(ih) );
+  Top.SetPtEtaPhiM( ptTop->at(it), 
+		    etaTop->at(it),
+		    phiTop->at(it),
+		    MTop->at(it) );
+
+  m_tau1_top = tau1Top->at(it);
+  m_tau2_top = tau2Top->at(it);
+  m_tau3_top = tau3Top->at(it);
+  m_tau1_higgs = tau1H->at(ih);
+  m_tau2_higgs = tau2H->at(ih);
+  m_tau3_higgs = tau3H->at(ih);
+
+  m_mass_softdrop_top   = SoftDropMassTop->at(it);
+  m_mass_softdrop_higgs = SoftDropMassH->at(ih);
+  m_mass_pruned_top   = PrunedMassTop->at(it);
+  m_mass_pruned_higgs = PrunedMassH->at(ih);
 
   m_pT_top   = Top.Pt();
   m_eta_top  = Top.Eta();
@@ -271,18 +428,6 @@ void ReducedNtuple::FillOutputTree(){
   m_eta_higgs  = Higgs.Eta();
   m_phi_higgs  = Higgs.Phi();
   m_mass_higgs = Higgs.M();
-
-  m_tau1_top = tau1TopTagged->at(it);
-  m_tau2_top = tau2TopTagged->at(it);
-  m_tau3_top = tau3TopTagged->at(it);
-  m_tau1_higgs = tau1HTagged->at(ih);
-  m_tau2_higgs = tau2HTagged->at(ih);
-  m_tau3_higgs = tau3HTagged->at(ih);
-
-  m_mass_softdrop_top   = SoftDropMassTopTagged->at(it);
-  m_mass_softdrop_higgs = SoftDropMassHTagged->at(ih);
-  m_mass_pruned_top   = PrunedMassTopTagged->at(it);
-  m_mass_pruned_higgs = PrunedMassHTagged->at(ih);
 
   m_M_Tp  = (Higgs+Top).M();
   m_pT_Tp = (Higgs+Top).Pt();

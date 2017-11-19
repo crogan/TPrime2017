@@ -117,6 +117,11 @@ private:
   vector<float> m_phi_mu_clean;
   vector<float> m_E_mu_clean;
 
+  bool m_SignalTrigger;
+
+  int m_N_SignalTriggerList;
+  vector<string> m_SignalTriggerList;
+
   // RestFrames stuff
   LabRecoFrame*       LAB;
   DecayRecoFrame*     Tp;
