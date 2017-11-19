@@ -186,8 +186,8 @@ void ReducedNtuple::FillOutputTree(){
   // if(FatJets[0].Pt()+FatJets[1].Pt() < 850.)
   //   return;
 
-  if(SelectedEvent_isRegionNotABCD)
-    return;
+  // if(SelectedEvent_isRegionNotABCD)
+  //   return;
   
   m_EvtPreselection += m_weight; 
 
