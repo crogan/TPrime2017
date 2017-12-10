@@ -345,18 +345,18 @@ void ReducedNtuple::FillOutputTree(){
 
   m_SignalTrigger = false;
 
-  int Ntrig = SelectedEvent_trigName->size();
-  for(int s = 0; s < m_N_SignalTriggerList; s++){
-    for(int t = 0; t < Ntrig; t++){
-      if(SelectedEvent_trigName->at(t).find(m_SignalTriggerList[s]) != string::npos){
-	if(SelectedEvent_trigBit->at(t)){
-	  m_SignalTrigger = true;
-	  break;
-	}
-      }
-    }
-    if(m_SignalTrigger) break;
-  }
+  // int Ntrig = SelectedEvent_trigName->size();
+  // for(int s = 0; s < m_N_SignalTriggerList; s++){
+  //   for(int t = 0; t < Ntrig; t++){
+  //     if(SelectedEvent_trigName->at(t).find(m_SignalTriggerList[s]) != string::npos){
+  // 	if(SelectedEvent_trigBit->at(t)){
+  // 	  m_SignalTrigger = true;
+  // 	  break;
+  // 	}
+  //     }
+  //   }
+  //   if(m_SignalTrigger) break;
+  // }
   
   // int m_N_SignalTriggerList;
   // vector<string> m_SignalTriggerList;

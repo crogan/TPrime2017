@@ -925,6 +925,8 @@ inline void InputTreeBase::Init(TTree *tree)
    fChain->SetMakeClass(1);
 
    fChain->SetBranchStatus("SelectedEvent_lhewts*", 0);
+   fChain->SetBranchStatus("SelectedEvent_trigBit", 0);
+   fChain->SetBranchStatus("SelectedEvent_trigName", 0);
 
    fChain->SetBranchAddress("SelectedEvent_runno", &SelectedEvent_runno, &b_SelectedEvent_runno);
    fChain->SetBranchAddress("SelectedEvent_lumisec", &SelectedEvent_lumisec, &b_SelectedEvent_lumisec);
