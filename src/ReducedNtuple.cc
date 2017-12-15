@@ -182,9 +182,12 @@ void ReducedNtuple::FillOutputTree(){
   if(FatJets.size() < 2) 
     return; 
 
-  // // trigger preselection
-  // if(FatJets[0].Pt()+FatJets[1].Pt() < 850.)
-  //   return;
+  // trigger preselection
+  if(FatJets[0].Pt()+FatJets[1].Pt() < 850.)
+    return;
+
+  if(FatJets[0].Pt() < 400.)
+    return;
 
   // if(SelectedEvent_isRegionNotABCD)
   //   return;

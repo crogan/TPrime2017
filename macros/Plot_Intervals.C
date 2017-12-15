@@ -61,8 +61,8 @@ void Plot_Intervals(){
   g_Color.push_back(kCyan+2);
   g_Color.push_back(kOrange+2);
   
-  // g_File.push_back("signal/TbtH_1200_LH.root");
-  // g_PlotTitle = "TbtH LH M_{T'} = 1.2 TeV";
+  g_File.push_back("signal/TbtH_1800_LH.root");
+  g_PlotTitle = "TbtH LH m_{T'} = 1.8 TeV";
 
   // g_File.push_back("signal/TttH_1200_RH.root");
   // g_PlotTitle = "TttH RH M_{T'} = 1.2 TeV";
@@ -70,8 +70,8 @@ void Plot_Intervals(){
   // g_File.push_back("signal/TbtH_1500_LH.root");
   // g_PlotTitle = "TbtH LH M_{T'} = 1.5 TeV";
 
-  g_File.push_back("signal/TttH_1500_RH.root");
-  g_PlotTitle = "TttH RH M_{T'} = 1.5 TeV";
+  // g_File.push_back("signal/TttH_1500_RH.root");
+  // g_PlotTitle = "TttH RH M_{T'} = 1.5 TeV";
 
   // g_File.push_back("signal/TbtH_1500_LH.root");
   // g_Hist.push_back(ihist);
@@ -93,11 +93,11 @@ void Plot_Intervals(){
   
   int Nsample = g_File.size();
 
-  g_Path = "/Users/crogan/Dropbox/SAMPLES/Tprime/";
+  g_Path = "/Users/crogan/Dropbox/SAMPLES/Tprime/12_10_17/";
   
-  g_Xname = "M_{T'} alternatives";
-  g_Xmin = 1000.;
-  g_Xmax = 1850.;
+  g_Xname = "M_{T} default [GeV]";
+  g_Xmin = 1100.;
+  g_Xmax = 2150.;
 
   // g_Xmin = 0.;
   // g_Xmax = 1.;
@@ -143,7 +143,7 @@ void Plot_Intervals(){
 			  base->mass_higgs );
 
       
-      double MT = MTprime(Top, Higgs, 0);
+      double MT = MTprime(Top, Higgs, 1);
       hist[0]->Fill(MT, base->weight);
       vMT[0].push_back(MT);
       //hist[h]->Fill(base->tau3_top/base->tau2_top, base->weight);
@@ -190,7 +190,7 @@ void Plot_Intervals(){
 			  base->mass_higgs );
 
       
-      double MT = MTprime(Top, Higgs, 0);
+      double MT = MTprime(Top, Higgs, 1);
       for(int i = 0; i < 4; i++){
 	if(MT >= intervals[i].first && MT <= intervals[i].second)
 	  hist[i+1]->Fill(MT, base->weight);
@@ -290,7 +290,7 @@ void Plot_Intervals(){
   l.DrawLatex(0.6,0.943,g_PlotTitle.c_str());
   l.SetTextSize(0.04);
   l.SetTextFont(42);
-  l.DrawLatex(0.15,0.943,"#bf{#it{CMS}} 13 TeV Simulation");	
+  l.DrawLatex(0.15,0.943,"#bf{#it{CMS}} Simulation Preliminary");	
 
   // l.SetTextSize(0.045);
   // l.SetTextFont(132);
@@ -531,34 +531,16 @@ std::pair<float,float> GetInterval(vector<float>& MT, float sigma){
   int N = MT.size();
 
   double Dmin = fabs(MT[N-1]-MT[0]);
-  int imin = 0;
-  for(int i = 0; i < N-1; i++)
-    if(fabs(MT[i+1]-MT[i]) < Dmin){
-      Dmin = fabs(MT[i+1]-MT[i]);
-      imin = i;
-    }
 
-  int jmin = imin+1;
-  int interval = N*P-2;
-  while(interval > 0){
-    if(imin == 0){
-      interval--;
-      jmin++;
-      continue;
-    }
-    if(jmin == N-1){
-      interval--;
-      imin--;
-      continue;
-    }
-    if( fabs(MT[imin]-MT[imin-1]) < fabs(MT[jmin+1]-MT[jmin]) ){
-      interval--;
-      imin--;
-      continue;
-    } else {
-      interval--;
-      jmin++;
-      continue;
+  int interval = N*P-1;
+
+  int imin = 0, jmin = 0;
+  for(int i = 0; i < N - interval; i++){
+    double D = fabs(MT[i+interval]-MT[i]);
+    if(D < Dmin){
+      Dmin = D;
+      imin = i;
+      jmin = imin+interval;
     }
   }
 

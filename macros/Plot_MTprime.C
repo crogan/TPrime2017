@@ -62,30 +62,30 @@ void Plot_MTprime(){
   g_Color.push_back(kOrange+2);
   
   // g_File.push_back("signal/TbtH_1200_LH.root");
-  // g_PlotTitle = "TbtH LH M_{T'} = 1.2 TeV";
+  // g_PlotTitle = "TbtH LH m_{T'} = 1.2 TeV";
 
-  // g_File.push_back("signal/TttH_1200_RH.root");
-  // g_PlotTitle = "TttH RH M_{T'} = 1.2 TeV";
+  g_File.push_back("signal/TttH_1200_RH.root");
+  g_PlotTitle = "TttH RH m_{T'} = 1.2 TeV";
 
   // g_File.push_back("signal/TbtH_1500_LH.root");
-  // g_PlotTitle = "TbtH LH M_{T'} = 1.5 TeV";
+  // g_PlotTitle = "TbtH LH m_{T'} = 1.5 TeV";
 
-  g_File.push_back("signal/TttH_1500_RH.root");
-  g_PlotTitle = "TttH RH M_{T'} = 1.5 TeV";
+  // g_File.push_back("signal/TttH_1500_RH.root");
+  // g_PlotTitle = "TttH RH m_{T'} = 1.5 TeV";
   
   int Nsample = g_File.size();
 
-  g_Path = "/Users/crogan/Dropbox/SAMPLES/Tprime/";
+  g_Path = "/Users/crogan/Dropbox/SAMPLES/Tprime/12_10_17/";
   
-  g_Xname = "M_{T'} alternatives";
-  g_Xmin = 1050.;
-  g_Xmax = 1750.;
+  g_Xname = "M_{T} alternatives [GeV]";
+  g_Xmin = 800.;
+  g_Xmax = 1400.;
 
   // g_Xmin = 0.;
   // g_Xmax = 1.;
   g_NX = 40;
 
-  int Nhist = 5;
+  int Nhist = 4;
 
   TH1D* hist[Nhist];
   vector<vector<float> > vMT;
@@ -111,9 +111,6 @@ void Plot_MTprime(){
       if(e%(max(1,Nentry/10)) == 0)
 	cout << "event " << e << " | " << Nentry << endl;
 
-      if(base->tau3_top/base->tau2_top > 0.6)
-      	continue;
-
       TLorentzVector Top, Higgs;
       Top.SetPtEtaPhiM( base->pT_top,
 			base->eta_top,
@@ -124,6 +121,40 @@ void Plot_MTprime(){
 			  base->phi_higgs,
 			  base->mass_higgs );
 
+      if(Top.Pt() + Higgs.Pt() < 850.)
+	continue;
+
+      if(!base->isD)
+	continue;
+      
+      int Njet = base->pT_extrajet->size();
+      double etaMax = 0.;
+      bool annulus = false;
+      TLorentzVector jet;
+      int Nextra = 0;
+      for(int i = 0; i < Njet; i++){
+	jet.SetPtEtaPhiM( base->pT_extrajet->at(i),
+			  base->eta_extrajet->at(i),
+			  base->phi_extrajet->at(i),
+			  base->mass_extrajet->at(i) );
+	if(jet.DeltaR(Higgs) > 0.55 && jet.DeltaR(Higgs) < 0.9)
+	  annulus = true;
+	if(jet.DeltaR(Higgs) < 1.2 || jet.DeltaR(Top) < 1.2)
+	  continue;
+
+	Nextra++;
+	if(fabs(jet.Eta()) > etaMax)
+	  etaMax = fabs(jet.Eta());
+      }
+      
+      if(Nextra < 2)
+	continue;
+
+      if(annulus)
+	continue;
+
+      
+      
       for(int h = 0; h < Nhist; h++){
 	double MT = MTprime(Top, Higgs, h, base->mass_softdrop_top, base->mass_softdrop_higgs);
 	hist[h]->Fill(MT, base->weight);
@@ -209,14 +240,14 @@ void Plot_MTprime(){
   leg->SetFillColor(kWhite);
   leg->SetLineColor(kWhite);
   leg->SetShadowColor(kWhite);
-  leg->AddEntry(hist[0], "M_{T'} default", "l");
-  leg->AddEntry(hist[1], "#tilde{M}_{T'}", "l");
-  leg->AddEntry(hist[2], "M_{T'}(m_{soft})", "l");
-  leg->AddEntry(hist[3], "#tilde{M}_{T'}(m_{soft})", "l");
-  leg->AddEntry(hist[4], "#tilde{M}_{T'} \"hybrid\"", "l");
-  // leg->AddEntry(hist[1], "#tilde{M}_{T'}", "l");
-  // leg->AddEntry(hist[2], "fixed p_{top/Higgs}", "l");
-  // leg->AddEntry(hist[3], "fixed E_{top/Higgs}", "l");
+  leg->AddEntry(hist[0], "M_{T} default", "l");
+  // leg->AddEntry(hist[1], "#tilde{M}_{T}", "l");
+  // leg->AddEntry(hist[2], "M_{T}(m_{soft})", "l");
+  // leg->AddEntry(hist[3], "#tilde{M}_{T}(m_{soft})", "l");
+  // leg->AddEntry(hist[4], "#tilde{M}_{T} \"hybrid\"", "l");
+  leg->AddEntry(hist[1], "#tilde{M}_{T}", "l");
+  leg->AddEntry(hist[2], "fixed p_{top/Higgs}", "l");
+  leg->AddEntry(hist[3], "fixed E_{top/Higgs}", "l");
   leg->SetLineColor(kWhite);
   leg->SetFillColor(kWhite);
   leg->SetShadowColor(kWhite);
@@ -231,7 +262,7 @@ void Plot_MTprime(){
   l.DrawLatex(0.6,0.943,g_PlotTitle.c_str());
   l.SetTextSize(0.04);
   l.SetTextFont(42);
-  l.DrawLatex(0.15,0.943,"#bf{#it{CMS}} 13 TeV Simulation");	
+  l.DrawLatex(0.14,0.943,"#bf{#it{CMS}} Simulation Preliminary");	
 
   // l.SetTextSize(0.045);
   // l.SetTextFont(132);
@@ -443,33 +474,33 @@ double MTprime(TLorentzVector Top, TLorentzVector Higgs, int type, float mTsoft,
   if(type == 1){
     return (Top+Higgs).M() - Top.M() - Higgs.M() + g_mHiggs + g_mTop;
   }
-  if(type == 2){
-    Top.SetPtEtaPhiM( Top.Pt(),
-		      Top.Eta(),
-		      Top.Phi(),
-		      mTsoft );
-    Higgs.SetPtEtaPhiM( Higgs.Pt(),
-			Higgs.Eta(),
-			Higgs.Phi(),
-			mHsoft );
-    return (Top+Higgs).M();
-  }
-  if(type == 3){
-    Top.SetPtEtaPhiM( Top.Pt(),
-		      Top.Eta(),
-		      Top.Phi(),
-		      mTsoft );
-    Higgs.SetPtEtaPhiM( Higgs.Pt(),
-			Higgs.Eta(),
-			Higgs.Phi(),
-			mHsoft );
-    return (Top+Higgs).M() - Top.M() - Higgs.M() + g_mHiggs + g_mTop;
-  }
-  if(type == 4){
-    return (Top+Higgs).M() - mTsoft - mHsoft + g_mHiggs + g_mTop;
-  }
+  // if(type == 2){
+  //   Top.SetPtEtaPhiM( Top.Pt(),
+  // 		      Top.Eta(),
+  // 		      Top.Phi(),
+  // 		      mTsoft );
+  //   Higgs.SetPtEtaPhiM( Higgs.Pt(),
+  // 			Higgs.Eta(),
+  // 			Higgs.Phi(),
+  // 			mHsoft );
+  //   return (Top+Higgs).M();
+  // }
+  // if(type == 3){
+  //   Top.SetPtEtaPhiM( Top.Pt(),
+  // 		      Top.Eta(),
+  // 		      Top.Phi(),
+  // 		      mTsoft );
+  //   Higgs.SetPtEtaPhiM( Higgs.Pt(),
+  // 			Higgs.Eta(),
+  // 			Higgs.Phi(),
+  // 			mHsoft );
+  //   return (Top+Higgs).M() - Top.M() - Higgs.M() + g_mHiggs + g_mTop;
+  // }
+  // if(type == 4){
+  //   return (Top+Higgs).M() - mTsoft - mHsoft + g_mHiggs + g_mTop;
+  // }
 
-  /*
+  
   if(type == 2){
     Top.SetPtEtaPhiM( Top.Pt(), Top.Eta(), Top.Phi(), g_mTop);
     Higgs.SetPtEtaPhiM( Higgs.Pt(), Higgs.Eta(), Higgs.Phi(), g_mHiggs);
@@ -482,6 +513,7 @@ double MTprime(TLorentzVector Top, TLorentzVector Higgs, int type, float mTsoft,
     Higgs.SetPtEtaPhiE( Higgs.Pt()*Phiggs/Higgs.P(), Higgs.Eta(), Higgs.Phi(), Higgs.E());
     return (Top+Higgs).M();
   }
+  /*
   if(type == 4){
     return ((g_mTop/Top.M())*Top+(g_mHiggs/Higgs.M())*Higgs).M();
   }
@@ -502,35 +534,16 @@ std::pair<float,float> GetInterval(vector<float>& MT, float sigma){
   int N = MT.size();
 
   double Dmin = fabs(MT[N-1]-MT[0]);
-  int imin = 0;
-  // for(int i = 0; i < N-1; i++)
-  //   if(fabs(MT[i+1]-MT[i]) < Dmin){
-  //     Dmin = fabs(MT[i+1]-MT[i]);
-  //     imin = i;
-  //   }
-  
-  imin = N/2;
-  int jmin = imin+1;
-  int interval = N*P-2;
-  while(interval > 0){
-    if(imin == 0){
-      interval--;
-      jmin++;
-      continue;
-    }
-    if(jmin == N-1){
-      interval--;
-      imin--;
-      continue;
-    }
-    if( fabs(MT[imin]-MT[imin-1]) < fabs(MT[jmin+1]-MT[jmin]) ){
-      interval--;
-      imin--;
-      continue;
-    } else {
-      interval--;
-      jmin++;
-      continue;
+
+  int interval = N*P-1;
+
+  int imin = 0, jmin = 0;
+  for(int i = 0; i < N - interval; i++){
+    double D = fabs(MT[i+interval]-MT[i]);
+    if(D < Dmin){
+      Dmin = D;
+      imin = i;
+      jmin = imin+interval;
     }
   }
 
