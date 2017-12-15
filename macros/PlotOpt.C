@@ -30,9 +30,9 @@ void PlotOpt(){
   TFile* input = new TFile("Opt.root","READ");
 
   double Sscale = 1.;
-  double Bscale = 1.;
+  double Bscale = 1.5;
 
-  string SignalModel = "TbtH_1200_LH";
+  string SignalModel = "TbtH_1000_LH";
   string plot_title = "TbtH LH, m_{T'} = 1200 GeV";
 
   TTree* tree  = (TTree*) input->Get("optimization");

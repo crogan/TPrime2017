@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////
 // This class has been automatically generated on
-// Thu Oct 12 21:12:38 2017 by ROOT version 5.34/34
+// Mon Dec 11 14:33:52 2017 by ROOT version 5.34/25
 // from TTree TPrime/TPrime
 // found on file: TbtH_1200_LH.root
 //////////////////////////////////////////////////////////
@@ -15,9 +15,9 @@
 // Header file for the classes stored in the TTree if any.
 #include <vector>
 
-using namespace std;
-
 // Fixed size dimensions of array or collections stored in the TTree if any.
+
+using namespace std;
 
 class ReducedBase {
 public :
@@ -32,6 +32,7 @@ public :
    Bool_t          isB;
    Bool_t          isC;
    Bool_t          isD;
+   Bool_t          SignalTrigger;
    Float_t         pT_top;
    Float_t         eta_top;
    Float_t         phi_top;
@@ -66,6 +67,10 @@ public :
    Float_t         eta_higgs_sj1;
    Float_t         phi_higgs_sj1;
    Float_t         mass_higgs_sj1;
+   Float_t         csv_top_sj0;
+   Float_t         csv_top_sj1;
+   Float_t         csv_higgs_sj0;
+   Float_t         csv_higgs_sj1;
    vector<float>   *pT_extrajet;
    vector<float>   *eta_extrajet;
    vector<float>   *phi_extrajet;
@@ -110,6 +115,7 @@ public :
    TBranch        *b_isB;   //!
    TBranch        *b_isC;   //!
    TBranch        *b_isD;   //!
+   TBranch        *b_SignalTrigger;   //!
    TBranch        *b_pT_top;   //!
    TBranch        *b_eta_top;   //!
    TBranch        *b_phi_top;   //!
@@ -144,6 +150,10 @@ public :
    TBranch        *b_eta_higgs_sj1;   //!
    TBranch        *b_phi_higgs_sj1;   //!
    TBranch        *b_mass_higgs_sj1;   //!
+   TBranch        *b_csv_top_sj0;   //!
+   TBranch        *b_csv_top_sj1;   //!
+   TBranch        *b_csv_higgs_sj0;   //!
+   TBranch        *b_csv_higgs_sj1;   //!
    TBranch        *b_pT_extrajet;   //!
    TBranch        *b_eta_extrajet;   //!
    TBranch        *b_phi_extrajet;   //!
@@ -191,6 +201,7 @@ public :
 };
 
 #endif
+
 
 inline ReducedBase::ReducedBase(TTree *tree) : fChain(0) 
 {
@@ -269,6 +280,7 @@ inline void ReducedBase::Init(TTree *tree)
    fChain->SetBranchAddress("isB", &isB, &b_isB);
    fChain->SetBranchAddress("isC", &isC, &b_isC);
    fChain->SetBranchAddress("isD", &isD, &b_isD);
+   fChain->SetBranchAddress("SignalTrigger", &SignalTrigger, &b_SignalTrigger);
    fChain->SetBranchAddress("pT_top", &pT_top, &b_pT_top);
    fChain->SetBranchAddress("eta_top", &eta_top, &b_eta_top);
    fChain->SetBranchAddress("phi_top", &phi_top, &b_phi_top);
@@ -303,6 +315,10 @@ inline void ReducedBase::Init(TTree *tree)
    fChain->SetBranchAddress("eta_higgs_sj1", &eta_higgs_sj1, &b_eta_higgs_sj1);
    fChain->SetBranchAddress("phi_higgs_sj1", &phi_higgs_sj1, &b_phi_higgs_sj1);
    fChain->SetBranchAddress("mass_higgs_sj1", &mass_higgs_sj1, &b_mass_higgs_sj1);
+   fChain->SetBranchAddress("csv_top_sj0", &csv_top_sj0, &b_csv_top_sj0);
+   fChain->SetBranchAddress("csv_top_sj1", &csv_top_sj1, &b_csv_top_sj1);
+   fChain->SetBranchAddress("csv_higgs_sj0", &csv_higgs_sj0, &b_csv_higgs_sj0);
+   fChain->SetBranchAddress("csv_higgs_sj1", &csv_higgs_sj1, &b_csv_higgs_sj1);
    fChain->SetBranchAddress("pT_extrajet", &pT_extrajet, &b_pT_extrajet);
    fChain->SetBranchAddress("eta_extrajet", &eta_extrajet, &b_eta_extrajet);
    fChain->SetBranchAddress("phi_extrajet", &phi_extrajet, &b_phi_extrajet);
@@ -366,3 +382,4 @@ inline Int_t ReducedBase::Cut(Long64_t entry)
 // returns -1 otherwise.
    return 1;
 }
+

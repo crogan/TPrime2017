@@ -39,14 +39,14 @@ using namespace RestFrames;
 void Plot_2D(){
   RestFrames::SetStyle();
 
-  // g_File.push_back("bkg/QCDPt.root");
+  // g_File.push_back("QCDPt.root");
   // g_PlotTitle = "QCD multijets";
   
-  // g_File.push_back("bkg/TTJets.root");
-  // g_File.push_back("bkg/ttHJets.root");
-  // g_File.push_back("bkg/ttWJets.root");
-  // g_File.push_back("bkg/ttZJets.root");
-  // g_PlotTitle = "t #bar{t} + X";
+  g_File.push_back("bkg/TTJets.root");
+  g_File.push_back("bkg/ttHJets.root");
+  g_File.push_back("bkg/ttWJets.root");
+  g_File.push_back("bkg/ttZJets.root");
+  g_PlotTitle = "t #bar{t} + X";
 
   // g_File.push_back("bkg/ST_antitop.root");
   // g_Hist.push_back(ihist);
@@ -70,14 +70,14 @@ void Plot_2D(){
   // g_Hist.push_back(ihist);
   // g_PlotTitle = "other";
  
-  // g_File.push_back("signal/TbtH_1200_LH.root");
+  // g_File.push_back("signal/TbtH_1000_LH.root");
   // g_PlotTitle = "TbtH LH M_{T'} = 1.2 TeV";
 
-  // g_File.push_back("signal/TbtH_1500_LH.root");
-  // g_PlotTitle = "TbtH LH M_{T'} = 1.5 TeV";
+  // //g_File.push_back("signal/TbtH_1500_LH.root");
+  // //g_PlotTitle = "TbtH LH M_{T'} = 1.5 TeV";
 
-  g_File.push_back("signal/TbtH_1800_LH.root");
-  g_PlotTitle = "TbtH LH M_{T'} = 1.8 TeV";
+  // g_File.push_back("signal/TbtH_1800_LH.root");
+  // g_PlotTitle = "TbtH LH M_{T'} = 1.8 TeV";
  
   // g_File.push_back("signal/TttH_1200_RH.root");
   // g_PlotTitle = "TttH RH M_{T'} = 1.2 TeV";
@@ -98,20 +98,19 @@ void Plot_2D(){
 
   int Nsample = g_File.size();
 
-  g_Path = "/Users/crogan/Dropbox/SAMPLES/Tprime/";
+  g_Path = "/Users/crogan/Dropbox/SAMPLES/Tprime/12_10_17/";
   
   //string g_Label = "No selection";
-  string g_Label = "Region D (#epsilon_{top} = 0.3)";
+  string g_Label = "Region D";
 
 
-  g_Xname = "#Delta R(j, H), all AK4 jets";
-  g_Xmin = 0.;
-  g_Xmax = 3.; 
+  g_Xname = "(P_{T}^{top}-p_{T}^{higgs})/M_{T'}";
+  g_Xmin = -1.;
+  g_Xmax = 1.; 
   g_NX = 30;
-  g_Yname = "#Delta R(j, T), all AK4 jets";
-
-  g_Ymin = 0.;
-  g_Ymax = 4.;
+  g_Yname = "|#eta_{top}| - |#eta_{higgs}|";
+  g_Ymin = 300.;
+  g_Ymax = 1000.;
   g_NY = 30.;
 
   TH2D* hist = new TH2D("hist","hist",
@@ -127,12 +126,9 @@ void Plot_2D(){
     int Nentry = base->fChain->GetEntries();
     for(int e = 0; e < Nentry; e++){
       base->GetEntry(e);
-
-      if(base->tau3_top/base->tau2_top > 0.57)
-      	continue;
       
-      if(base->N_extra < 1)
-       	continue;
+      // if(base->N_extra < 1)
+      //  	continue;
 
       // if(base->M_Tp < 1200)
       //  	continue;
@@ -153,23 +149,84 @@ void Plot_2D(){
 
       TVector3 boost = Tp.BoostVector();
       T.Boost(-boost);
+      double PCM = T.P();
+      double PtCM = T.Pt();
       double mycos = T.Vect().Unit().Dot(-boost.Unit());
+      TVector3 TT = T.Vect();
+      TT.SetZ(0.);
+      TVector3 BT = boost;
+      BT.SetZ(0.);
+      double mycosT = TT.Unit().Dot(-BT.Unit());
+      T.Boost(boost);
 
+      
       double v1 = (mycos-base->cosTq)/(2. - fabs(mycos+base->cosTq));
       double v2 = (mycos+base->cosTq)/(2. - fabs(mycos-base->cosTq));
       double v3 = sqrt(v1*v1+v2*v2)/sqrt(2);
 
+      double etaMax = 0.;
+      vector<TLorentzVector> P4_extra;
+
       int Nj = base->pT_extrajet->size();
+      bool H_annul = false;
       for(int j = 0; j < Nj; j++){
-	TLorentzVector jet;
-	jet.SetPtEtaPhiM(base->pT_extrajet->at(j),
-			 base->eta_extrajet->at(j),
-			 base->phi_extrajet->at(j),
-			 base->mass_extrajet->at(j));
-	hist->Fill(jet.DeltaR(H), jet.DeltaR(T), base->weight);
+      	TLorentzVector jet;
+      	jet.SetPtEtaPhiM(base->pT_extrajet->at(j),
+      			 base->eta_extrajet->at(j),
+      			 base->phi_extrajet->at(j),
+      			 base->mass_extrajet->at(j));
+	if(jet.DeltaR(H) > 0.55 && jet.DeltaR(H) < 0.9)
+	  H_annul = true;
+	
+ 	if(jet.DeltaR(H) < 1.2 || jet.DeltaR(T) < 1.2)
+	  continue;
+	
+	if(fabs(jet.Eta()) > etaMax)
+	  etaMax = fabs(jet.Eta());
+
+	P4_extra.push_back(jet);
       }
 
-      //hist->Fill(fabs(q.Rapidity()-Tp.Rapidity()), base->M_Tp, base->weight);
+      if(!base->isD) continue;
+
+      int Nextra = P4_extra.size();
+      if( Nextra < 2) continue;
+
+      if(etaMax < 2.4) continue;
+      if(H_annul) continue;
+
+      if(H.Pt() < 300.) continue;
+      if(T.Pt() < 400.) continue;
+
+      double HT4 = H.Pt() + T.Pt() + P4_extra[0].Pt() + P4_extra[1].Pt();
+      if(HT4 < 900) continue;
+      //if(H.Pt() + T.Pt()  < 850.) continue;
+
+      double MTp = (H+T).M() - H.M() - T.M() + 300.;
+
+      T.SetZ(0.);
+      H.SetZ(0.);
+
+      TVector3 P3_T = T.Vect();
+      TVector3 P3_H = H.Vect();
+      
+      P3_T.SetZ(0.);
+      P3_H.SetZ(0.);
+
+      double val = (P3_T + P3_H).Unit().Dot(P3_H);
+      
+
+      P3_T = P3_T - P3_T.Dot(P3_T+P3_H)/(P3_T+P3_H).Mag2()*(P3_T+P3_H);
+      val /= P3_T.Mag();
+
+      //double chi = (H.Rapidity() - T.Rapidity())/fabs(H.Rapidity() - T.Rapidity())*exp(fabs(H.Rapidity() - T.Rapidity()));
+      double chiT = (T.Pt() - H.Pt())/MTp;
+
+      //double chiT = (sqrt(T.Pz()*T.Pz()) - sqrt(H.Pz()*H.Pz()))/MTp;
+
+      // double chi = (T.Eta() - H.Eta());
+
+      hist->Fill((H.Pt())/PCM, H.Pt(), base->weight);
     }
 
     delete base;

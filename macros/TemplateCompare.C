@@ -52,7 +52,7 @@ void TemplateCompare(){
   setstyle(0);
 
   bool DO_BAND = false;
-  int REBIN = 1;
+  int REBIN = 20;
   
   vector<int> g_Color;
   g_Color.push_back(kBlue+2);
@@ -62,16 +62,16 @@ void TemplateCompare(){
   g_Color.push_back(kCyan+2);
   g_Color.push_back(kOrange+2);
 
-  g_File_new = "templates_topM_H1M0L_extraJetTwo_extraForwardJetOne_SMOOTH_17Nov17.root";
-  g_Hist_new.push_back("MTP_regionC_Other");
-  g_Label_new.push_back("Other smooth");
-  g_Hist_new.push_back("MTP_regionC_TTJets");
+  g_File_new = "templates_tH_ht4-900_annulus_0p55-0p9_12Dec17_smoothed.root";
+  // g_Hist_new.push_back("MTP_regionC_Other");
+  // g_Label_new.push_back("Other smooth");
+  g_Hist_new.push_back("MTP_regionA_TTJets");
   g_Label_new.push_back("t #bar{t} + jets smooth");
-  g_Hist_new.push_back("MTP_regionC_QCD");
-  g_Label_new.push_back("QCD smooth");
+  // g_Hist_new.push_back("MTP_regionC_QCD");
+  // g_Label_new.push_back("QCD smooth");
 
-  g_File_old = "templates_topM_H1M0L_extraJetTwo_extraForwardJetOne_17Nov17.root";
-  g_Hist_old.push_back("MTP_regionC_data_obs");
+  g_File_old = "templates_tH_ht4-900_annulus_0p55-0p9_12Dec17.root";
+  g_Hist_old.push_back("MTP_regionA_TTJets");
   g_Label_old = "Data";
 
   g_PlotTitle = "Region C";
@@ -79,7 +79,7 @@ void TemplateCompare(){
   int Nhist_new = g_Hist_new.size();
   int Nhist_old = g_Hist_old.size();
 
-  g_Path = "/Users/crogan/Dropbox/SAMPLES/Tprime/templates/17Nov17/";
+  g_Path = "/Users/crogan/Dropbox/SAMPLES/Tprime/templates/12Dec17/";
   
   g_Xname = "#tilde{M}_{T'} [GeV]";
 
@@ -157,6 +157,7 @@ void TemplateCompare(){
   top->SetBottomMargin(0.15);
   top->SetTopMargin(0.085);
   
+  hist_old[0]->Rebin(REBIN);
   hist_old[0]->Draw();
   hist_old[0]->GetXaxis()->CenterTitle();
   hist_old[0]->GetXaxis()->SetTitleFont(132);
@@ -178,6 +179,7 @@ void TemplateCompare(){
   int Ntype[3];
 
   for(int i = Nhist_new-1; i >= 0; i--){
+    hist_new[i]->Rebin(REBIN);
     hist_new[i]->SetLineColor(g_Color[i]-11);
     hist_new[i]->SetLineWidth(3);
     hist_new[i]->SetMarkerColor(g_Color[i]-11);

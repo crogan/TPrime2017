@@ -127,16 +127,20 @@ void PlotTriggerEff(){
 
     double sumPT_AK8 = P4_AK8[0].Pt()+P4_AK8[1].Pt();
 
-    if(sumPT_AK8 < 600. || Nextra < 2) continue;
+    if(sumPT_AK8 < 850. || Nextra < 2) continue;
+
+    // if(P4_AK8[0].Pt() < 400.) continue;
+    // if(P4_AK8[1].Pt() < 400.) continue;
 
     double HT4 = sumPT_AK8 + P4_extraAK4[0].Pt() + P4_extraAK4[1].Pt();
 
     h_NUM_2D->Fill(HT4, sumPT_AK8);
 
-    //if(sumPT_AK8 < 700.) continue; 
+    // if(HT4 < 900.) continue;
+    
 
     //h_NUM[0]->Fill(MTp);
-    h_NUM[0]->Fill(sumPT_AK8);
+    h_NUM[0]->Fill(MTp);
 
   }
    
@@ -202,16 +206,19 @@ void PlotTriggerEff(){
 
     double sumPT_AK8 = P4_AK8[0].Pt()+P4_AK8[1].Pt();
 
-    if(sumPT_AK8 < 600. || Nextra < 2) continue;
+    if(sumPT_AK8 < 850. || Nextra < 2) continue;
 
     double HT4 = sumPT_AK8 + P4_extraAK4[0].Pt() + P4_extraAK4[1].Pt();
 
+    // if(P4_AK8[0].Pt() < 400.) continue;
+    // if(P4_AK8[1].Pt() < 400.) continue;
+
     h_DEN_2D->Fill(HT4, sumPT_AK8);
 
-    //if(sumPT_AK8 < 700.) continue; 
+   // if(HT4 < 900.) continue; 
 
     //h_DEN[0]->Fill(MTp);
-    h_DEN[0]->Fill(sumPT_AK8);
+    h_DEN[0]->Fill(MTp);
   }
 
   //h_DEN[0]->Add(h_NUM[0]);
