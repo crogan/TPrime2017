@@ -241,6 +241,7 @@ int main(int argc, char* argv[]) {
     return 0;
 
   int Nbins;
+  double CHI2;
   TH1F* hist = nullptr;
   // QCD Region A Fits used as seed to get Other
   // Fits, and then new "smooth QCD" from data
@@ -273,14 +274,21 @@ int main(int argc, char* argv[]) {
     }
     
     Nbins = hist->GetNbinsX();
+    CHI2  = 0.;
     for(int b = 0; b < Nbins; b++){
       if(DO_ERR){
 	double x0 = hist->GetXaxis()->GetBinLowEdge(b+1);
 	double x1 = hist->GetXaxis()->GetBinUpEdge(b+1);
 	double val = f_nom->Integral(x0,x1);
-	hist->SetBinContent(b+1, val/(x1-x0));
 	double valerr = f_nom->IntegralError(x0,x1,result->GetParams(),
 					     result->GetCovarianceMatrix().GetMatrixArray());
+
+	double pre = hist->GetBinContent(b+1);
+	double pre_err = hist->GetBinError(b+1);
+	CHI2 += pow(pre-val/(x1-x0), 2.)/
+	  (valerr*valerr/(x1-x0)/(x1-x0) + pre_err*pre_err);
+	valerr = sqrt(valerr*valerr + 0.02*0.02*val*val);
+	hist->SetBinContent(b+1, val/(x1-x0));
 	hist->SetBinError(b+1, valerr/(x1-x0));
       } else {
 	double xC = hist->GetXaxis()->GetBinCenter(b+1);
@@ -288,7 +296,14 @@ int main(int argc, char* argv[]) {
 	hist->SetBinContent(b+1, val);
       }
     }
-
+    if(DO_ERR){
+      double nCHI2 = sqrt(CHI2 / f_nom->GetNDF());
+      if(nCHI2 > 1)
+	for(int b = 0; b < Nbins; b++){
+	  hist->SetBinError(b+1, hist->GetBinError(b+1)*nCHI2);
+	}
+    }
+      
     for(int i = 0; i < 4; i++){
       f_nom->FixParameter(i, result->GetParams()[i]);
     }
@@ -308,14 +323,20 @@ int main(int argc, char* argv[]) {
       
       f_nom->SetParameter(4, new_res->GetParams()[4]);
       Nbins = hist->GetNbinsX();
+      CHI2  = 0.;
       for(int b = 0; b < Nbins; b++){
 	if(DO_ERR){
 	  double x0 = hist->GetXaxis()->GetBinLowEdge(b+1);
 	  double x1 = hist->GetXaxis()->GetBinUpEdge(b+1);
 	  double val = f_nom->Integral(x0,x1);
-	  hist->SetBinContent(b+1, val/(x1-x0));
 	  double valerr = f_nom->IntegralError(x0,x1,new_res->GetParams(),
 					       new_res->GetCovarianceMatrix().GetMatrixArray());
+	  double pre = hist->GetBinContent(b+1);
+	  double pre_err = hist->GetBinError(b+1);
+	  CHI2 += pow(pre-val/(x1-x0), 2.)/
+	    (valerr*valerr/(x1-x0)/(x1-x0) + pre_err*pre_err);
+	  valerr = sqrt(valerr*valerr + 0.02*0.02*val*val);
+	  hist->SetBinContent(b+1, val/(x1-x0));
 	  hist->SetBinError(b+1, valerr/(x1-x0));
 	} else {
 	  double xC = hist->GetXaxis()->GetBinCenter(b+1);
@@ -323,6 +344,13 @@ int main(int argc, char* argv[]) {
 	  hist->SetBinContent(b+1, val);
 	}
       }
+      // no inflation for "other"
+      // if(DO_ERR){
+      // 	double nCHI2 = sqrt(CHI2 / f_nom->GetNDF());
+      // 	if(nCHI2 > 1)
+      // 	  for(int b = 0; b < Nbins; b++)
+      // 	    hist->SetBinError(b+1, hist->GetBinError(b+1)*nCHI2);
+      // }
     }
     
   }
@@ -360,20 +388,32 @@ int main(int argc, char* argv[]) {
       }
     
       Nbins = hist->GetNbinsX();
+      CHI2  = 0.;
       for(int b = 0; b < Nbins; b++){
 	if(DO_ERR){
 	  double x0 = hist->GetXaxis()->GetBinLowEdge(b+1);
 	  double x1 = hist->GetXaxis()->GetBinUpEdge(b+1);
 	  double val = f_nom->Integral(x0,x1);
-	  hist->SetBinContent(b+1, val/(x1-x0));
 	  double valerr = f_nom->IntegralError(x0,x1,result->GetParams(),
 					       result->GetCovarianceMatrix().GetMatrixArray());
+	  double pre = hist->GetBinContent(b+1);
+	  double pre_err = hist->GetBinError(b+1);
+	  CHI2 += pow(pre-val/(x1-x0), 2.)/
+	    (valerr*valerr/(x1-x0)/(x1-x0) + pre_err*pre_err);
+	  valerr = sqrt(valerr*valerr + 0.02*0.02*val*val);
+	  hist->SetBinContent(b+1, val/(x1-x0));
 	  hist->SetBinError(b+1, valerr/(x1-x0));
 	} else {
 	  double xC = hist->GetXaxis()->GetBinCenter(b+1);
 	  double val = f_nom->Eval(xC);
 	  hist->SetBinContent(b+1, val);
 	}
+      }
+      if(DO_ERR){
+	double nCHI2 = sqrt(CHI2 / f_nom->GetNDF());
+	if(nCHI2 > 1)
+	  for(int b = 0; b < Nbins; b++)
+	    hist->SetBinError(b+1, hist->GetBinError(b+1)*nCHI2);
       }
     }
   }
@@ -417,20 +457,33 @@ int main(int argc, char* argv[]) {
     }
     
     Nbins = hist->GetNbinsX();
+    CHI2  = 0.;
     for(int b = 0; b < Nbins; b++){
       if(DO_ERR){
 	double x0 = hist->GetXaxis()->GetBinLowEdge(b+1);
 	double x1 = hist->GetXaxis()->GetBinUpEdge(b+1);
 	double val = f_nom->Integral(x0,x1);
-	hist->SetBinContent(b+1, val/(x1-x0));
 	double valerr = f_nom->IntegralError(x0,x1,result->GetParams(),
 					     result->GetCovarianceMatrix().GetMatrixArray());
+	double pre = hist->GetBinContent(b+1);
+	double pre_err = hist->GetBinError(b+1);
+	CHI2 += pow(pre-val/(x1-x0), 2.)/
+	  (valerr*valerr/(x1-x0)/(x1-x0) + pre_err*pre_err);
+	valerr = sqrt(valerr*valerr + 0.02*0.02*val*val);
+	hist->SetBinContent(b+1, val/(x1-x0));
 	hist->SetBinError(b+1, valerr/(x1-x0));
       } else {
 	double xC = hist->GetXaxis()->GetBinCenter(b+1);
 	double val = f_nom->Eval(xC);
 	hist->SetBinContent(b+1, val);
       }
+    }
+
+    if(DO_ERR){
+      double nCHI2 = sqrt(CHI2 / f_nom->GetNDF());
+      if(nCHI2 > 1)
+	for(int b = 0; b < Nbins; b++)
+	  hist->SetBinError(b+1, hist->GetBinError(b+1)*nCHI2);
     }
 
     for(int i = 0; i < 4; i++){
@@ -457,20 +510,32 @@ int main(int argc, char* argv[]) {
       
       f_nom->SetParameter(4, new_res->GetParams()[4]);
       Nbins = hist->GetNbinsX();
+      CHI2  = 0.;
       for(int b = 0; b < Nbins; b++){
 	if(DO_ERR){
 	  double x0 = hist->GetXaxis()->GetBinLowEdge(b+1);
 	  double x1 = hist->GetXaxis()->GetBinUpEdge(b+1);
 	  double val = f_nom->Integral(x0,x1);
-	  hist->SetBinContent(b+1, val/(x1-x0));
 	  double valerr = f_nom->IntegralError(x0,x1,new_res->GetParams(),
 					       new_res->GetCovarianceMatrix().GetMatrixArray());
+	  double pre = hist->GetBinContent(b+1);
+	  double pre_err = hist->GetBinError(b+1);
+	  CHI2 += pow(pre-val/(x1-x0), 2.)/
+	    (valerr*valerr/(x1-x0)/(x1-x0) + pre_err*pre_err);
+	  valerr = sqrt(valerr*valerr + 0.02*0.02*val*val);
+	  hist->SetBinContent(b+1, val/(x1-x0));
 	  hist->SetBinError(b+1, valerr/(x1-x0));
 	} else {
 	  double xC = hist->GetXaxis()->GetBinCenter(b+1);
 	  double val = f_nom->Eval(xC);
 	  hist->SetBinContent(b+1, val);
 	}
+      }
+      if(DO_ERR){
+	double nCHI2 = sqrt(CHI2 / f_nom->GetNDF());
+	if(nCHI2 > 1)
+	  for(int b = 0; b < Nbins; b++)
+	    hist->SetBinError(b+1, hist->GetBinError(b+1)*nCHI2);
       }
     }    
   }

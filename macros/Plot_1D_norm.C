@@ -45,7 +45,7 @@ void Plot_1D_norm(){
   setstyle(0);
 
   //g_PlotTitle = "Baseline Selection";
-  g_PlotTitle = "Region D (#epsilon_{top} = 0.3)";
+  g_PlotTitle = "Region D Selection";
 
   int ihist = 0;
 
@@ -201,13 +201,13 @@ void Plot_1D_norm(){
   int Nsample = g_File.size();
   int Nhist = ihist;
 
-  g_Path = "/Users/crogan/Dropbox/SAMPLES/Tprime/";
+  g_Path = "/Users/crogan/Dropbox/SAMPLES/Tprime/12_10_17/";
   
   //g_Xname = "N_{jet}^{ V_{S}}";
-  g_Xname = "Number of extra jets (#Delta R(j, H/T) > 1.2)";
-  g_Xmin = -0.5;
-  g_Xmax = 2.5;
-  g_NX = 3;
+  g_Xname = "#Delta R(j, H) for all AK4 jets (with #Delta R(j, top) > 1.2)";
+  g_Xmin = 0.;
+  g_Xmax = 4.5;
+  g_NX = 40;
 
 
   TH1D* hist[Nhist];
@@ -230,16 +230,16 @@ void Plot_1D_norm(){
       if(e%(max(1,Nentry/10)) == 0)
 	cout << "event " << e << " | " << Nentry << endl;
 
-      // if(base->dphiISRI < 3.0)
-      // 	continue;
-
-      // if(base->tau3_top/base->tau2_top > 0.57)
-      // 	continue;
-
        TLorentzVector H,T;
       H.SetPtEtaPhiM( base->pT_higgs, base->eta_higgs, base->phi_higgs, base->mass_higgs );
       T.SetPtEtaPhiM( base->pT_top, base->eta_top, base->phi_top, base->mass_top );
       TLorentzVector Tp = H+T;
+
+       if(T.Pt() + H.Pt() < 850.)
+	continue;
+
+      if(!base->isD)
+	continue;
       
       double RPTtop = base->pT_top / (base->pT_top + base->M_Tp);
       double RPThiggs = base->pT_higgs / (base->pT_higgs + base->M_Tp);
@@ -259,7 +259,8 @@ void Plot_1D_norm(){
 			 base->eta_extrajet->at(j),
 			 base->phi_extrajet->at(j),
 			 base->mass_extrajet->at(j));
-	if(jet.DeltaR(H) < 1.2 || jet.DeltaR(T) < 1.2) continue;
+	// if(jet.DeltaR(H) < 1.2 || jet.DeltaR(T) < 1.2) continue;
+	if(jet.DeltaR(T) < 1.2) continue;
 	Nextra++;
 	jets.push_back(jet);
 	if(fabs(jet.Eta()) > maxEta)
@@ -269,12 +270,12 @@ void Plot_1D_norm(){
 	if(base->CSV_extrajet->at(j) > bjetCSV){
 	  bjetCSV = base->CSV_extrajet->at(j);
 	  bjet = jet;
-     }
-	//hist[g_Hist[s]]->Fill(jet.DeltaR(T), base->weight);
+	}
+	hist[g_Hist[s]]->Fill(jet.DeltaR(H), base->weight);
       }
-      if(Nextra > 1)
-      	for(int i = 0; i < min(Nbtag,g_NX); i++)
-      	  hist[g_Hist[s]]->Fill(i, base->weight);
+      // if(Nextra > 1)
+      // 	for(int i = 0; i < min(Nbtag,g_NX); i++)
+      // 	  hist[g_Hist[s]]->Fill(i, base->weight);
 
       double dRapidity = 0;
       double dbEta = 0;
@@ -298,8 +299,8 @@ void Plot_1D_norm(){
   int imax = -1;
   for(int i = 0; i < Nhist; i++){
     cout << hist[i]->Integral() << " bla" << endl;
-    //hist[i]->Scale(1./hist[i]->Integral());
-    hist[i]->Scale(1./hist[i]->GetMaximum());
+    hist[i]->Scale(1./hist[i]->Integral());
+    //hist[i]->Scale(1./hist[i]->GetMaximum());
     if(hist[i]->GetMaximum() > max){
       max = hist[i]->GetMaximum();
       imax = i;
@@ -323,11 +324,11 @@ void Plot_1D_norm(){
   can->SetGridy();
   can->Draw();
   can->cd();
-  for(int i = 0; i < hist[imax]->GetNbinsX(); i++){
-    char* sbin = new char[20];
-    sprintf(sbin,"#geq %d", i);
-    hist[imax]->GetXaxis()->SetBinLabel(i+1,sbin);
-  }
+  // for(int i = 0; i < hist[imax]->GetNbinsX(); i++){
+  //   char* sbin = new char[20];
+  //   sprintf(sbin,"#geq %d", i);
+  //   hist[imax]->GetXaxis()->SetBinLabel(i+1,sbin);
+  // }
   hist[imax]->Draw();
   hist[imax]->GetXaxis()->CenterTitle();
   hist[imax]->GetXaxis()->SetTitleFont(132);
@@ -381,7 +382,7 @@ void Plot_1D_norm(){
   l.DrawLatex(0.6,0.943,g_PlotTitle.c_str());
   l.SetTextSize(0.04);
   l.SetTextFont(42);
-  l.DrawLatex(0.15,0.943,"#bf{#it{CMS}} 13 TeV Simulation");	
+  l.DrawLatex(0.15,0.943,"#bf{#it{CMS}} Simulation Preliminary");	
 
   // l.SetTextSize(0.045);
   // l.SetTextFont(132);

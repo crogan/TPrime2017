@@ -45,8 +45,8 @@ void setstyle(int istyle);
 void Plot_Template(){
   setstyle(0);
 
-  bool DO_BAND = false;
-  int REBIN = 1;
+  bool DO_BAND = true;
+  int REBIN = 10;
   
   vector<int> g_Color;
   g_Color.push_back(kBlue+2);
@@ -56,7 +56,7 @@ void Plot_Template(){
   g_Color.push_back(kCyan+2);
   g_Color.push_back(kOrange+2);
 
-  g_File.push_back("7Nov17/templates_topM_extraJetTwo_extraForwardJetOne_7Nov17.root");
+  g_File.push_back("13Dec17/templates_tZ_ptSum850_annulus_0p55-0p9_12Dec17.root");
   g_Hist.push_back("MTP_regionA_QCD");
   //g_PlotTitle = "t #bar{t}+jets Region A";
   g_PlotTitle = "QCD Region B";
@@ -105,9 +105,9 @@ void Plot_Template(){
   TF1 *f_temp = new TF1("temp","[0]*exp([1]*x)", 1100., 2500);
   
   for(int h = 0; h < Nhist; h++){
-    hist[h]->Rebin(REBIN);
-    for(int i = 0; i < 3; i++)
-      hist_func[i][h]->Rebin(REBIN);
+    //hist[h]->Rebin(REBIN);
+    // for(int i = 0; i < 3; i++)
+    //   hist_func[i][h]->Rebin(REBIN);
     
     char fname[50];
     sprintf(fname, "func_%d", h);
@@ -144,6 +144,9 @@ void Plot_Template(){
     
     TFitResultPtr result = hist[h]->Fit(fname, "SLLER");
 
+    double CHI2 = 0.;
+    double NCHI2 = 0;
+    
     if(DO_BAND){
     int Nbins = hist[h]->GetNbinsX();
     for(int b = 0; b < Nbins; b++){
@@ -153,15 +156,28 @@ void Plot_Template(){
       double val = vfunc[h]->Integral(x0,x1);
       double valerr = vfunc[h]->IntegralError(x0,x1,result->GetParams(),
       		      result->GetCovarianceMatrix().GetMatrixArray());
+      double Nchi2 = vfunc[h]->GetChisquare()/vfunc[h]->GetNDF();
+      cout << Nchi2 << " !!!!!!!!!!! " << sqrt(Nchi2) << endl;
+
+      NCHI2 += 1.;
+      CHI2 += pow(hist[h]->GetBinContent(b+1)-val/(x1-x0), 2.)/
+	(valerr*valerr/(x1-x0)/(x1-x0) + hist[h]->GetBinError(b+1)*hist[h]->GetBinError(b+1));
+      
+      // if(Nchi2 > 1)
+      // 	valerr *= sqrt(Nchi2);
+      valerr = sqrt(valerr*valerr + 0.02*0.02*val*val);
+      
       //double valerr = 0;
-      hist_func[0][h]->SetBinContent(b+1, val/(x1-x0));
-      hist_func[0][h]->SetBinError(b+1, valerr/(x1-x0));
+      hist_func[0][h]->SetBinContent(b+1, val/(x1-x0)*REBIN);
+      hist_func[0][h]->SetBinError(b+1, valerr/(x1-x0)*REBIN);
       hist_func[1][h]->SetBinContent(b+1, (val+valerr)/(x1-x0));
       hist_func[2][h]->SetBinContent(b+1, (val-valerr)/(x1-x0));
     }
-      
+    cout << CHI2 << " " << NCHI2 << endl;
+    if(CHI2/NCHI2 > 1)
+      for(int b = 0; b < Nbins; b++)
+	hist_func[0][h]->SetBinError(b+1, hist_func[0][h]->GetBinError(b+1)*sqrt(CHI2/NCHI2));
     }
- 
   }
 
   //return;
@@ -169,6 +185,7 @@ void Plot_Template(){
   double max = -1.;
   int imax = -1;
   for(int i = 0; i < Nhist; i++){
+    hist[i]->Rebin(REBIN);
     //hist[i]->Scale(1./hist[i]->Integral());
     if(hist[i]->GetMaximum() > max){
       max = hist[i]->GetMaximum();
@@ -223,7 +240,7 @@ void Plot_Template(){
     if(DO_BAND){
       hist_func[0][i]->SetFillColor(kGreen+10);
       hist_func[0][i]->Draw("SAME E3");
-       hist[i]->Draw("SAME");
+      hist[i]->Draw("SAME");
     } else {
       vfunc[i]->Draw("SAME");
     }

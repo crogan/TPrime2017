@@ -51,8 +51,8 @@ void setstyle(int istyle);
 void TemplateCompare(){
   setstyle(0);
 
-  bool DO_BAND = false;
-  int REBIN = 20;
+  bool DO_BAND = true;
+  int REBIN = 15;
   
   vector<int> g_Color;
   g_Color.push_back(kBlue+2);
@@ -62,16 +62,20 @@ void TemplateCompare(){
   g_Color.push_back(kCyan+2);
   g_Color.push_back(kOrange+2);
 
-  g_File_new = "templates_tH_ht4-900_annulus_0p55-0p9_12Dec17_smoothed.root";
-  // g_Hist_new.push_back("MTP_regionC_Other");
-  // g_Label_new.push_back("Other smooth");
-  g_Hist_new.push_back("MTP_regionA_TTJets");
+  g_File_new = "templates_tH_ptSum850_annulus_0p55-0p9_12Dec17_NEW.root";
+  //g_File_new = "templates_tZ_ptSum850_annulus_0p55-0p9_12Dec17_NEW.root";
+  g_Hist_new.push_back("MTP_regionC_Other");
+  g_Label_new.push_back("Other smooth");
+  g_Hist_new.push_back("MTP_regionC_TTJets");
   g_Label_new.push_back("t #bar{t} + jets smooth");
-  // g_Hist_new.push_back("MTP_regionC_QCD");
-  // g_Label_new.push_back("QCD smooth");
+  g_Hist_new.push_back("MTP_regionC_QCD");
+  g_Label_new.push_back("QCD smooth");
 
-  g_File_old = "templates_tH_ht4-900_annulus_0p55-0p9_12Dec17.root";
-  g_Hist_old.push_back("MTP_regionA_TTJets");
+  //g_File_old = "templates_tZ_ptSum850_annulus_0p55-0p9_12Dec17.root";
+  g_File_old = "templates_tH_ptSum850_annulus_0p55-0p9_12Dec17.root";
+  //g_Hist_old.push_back("MTP_regionD_TTJets");
+  g_Hist_old.push_back("MTP_regionC_data_obs");
+  //g_Label_old = "t #bar{t} + jets MC";
   g_Label_old = "Data";
 
   g_PlotTitle = "Region C";
@@ -79,9 +83,9 @@ void TemplateCompare(){
   int Nhist_new = g_Hist_new.size();
   int Nhist_old = g_Hist_old.size();
 
-  g_Path = "/Users/crogan/Dropbox/SAMPLES/Tprime/templates/12Dec17/";
+  g_Path = "/Users/crogan/Dropbox/SAMPLES/Tprime/templates/13Dec17/";
   
-  g_Xname = "#tilde{M}_{T'} [GeV]";
+  g_Xname = "#tilde{M}_{T} [GeV]";
 
   vector<TH1F*> hist_new;
   vector<TH1F*> hist_old;
@@ -96,8 +100,8 @@ void TemplateCompare(){
     if(hist_temp){
       hist_new.push_back( (TH1F*)hist_temp->Clone(hname) );
       TF1* func = hist_new[hist_new.size()-1]->GetFunction("f_nom");
-      if(func)
-	func->Delete();
+      // if(func)
+      // 	func->Delete();
     }
     else
       cout << "NO HIST" << endl;
@@ -136,8 +140,8 @@ void TemplateCompare(){
     Nhist_new++;
   }
 
-  
-  float width = hist_new[0]->GetBinWidth(1);
+  hist_old[0]->Rebin(REBIN);
+  float width = hist_old[0]->GetBinWidth(1);
   char *yaxis = new char[100];
   sprintf(yaxis,"Events / %0.0f GeV", width);
 
@@ -157,7 +161,7 @@ void TemplateCompare(){
   top->SetBottomMargin(0.15);
   top->SetTopMargin(0.085);
   
-  hist_old[0]->Rebin(REBIN);
+  
   hist_old[0]->Draw();
   hist_old[0]->GetXaxis()->CenterTitle();
   hist_old[0]->GetXaxis()->SetTitleFont(132);
@@ -179,7 +183,7 @@ void TemplateCompare(){
   int Ntype[3];
 
   for(int i = Nhist_new-1; i >= 0; i--){
-    hist_new[i]->Rebin(REBIN);
+    hist_new[i]->Scale(REBIN);
     hist_new[i]->SetLineColor(g_Color[i]-11);
     hist_new[i]->SetLineWidth(3);
     hist_new[i]->SetMarkerColor(g_Color[i]-11);
@@ -187,7 +191,7 @@ void TemplateCompare(){
     hist_new[i]->SetFillColor(g_Color[i]-11);
     hist_new[i]->Draw("SAME E3");
   }
-
+  
   hist_old[0]->SetLineColor(kBlack);
   hist_old[0]->SetLineWidth(2);
   hist_old[0]->SetMarkerColor(kBlack);
@@ -196,7 +200,7 @@ void TemplateCompare(){
   hist_old[0]->SetFillColor(kWhite);
   hist_old[0]->Draw("SAME");
 
-  TLegend* leg = new TLegend(0.1588,0.68,0.3946,0.8947);
+  TLegend* leg = new TLegend(0.649811,0.637551,0.930425,0.853061);
   leg->SetTextFont(132);
   leg->SetTextSize(0.045);
   leg->SetFillColor(kWhite);
@@ -226,10 +230,10 @@ void TemplateCompare(){
   l.SetTextSize(0.05);
   l.SetTextFont(132);
   // l.DrawLatex(0.17,0.855,g_PlotTitle.c_str());
-  l.DrawLatex(0.6,0.943,g_PlotTitle.c_str());
+  l.DrawLatex(0.82,0.943,g_PlotTitle.c_str());
   l.SetTextSize(0.04);
   l.SetTextFont(42);
-  l.DrawLatex(0.15,0.943,"#bf{#it{CMS}} 13 TeV Simulation");	
+  l.DrawLatex(0.15,0.943,"#bf{#it{CMS}} Preliminary");	
 
   // l.SetTextSize(0.045);
   // l.SetTextFont(132);
@@ -240,7 +244,10 @@ void TemplateCompare(){
   can->cd();
 
   TH1F* ratio = (TH1F*)hist_old[0]->Clone("Ratio");
-  ratio->Divide(hist_new[Nhist_new-1]);
+  TH1F* DEN   = (TH1F*)hist_new[Nhist_new-1]->Clone("DEN");
+  DEN->Scale(1./double(REBIN));
+  DEN->Rebin(REBIN);
+  ratio->Divide(DEN);
 
   TPad* bot = new TPad("bot","bot", 0., 0.0, 1., 0.4);
   bot->Draw();
@@ -325,7 +332,7 @@ void setstyle(int istyle) {
   gStyle->SetLineStyleString(2,"[12 12]"); // postscript dashes
 	
   //..Get rid of X error bars
-  gStyle->SetErrorX(0.001);
+  //gStyle->SetErrorX(0.001);
 	
   // do not display any of the standard histogram decorations
   gStyle->SetOptTitle(0);

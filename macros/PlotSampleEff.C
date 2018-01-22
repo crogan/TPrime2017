@@ -29,93 +29,94 @@ void PlotSampleEff(){
   g_Color.push_back(kRed+2);
   g_Color.push_back(kGreen+2);
   g_Color.push_back(kMagenta+2);
+  g_Color.push_back(kOrange+2);
   
   vector<string> g_Files;
 
-   // g_Files.push_back("TbtH_800_LH.root");
-  // g_Files.push_back("TbtH_900_LH.root");
-  // g_Files.push_back("TbtH_1000_LH.root");
-  // g_Files.push_back("TbtH_1100_LH.root");
-  // g_Files.push_back("TbtH_1200_LH.root");
+  g_Files.push_back("TbtH_800_LH.root");
+  g_Files.push_back("TbtH_900_LH.root");
+  g_Files.push_back("TbtH_1000_LH.root");
+  g_Files.push_back("TbtH_1100_LH.root");
+  g_Files.push_back("TbtH_1200_LH.root");
   // g_Files.push_back("TbtH_1200_RH.root");
-  // g_Files.push_back("TbtH_1300_LH.root");
-  // g_Files.push_back("TbtH_1400_LH.root");
-  // g_Files.push_back("TbtH_1500_LH.root");
-  // g_Files.push_back("TbtH_1700_LH.root");
-  // g_Files.push_back("TbtH_1800_LH.root");
+  g_Files.push_back("TbtH_1300_LH.root");
+  g_Files.push_back("TbtH_1400_LH.root");
+  g_Files.push_back("TbtH_1500_LH.root");
+  g_Files.push_back("TbtH_1700_LH.root");
+  g_Files.push_back("TbtH_1800_LH.root");
   // g_Files.push_back("TbtH_1800_RH.root");
-  // // g_Files.push_back("TbtH_2000_10GeV_LH.root");
-  // // g_Files.push_back("TbtH_2400_10GeV_LH.root");
-  // // g_Files.push_back("TbtH_2600_10GeV_LH.root");
-  // g_Files.push_back("TbtH_1000_10p_LH.root");
-  // g_Files.push_back("TbtH_1000_20p_LH.root");
-  // g_Files.push_back("TbtH_1000_30p_LH.root");
-  // g_Files.push_back("TbtH_1200_10p_LH.root");
-  // g_Files.push_back("TbtH_1200_20p_LH.root");
-  // g_Files.push_back("TbtH_1200_30p_LH.root");
-  // g_Files.push_back("TbtH_1400_10p_LH.root");
-  // g_Files.push_back("TbtH_1400_20p_LH.root");
-  // g_Files.push_back("TbtH_1400_30p_LH.root");
-  // g_Files.push_back("TbtH_1600_10p_LH.root");
-  // g_Files.push_back("TbtH_1600_20p_LH.root");
-  // g_Files.push_back("TbtH_1600_30p_LH.root");
-  // g_Files.push_back("TbtH_1800_10p_LH.root");
-  // g_Files.push_back("TbtH_1800_20p_LH.root");
-  // g_Files.push_back("TbtH_1800_30p_LH.root");
-  // g_Files.push_back("TbtH_2000_10p_LH.root");
-  // g_Files.push_back("TbtH_2000_20p_LH.root");
-  // g_Files.push_back("TbtH_2000_30p_LH.root");
-  // // g_Files.push_back("TbtH_2400_10p_LH.root");
-  // // g_Files.push_back("TbtH_2400_20p_LH.root");
-  // // g_Files.push_back("TbtH_2400_30p_LH.root");
-  // // g_Files.push_back("TbtH_2600_10p_LH.root");
-  // // g_Files.push_back("TbtH_2600_20p_LH.root");
-  // // g_Files.push_back("TbtH_2600_30p_LH.root");
+  // g_Files.push_back("TbtH_2000_10GeV_LH.root");
+  // g_Files.push_back("TbtH_2400_10GeV_LH.root");
+  // g_Files.push_back("TbtH_2600_10GeV_LH.root");
+  g_Files.push_back("TbtH_1000_10p_LH.root");
+  g_Files.push_back("TbtH_1000_20p_LH.root");
+  g_Files.push_back("TbtH_1000_30p_LH.root");
+  g_Files.push_back("TbtH_1200_10p_LH.root");
+  g_Files.push_back("TbtH_1200_20p_LH.root");
+  g_Files.push_back("TbtH_1200_30p_LH.root");
+  g_Files.push_back("TbtH_1400_10p_LH.root");
+  g_Files.push_back("TbtH_1400_20p_LH.root");
+  g_Files.push_back("TbtH_1400_30p_LH.root");
+  g_Files.push_back("TbtH_1600_10p_LH.root");
+  g_Files.push_back("TbtH_1600_20p_LH.root");
+  g_Files.push_back("TbtH_1600_30p_LH.root");
+  g_Files.push_back("TbtH_1800_10p_LH.root");
+  g_Files.push_back("TbtH_1800_20p_LH.root");
+  g_Files.push_back("TbtH_1800_30p_LH.root");
+  g_Files.push_back("TbtH_2000_10p_LH.root");
+  g_Files.push_back("TbtH_2000_20p_LH.root");
+  g_Files.push_back("TbtH_2000_30p_LH.root");
+  // g_Files.push_back("TbtH_2400_10p_LH.root");
+  // g_Files.push_back("TbtH_2400_20p_LH.root");
+  // g_Files.push_back("TbtH_2400_30p_LH.root");
+  // g_Files.push_back("TbtH_2600_10p_LH.root");
+  // g_Files.push_back("TbtH_2600_20p_LH.root");
+  // g_Files.push_back("TbtH_2600_30p_LH.root");
 
   
-  g_Files.push_back("TttH_1000_RH.root");
-  g_Files.push_back("TttH_1100_RH.root");
-  g_Files.push_back("TttH_1200_LH.root");
-  g_Files.push_back("TttH_1200_RH.root");
-  g_Files.push_back("TttH_1300_RH.root");
-  g_Files.push_back("TttH_1400_RH.root");
-  g_Files.push_back("TttH_1500_RH.root");
-  g_Files.push_back("TttH_1700_RH.root");
-  g_Files.push_back("TttH_1800_LH.root");
-  g_Files.push_back("TttH_1800_RH.root");
-  g_Files.push_back("TttH_1000_10p_RH.root");
-  g_Files.push_back("TttH_1000_20p_RH.root");
-  g_Files.push_back("TttH_1000_30p_RH.root");
-  g_Files.push_back("TttH_1200_10p_RH.root");
-  g_Files.push_back("TttH_1200_30p_RH.root");
-  g_Files.push_back("TttH_1400_10p_RH.root");
-  g_Files.push_back("TttH_1400_20p_RH.root");
-  g_Files.push_back("TttH_1400_30p_RH.root");
-  g_Files.push_back("TttH_1600_10p_RH.root");
-  g_Files.push_back("TttH_1600_20p_RH.root");
-  g_Files.push_back("TttH_1600_30p_RH.root");
-  g_Files.push_back("TttH_1800_10p_RH.root");
-  g_Files.push_back("TttH_1800_20p_RH.root");
-  g_Files.push_back("TttH_1800_30p_RH.root");
-  // g_Files.push_back("TttH_2000_10GeV_RH.root");
-  // g_Files.push_back("TttH_2000_10p_RH.root");
-  // g_Files.push_back("TttH_2400_10GeV_RH.root");
-  // g_Files.push_back("TttH_2000_20p_RH.root");
-  // g_Files.push_back("TttH_2400_10p_RH.root");
-  // g_Files.push_back("TttH_2400_20p_RH.root");
-  // g_Files.push_back("TttH_2400_30p_RH.root");
-  // g_Files.push_back("TttH_2600_10p_RH.root");
-  // g_Files.push_back("TttH_2600_20p_RH.root");
-  // g_Files.push_back("TttH_2600_30p_RH.root");
+  // g_Files.push_back("TttH_1000_RH.root");
+  // g_Files.push_back("TttH_1100_RH.root");
+  // // g_Files.push_back("TttH_1200_LH.root");
+  // g_Files.push_back("TttH_1200_RH.root");
+  // g_Files.push_back("TttH_1300_RH.root");
+  // g_Files.push_back("TttH_1400_RH.root");
+  // g_Files.push_back("TttH_1500_RH.root");
+  // g_Files.push_back("TttH_1700_RH.root");
+  // // g_Files.push_back("TttH_1800_LH.root");
+  // g_Files.push_back("TttH_1800_RH.root");
+  // g_Files.push_back("TttH_1000_10p_RH.root");
+  // g_Files.push_back("TttH_1000_20p_RH.root");
+  // g_Files.push_back("TttH_1000_30p_RH.root");
+  // g_Files.push_back("TttH_1200_10p_RH.root");
+  // g_Files.push_back("TttH_1200_30p_RH.root");
+  // g_Files.push_back("TttH_1400_10p_RH.root");
+  // g_Files.push_back("TttH_1400_20p_RH.root");
+  // g_Files.push_back("TttH_1400_30p_RH.root");
+  // g_Files.push_back("TttH_1600_10p_RH.root");
+  // g_Files.push_back("TttH_1600_20p_RH.root");
+  // g_Files.push_back("TttH_1600_30p_RH.root");
+  // g_Files.push_back("TttH_1800_10p_RH.root");
+  // g_Files.push_back("TttH_1800_20p_RH.root");
+  // g_Files.push_back("TttH_1800_30p_RH.root");
+  // // g_Files.push_back("TttH_2000_10GeV_RH.root");
+  // // g_Files.push_back("TttH_2000_10p_RH.root");
+  // // g_Files.push_back("TttH_2400_10GeV_RH.root");
+  // // g_Files.push_back("TttH_2000_20p_RH.root");
+  // // g_Files.push_back("TttH_2400_10p_RH.root");
+  // // g_Files.push_back("TttH_2400_20p_RH.root");
+  // // g_Files.push_back("TttH_2400_30p_RH.root");
+  // // g_Files.push_back("TttH_2600_10p_RH.root");
+  // // g_Files.push_back("TttH_2600_20p_RH.root");
+  // // g_Files.push_back("TttH_2600_30p_RH.root");
 
   int Nfile = g_Files.size();
 
   string g_Path = "/Users/crogan/Dropbox/SAMPLES/Tprime/12_10_17/signal/";
 
-  TH1D* h_NUM[3];
-  TH1D* h_DEN[3];
+  TH1D* h_NUM[5];
+  TH1D* h_DEN[5];
 
-  for(int i = 0; i < 4; i++){
+  for(int i = 0; i < 5; i++){
     char* sname = new char[10];
     sprintf(sname, "h_%d", i);
     h_NUM[i] = (TH1D*) new TH1D(("h_NUM"+string(sname)).c_str(),
@@ -137,13 +138,15 @@ void PlotSampleEff(){
     double EvtTot = evtbase->EvtTotal;
     double EvtPre = evtbase->EvtPreselection;
     double EvtSel = evtbase->EvtSelected;
+    double EvtHT      = 0.;
     double EvtRegionD = 0.;
+    double EvtAnnulus = 0.;
     double EvtExtra = 0.;
     double EvtFExtra = 0.;
     delete evtbase;
     delete echain;
 
-    for(int i = 0; i < 4; i++)
+    for(int i = 0; i < 5; i++)
       h_DEN[i]->SetBinContent(f+1, EvtTot);
     
     h_NUM[0]->SetBinContent(f+1, EvtPre);
@@ -157,51 +160,70 @@ void PlotSampleEff(){
     for(int e = 0; e < Nentry; e++){
       base->GetEntry(e);
 
-      EvtRegionD += base->weight;
+      EvtHT += base->weight;
       h_NUM[1]->Fill(f, base->weight);
-      
-      if(base->N_extra < 1)
-       	continue;
 
-      EvtExtra += base->weight;
+       TLorentzVector Top, Higgs;
+      Top.SetPtEtaPhiM( base->pT_top,
+			base->eta_top,
+			base->phi_top,
+			base->mass_top );
+      Higgs.SetPtEtaPhiM( base->pT_higgs,
+			  base->eta_higgs,
+			  base->phi_higgs,
+			  base->mass_higgs );
+
+      if(Top.Pt() + Higgs.Pt() < 850.)
+	continue;
+
+      if(!base->isD)
+	continue;
+
+      EvtRegionD += base->weight;
       h_NUM[2]->Fill(f, base->weight);
+      
+      int Njet = base->pT_extrajet->size();
+      double etaMax = 0.;
+      bool annulus = false;
+      TLorentzVector jet;
+      int Nextra = 0;
+      for(int i = 0; i < Njet; i++){
+	jet.SetPtEtaPhiM( base->pT_extrajet->at(i),
+			  base->eta_extrajet->at(i),
+			  base->phi_extrajet->at(i),
+			  base->mass_extrajet->at(i) );
+	if(jet.DeltaR(Higgs) > 0.55 && jet.DeltaR(Higgs) < 0.9)
+	  annulus = true;
+	if(jet.DeltaR(Higgs) < 1.2 || jet.DeltaR(Top) < 1.2)
+	  continue;
 
-      if(fabs(base->eta_q) < 2.4)
-       	continue;
+	Nextra++;
+	if(fabs(jet.Eta()) > etaMax)
+	  etaMax = fabs(jet.Eta());
+      }
 
-      EvtFExtra += base->weight;
+      if(annulus)
+	continue;
+
+      EvtAnnulus += base->weight;
       h_NUM[3]->Fill(f, base->weight);
       
-      // for(int i = 0; i < 3; i++)
-      // 	h_DEN[i]->Fill(f, base->weight);
+      if(Nextra < 2)
+	continue;
 
-      // bool eveto  = false;
-      // bool muveto = false;
+      if(etaMax < 2.4)
+	continue;
+
+      EvtExtra += base->weight;
+      h_NUM[4]->Fill(f, base->weight);
+
+      // if(fabs(base->eta_q) < 2.4)
+      //  	continue;
+
+      // EvtFExtra += base->weight;
+      // h_NUM[3]->Fill(f, base->weight);
       
-      // TLorentzVector L;
-      // TLorentzVector H;
-      // H.SetPtEtaPhiM( base->pT_higgs, base->eta_higgs, base->phi_higgs, base->mass_higgs );
-      // if(base->pT_mu_clean->size() > 0 && base->pT_mu_clean->at(0) >= 55.){
-      // 	L.SetPtEtaPhiE(base->pT_mu_clean->at(0),
-      // 		       base->eta_mu_clean->at(0),
-      // 		       base->phi_mu_clean->at(0),
-      // 		       base->E_mu_clean->at(0));
-      // 	if(H.DeltaR(L) > 1.) muveto = true;
-      // }
-      // if(base->pT_ele_clean->size() > 0 && base->pT_ele_clean->at(0) >= 55.){
-      // 	L.SetPtEtaPhiE(base->pT_ele_clean->at(0),
-      // 		       base->eta_ele_clean->at(0),
-      // 		       base->phi_ele_clean->at(0),
-      // 		       base->E_ele_clean->at(0));
-      // 	if(H.DeltaR(L) > 1.) eveto = true;
-      // }
-
-      // if(muveto || eveto)
-      // 	h_NUM[0]->Fill(f, base->weight);
-      // if(eveto)
-      // 	h_NUM[1]->Fill(f, base->weight);
-      // if(muveto)
-      // 	h_NUM[2]->Fill(f, base->weight);
+     
     }
     delete base;
     delete chain;
@@ -211,10 +233,10 @@ void PlotSampleEff(){
   //TEfficiency* h_EFF = new TEfficiency(h_NUM, h_DEN);
   // h_Eff->Draw();
   TMultiGraph *mg = new TMultiGraph();
-  TGraphAsymmErrors* gr[4];
-  for(int i = 0; i < 4; i++){
+  TGraphAsymmErrors* gr[5];
+  for(int i = 0; i < 5; i++){
     gr[i] = new TGraphAsymmErrors(h_NUM[i], h_DEN[i]);
-    gr[i]->SetLineWidth(2);
+    gr[i]->SetLineWidth(3);
     gr[i]->SetMarkerSize(0);
     gr[i]->SetMarkerColor(g_Color[i]);
     gr[i]->SetLineColor(g_Color[i]);
@@ -241,6 +263,7 @@ void PlotSampleEff(){
   can->SetTopMargin(0.085);
   can->SetGridx();
   can->SetGridy();
+  can->SetLogy();
   can->Draw();
   can->cd();
   for(int s = 0; s < Nfile; s++){
@@ -269,9 +292,9 @@ void PlotSampleEff(){
   h_NUM[0]->GetYaxis()->SetLabelSize(0.05);
   //h_NUM[0]->GetYaxis()->SetTitle("1 - #epsilon lepton veto [w/ #Delta R (lep, Higgs) > 1]");
   //h_NUM[0]->GetYaxis()->SetTitle("1 - #epsilon lepton veto");
-  h_NUM[0]->GetYaxis()->SetTitle("#epsilon selection");
-  h_NUM[0]->GetYaxis()->SetRangeUser(0., 1.);
-  for(int i = 0; i < 4; i++)
+  h_NUM[0]->GetYaxis()->SetTitle("#epsilon  selection");
+  //h_NUM[0]->GetYaxis()->SetRangeUser(0., 1.);
+  for(int i = 0; i < 5; i++)
     gr[i]->Draw("P same");
  
 
@@ -284,7 +307,7 @@ void PlotSampleEff(){
   l.DrawLatex(0.71,0.943, "Region D Selection");
   l.SetTextSize(0.04);
   l.SetTextFont(42);
-  l.DrawLatex(0.13,0.943,"#bf{#it{CMS}} 13 TeV Simulation");
+  l.DrawLatex(0.13,0.943,"#bf{#it{CMS}} Simulation Preliminary");
 
   TLegend* leg = new TLegend(0.16,0.686,0.334,0.886);
   leg->SetTextFont(132);
@@ -292,13 +315,11 @@ void PlotSampleEff(){
   leg->SetFillColor(kWhite);
   leg->SetLineColor(kWhite);
   leg->SetShadowColor(kWhite);
-  // leg->AddEntry(gr[0], "e and #mu");
-  // leg->AddEntry(gr[1], "electron");
-  // leg->AddEntry(gr[2], "muon");
   leg->AddEntry(gr[0], "preselection");
-  leg->AddEntry(gr[1], "top & Higgs ID");
-  leg->AddEntry(gr[2], "#geq 1 extra jet");
-  leg->AddEntry(gr[3], "#geq 1 extra jet |#eta| > 2.4");
+  leg->AddEntry(gr[1], "top & Higgs tag");
+  leg->AddEntry(gr[2], "region D btags");
+  leg->AddEntry(gr[3], "Higgs annulus");
+  leg->AddEntry(gr[4], "extra jet sel.");
   leg->SetLineColor(kWhite);
   leg->SetFillColor(kWhite);
   leg->SetShadowColor(kWhite);

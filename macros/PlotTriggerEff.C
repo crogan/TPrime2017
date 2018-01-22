@@ -36,12 +36,13 @@ double g_NX;
 void PlotTriggerEff(){
   RestFrames::SetStyle();
 
+  //string ifile = "/Users/crogan/Dropbox/SAMPLES/Tprime/trigger/L3T23_TbtH_M-1200_Width-30p_LH.root";
   string ifile = "/Users/crogan/Dropbox/SAMPLES/Tprime/trigger/DATA_2016.root";
   
-  g_Xname = "#tilde{M}_{T'} [GeV]";
-  //g_Xname = "p_{T}^{AK8,1} + p_{T}^{AK8,2} + p_{T}^{extra,1} + p_{T}^{extra,2} [GeV]";
-  g_Xmin = 400.;
-  g_Xmax = 2000.;
+  //g_Xname = "#tilde{M}_{T'} [GeV]";
+  g_Xname = "p_{T}^{AK8,1} + p_{T}^{AK8,2} [GeV]";
+  g_Xmin = 100.;
+  g_Xmax = 1000.;
 
   g_NX = 100;
 
@@ -85,7 +86,7 @@ void PlotTriggerEff(){
     //if(e%1000 != 0) continue;
 
     base->GetEntry(e);
-
+    
     int NAK8 = base->ptAK8->size();
     if(NAK8 < 2)
       continue;
@@ -127,20 +128,21 @@ void PlotTriggerEff(){
 
     double sumPT_AK8 = P4_AK8[0].Pt()+P4_AK8[1].Pt();
 
-    if(sumPT_AK8 < 850. || Nextra < 2) continue;
+    if(sumPT_AK8 < 850.) continue;
 
     // if(P4_AK8[0].Pt() < 400.) continue;
     // if(P4_AK8[1].Pt() < 400.) continue;
 
-    double HT4 = sumPT_AK8 + P4_extraAK4[0].Pt() + P4_extraAK4[1].Pt();
+    //double HT4 = sumPT_AK8 + P4_extraAK4[0].Pt() + P4_extraAK4[1].Pt();
 
-    h_NUM_2D->Fill(HT4, sumPT_AK8);
+    //h_NUM_2D->Fill(HT4, sumPT_AK8);
 
     // if(HT4 < 900.) continue;
     
 
     //h_NUM[0]->Fill(MTp);
-    h_NUM[0]->Fill(MTp);
+    //h_NUM[0]->Fill(sumPT_AK8);
+    h_NUM[0]->Fill(P4_AK8[0].Pt());
 
   }
    
@@ -206,19 +208,20 @@ void PlotTriggerEff(){
 
     double sumPT_AK8 = P4_AK8[0].Pt()+P4_AK8[1].Pt();
 
-    if(sumPT_AK8 < 850. || Nextra < 2) continue;
+    if(sumPT_AK8 < 850.) continue;
 
-    double HT4 = sumPT_AK8 + P4_extraAK4[0].Pt() + P4_extraAK4[1].Pt();
+    //double HT4 = sumPT_AK8 + P4_extraAK4[0].Pt() + P4_extraAK4[1].Pt();
 
     // if(P4_AK8[0].Pt() < 400.) continue;
     // if(P4_AK8[1].Pt() < 400.) continue;
 
-    h_DEN_2D->Fill(HT4, sumPT_AK8);
+    //h_DEN_2D->Fill(HT4, sumPT_AK8);
 
    // if(HT4 < 900.) continue; 
 
     //h_DEN[0]->Fill(MTp);
-    h_DEN[0]->Fill(MTp);
+    //h_DEN[0]->Fill(sumPT_AK8);
+    h_DEN[0]->Fill(P4_AK8[0].Pt());
   }
 
   //h_DEN[0]->Add(h_NUM[0]);
@@ -271,7 +274,7 @@ void PlotTriggerEff(){
   h_NUM[0]->GetYaxis()->SetTitleOffset(1.);
   h_NUM[0]->GetYaxis()->SetLabelFont(132);
   h_NUM[0]->GetYaxis()->SetLabelSize(0.05);
-  h_NUM[0]->GetYaxis()->SetTitle("#epsilon trigger OR");
+  h_NUM[0]->GetYaxis()->SetTitle("#epsilon  trigger");
   h_NUM[0]->GetYaxis()->SetRangeUser(0., 1.);
   for(int i = 0; i < Nhist; i++)
     gr[i]->Draw("P same");
@@ -283,10 +286,12 @@ void PlotTriggerEff(){
   l.SetTextSize(0.045);
   l.SetTextFont(132);
   // l.DrawLatex(0.17,0.855,g_PlotTitle.c_str());
-  l.DrawLatex(0.71,0.943, "pre-selection");
+  l.DrawLatex(0.79,0.943,"Preselection");
   l.SetTextSize(0.04);
   l.SetTextFont(42);
-  l.DrawLatex(0.13,0.943,"#bf{#it{CMS}} Internal 13 TeV");
+   //l.DrawLatex(0.01,0.943,"#bf{#it{CMS}} Preliminary - 35.9 fb^{-1} (13 TeV)");
+    l.DrawLatex(0.13,0.943,"#bf{#it{CMS}} Preliminary - TbtH 1200 GeV (30% width)");
+  
 
   // TLegend* leg = new TLegend(0.16,0.686,0.334,0.886);
   // leg->SetTextFont(132);
@@ -333,7 +338,7 @@ void PlotTriggerEff(){
     h_NUM_2D->GetZaxis()->SetTitleOffset(1.3);
     h_NUM_2D->GetZaxis()->SetLabelFont(132);
     h_NUM_2D->GetZaxis()->SetLabelSize(0.05);
-    h_NUM_2D->GetZaxis()->SetTitle("#epsilon trigger OR");
+    h_NUM_2D->GetZaxis()->SetTitle("#epsilon  trigger");
     //h_NUM_2D->GetZaxis()->SetRangeUser(0.9*h_NUM_2D->GetMinimum(0.0),1.1*h_NUM_2D->GetMaximum());
 
     l.SetTextFont(132);
@@ -341,9 +346,10 @@ void PlotTriggerEff(){
     l.SetTextSize(0.05);
     l.SetTextFont(132);
     // l.DrawLatex(0.17,0.855,g_PlotTitle.c_str());
-    l.DrawLatex(0.6,0.943,"pre-selection");
+    l.DrawLatex(0.79,0.943,"Preselection");
     l.SetTextSize(0.04);
     l.SetTextFont(42);
-    l.DrawLatex(0.01,0.943,"#bf{#it{CMS}} Internal 13 TeV");
+    //l.DrawLatex(0.01,0.943,"#bf{#it{CMS}} Preliminary - 35.9 fb^{-1} (13 TeV)");
+    l.DrawLatex(0.01,0.943,"#bf{#it{CMS}} Preliminary - TbtH 1200 GeV (30% width)");
 
 }
