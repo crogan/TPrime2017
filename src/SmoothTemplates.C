@@ -550,6 +550,20 @@ int main(int argc, char* argv[]) {
 	  string histname = "MTP_"+regionnames[r]+"_QCD"+systnames[s];
 	  hist_QCD[regionnames[r]][systnames[s]]->GetFunction("f_nom")->Delete();
 	  hist_QCD[regionnames[r]][systnames[s]]->Write(histname.c_str());
+	  if(systnames[s] == ""){
+	    string histname_up = histname+"_ShapeUp";
+	    string histname_dn = histname+"_ShapeDown";
+	    TH1F* hist_up = (TH1F*) hist_QCD[regionnames[r]][systnames[s]]->Clone(histname_up.c_str());
+	    TH1F* hist_dn = (TH1F*) hist_QCD[regionnames[r]][systnames[s]]->Clone(histname_dn.c_str());
+	    int Nb = hist_up->GetNbinsX();
+	    for(int b = 0; b < Nb; b++){
+	      hist_up->SetBinContent(b+1, hist_up->GetBinContent(b+1)+hist_up->GetBinError(b+1));
+	      hist_dn->SetBinContent(b+1, hist_dn->GetBinContent(b+1)-hist_dn->GetBinError(b+1));
+	    }
+	    fout->cd();
+	    hist_up->Write(histname_up.c_str());
+	    hist_dn->Write(histname_dn.c_str());
+	  }
 	}
       }
     }
@@ -563,6 +577,20 @@ int main(int argc, char* argv[]) {
 	  string histname = "MTP_"+regionnames[r]+"_TTJets"+systnames[s];
 	  hist_TTJets[regionnames[r]][systnames[s]]->GetFunction("f_nom")->Delete();
 	  hist_TTJets[regionnames[r]][systnames[s]]->Write(histname.c_str());
+	  if(systnames[s] == ""){
+	    string histname_up = histname+"_ShapeUp";
+	    string histname_dn = histname+"_ShapeDown";
+	    TH1F* hist_up = (TH1F*) hist_TTJets[regionnames[r]][systnames[s]]->Clone(histname_up.c_str());
+	    TH1F* hist_dn = (TH1F*) hist_TTJets[regionnames[r]][systnames[s]]->Clone(histname_dn.c_str());
+	    int Nb = hist_up->GetNbinsX();
+	    for(int b = 0; b < Nb; b++){
+	      hist_up->SetBinContent(b+1, hist_up->GetBinContent(b+1)+hist_up->GetBinError(b+1));
+	      hist_dn->SetBinContent(b+1, hist_dn->GetBinContent(b+1)-hist_dn->GetBinError(b+1));
+	    }
+	    fout->cd();
+	    hist_up->Write(histname_up.c_str());
+	    hist_dn->Write(histname_dn.c_str());
+	  }
 	}
       }
     }
@@ -576,6 +604,20 @@ int main(int argc, char* argv[]) {
 	  string histname = "MTP_"+regionnames[r]+"_Other"+systnames[s];
 	  hist_Other[regionnames[r]][systnames[s]]->GetFunction("f_nom")->Delete();
 	  hist_Other[regionnames[r]][systnames[s]]->Write(histname.c_str());
+	  if(systnames[s] == ""){
+	    string histname_up = histname+"_ShapeUp";
+	    string histname_dn = histname+"_ShapeDown";
+	    TH1F* hist_up = (TH1F*) hist_Other[regionnames[r]][systnames[s]]->Clone(histname_up.c_str());
+	    TH1F* hist_dn = (TH1F*) hist_Other[regionnames[r]][systnames[s]]->Clone(histname_dn.c_str());
+	    int Nb = hist_up->GetNbinsX();
+	    for(int b = 0; b < Nb; b++){
+	      hist_up->SetBinContent(b+1, hist_up->GetBinContent(b+1)+hist_up->GetBinError(b+1));
+	      hist_dn->SetBinContent(b+1, hist_dn->GetBinContent(b+1)-hist_dn->GetBinError(b+1));
+	    }
+	    fout->cd();
+	    hist_up->Write(histname_up.c_str());
+	    hist_dn->Write(histname_dn.c_str());
+	  }
 	}
       }							    
     }
@@ -593,10 +635,39 @@ int main(int argc, char* argv[]) {
 	fout->cd();
 	string histname = "MTP_regionD_estQCD"+systnames[s];
 	hist->Write(histname.c_str());
+	if(systnames[s] == ""){
+	  string histname_up = histname+"_ShapeUp";
+	  string histname_dn = histname+"_ShapeDown";
+	  TH1F* hist_up = (TH1F*) hist->Clone(histname_up.c_str());
+	  TH1F* hist_dn = (TH1F*) hist->Clone(histname_dn.c_str());
+	  int Nb = hist_up->GetNbinsX();
+	  for(int b = 0; b < Nb; b++){
+	    hist_up->SetBinContent(b+1, hist_up->GetBinContent(b+1)+hist_up->GetBinError(b+1));
+	    hist_dn->SetBinContent(b+1, hist_dn->GetBinContent(b+1)-hist_dn->GetBinError(b+1));
+	  }
+	  fout->cd();
+	  hist_up->Write(histname_up.c_str());
+	  hist_dn->Write(histname_dn.c_str());
+	}
+	
 	hist->Add(hist_TTJets["regionD"][systnames[s]]);
 	hist->Add(hist_Other["regionD"][systnames[s]]);
 	histname = "MTP_regionD_estBackground"+systnames[s];
 	hist->Write(histname.c_str());
+	if(systnames[s] == ""){
+	  string histname_up = histname+"_ShapeUp";
+	  string histname_dn = histname+"_ShapeDown";
+	  TH1F* hist_up = (TH1F*) hist->Clone(histname_up.c_str());
+	  TH1F* hist_dn = (TH1F*) hist->Clone(histname_dn.c_str());
+	  int Nb = hist_up->GetNbinsX();
+	  for(int b = 0; b < Nb; b++){
+	    hist_up->SetBinContent(b+1, hist_up->GetBinContent(b+1)+hist_up->GetBinError(b+1));
+	    hist_dn->SetBinContent(b+1, hist_dn->GetBinContent(b+1)-hist_dn->GetBinError(b+1));
+	  }
+	  fout->cd();
+	  hist_up->Write(histname_up.c_str());
+	  hist_dn->Write(histname_dn.c_str());
+	}
       }
     }
   }
