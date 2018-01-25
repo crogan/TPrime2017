@@ -558,7 +558,7 @@ int main(int argc, char* argv[]) {
 	    int Nb = hist_up->GetNbinsX();
 	    for(int b = 0; b < Nb; b++){
 	      hist_up->SetBinContent(b+1, hist_up->GetBinContent(b+1)+hist_up->GetBinError(b+1));
-	      hist_dn->SetBinContent(b+1, hist_dn->GetBinContent(b+1)-hist_dn->GetBinError(b+1));
+	      hist_dn->SetBinContent(b+1, std::max(0., hist_dn->GetBinContent(b+1)-hist_dn->GetBinError(b+1)));
 	    }
 	    fout->cd();
 	    hist_up->Write(histname_up.c_str());
@@ -585,7 +585,7 @@ int main(int argc, char* argv[]) {
 	    int Nb = hist_up->GetNbinsX();
 	    for(int b = 0; b < Nb; b++){
 	      hist_up->SetBinContent(b+1, hist_up->GetBinContent(b+1)+hist_up->GetBinError(b+1));
-	      hist_dn->SetBinContent(b+1, hist_dn->GetBinContent(b+1)-hist_dn->GetBinError(b+1));
+	      hist_dn->SetBinContent(b+1, std::max(0., hist_dn->GetBinContent(b+1)-hist_dn->GetBinError(b+1)));
 	    }
 	    fout->cd();
 	    hist_up->Write(histname_up.c_str());
@@ -612,7 +612,7 @@ int main(int argc, char* argv[]) {
 	    int Nb = hist_up->GetNbinsX();
 	    for(int b = 0; b < Nb; b++){
 	      hist_up->SetBinContent(b+1, hist_up->GetBinContent(b+1)+hist_up->GetBinError(b+1));
-	      hist_dn->SetBinContent(b+1, hist_dn->GetBinContent(b+1)-hist_dn->GetBinError(b+1));
+	      hist_dn->SetBinContent(b+1, std::max(0., hist_dn->GetBinContent(b+1)-hist_dn->GetBinError(b+1)));
 	    }
 	    fout->cd();
 	    hist_up->Write(histname_up.c_str());
@@ -643,7 +643,7 @@ int main(int argc, char* argv[]) {
 	  int Nb = hist_up->GetNbinsX();
 	  for(int b = 0; b < Nb; b++){
 	    hist_up->SetBinContent(b+1, hist_up->GetBinContent(b+1)+hist_up->GetBinError(b+1));
-	    hist_dn->SetBinContent(b+1, hist_dn->GetBinContent(b+1)-hist_dn->GetBinError(b+1));
+	    hist_dn->SetBinContent(b+1, std::max(0., hist_dn->GetBinContent(b+1)-hist_dn->GetBinError(b+1)));
 	  }
 	  fout->cd();
 	  hist_up->Write(histname_up.c_str());
@@ -662,7 +662,7 @@ int main(int argc, char* argv[]) {
 	  int Nb = hist_up->GetNbinsX();
 	  for(int b = 0; b < Nb; b++){
 	    hist_up->SetBinContent(b+1, hist_up->GetBinContent(b+1)+hist_up->GetBinError(b+1));
-	    hist_dn->SetBinContent(b+1, hist_dn->GetBinContent(b+1)-hist_dn->GetBinError(b+1));
+	    hist_dn->SetBinContent(b+1, std::max(0., hist_dn->GetBinContent(b+1)-hist_dn->GetBinError(b+1)));
 	  }
 	  fout->cd();
 	  hist_up->Write(histname_up.c_str());
