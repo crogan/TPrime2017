@@ -578,8 +578,8 @@ int main(int argc, char* argv[]) {
 	  hist_TTJets[regionnames[r]][systnames[s]]->GetFunction("f_nom")->Delete();
 	  hist_TTJets[regionnames[r]][systnames[s]]->Write(histname.c_str());
 	  if(systnames[s] == ""){
-	    string histname_up = histname+"_ShapeUp";
-	    string histname_dn = histname+"_ShapeDown";
+	    string histname_up = histname+"_ShapeTTJetsUp";
+	    string histname_dn = histname+"_ShapeTTJetsDown";
 	    TH1F* hist_up = (TH1F*) hist_TTJets[regionnames[r]][systnames[s]]->Clone(histname_up.c_str());
 	    TH1F* hist_dn = (TH1F*) hist_TTJets[regionnames[r]][systnames[s]]->Clone(histname_dn.c_str());
 	    int Nb = hist_up->GetNbinsX();
@@ -605,8 +605,8 @@ int main(int argc, char* argv[]) {
 	  hist_Other[regionnames[r]][systnames[s]]->GetFunction("f_nom")->Delete();
 	  hist_Other[regionnames[r]][systnames[s]]->Write(histname.c_str());
 	  if(systnames[s] == ""){
-	    string histname_up = histname+"_ShapeUp";
-	    string histname_dn = histname+"_ShapeDown";
+	    string histname_up = histname+"_ShapeOtherUp";
+	    string histname_dn = histname+"_ShapeOtherDown";
 	    TH1F* hist_up = (TH1F*) hist_Other[regionnames[r]][systnames[s]]->Clone(histname_up.c_str());
 	    TH1F* hist_dn = (TH1F*) hist_Other[regionnames[r]][systnames[s]]->Clone(histname_dn.c_str());
 	    int Nb = hist_up->GetNbinsX();
@@ -636,8 +636,8 @@ int main(int argc, char* argv[]) {
 	string histname = "MTP_regionD_estQCD"+systnames[s];
 	hist->Write(histname.c_str());
 	if(systnames[s] == ""){
-	  string histname_up = histname+"_ShapeUp";
-	  string histname_dn = histname+"_ShapeDown";
+	  string histname_up = histname+"_ShapeQCDUp";
+	  string histname_dn = histname+"_ShapeQCDDown";
 	  TH1F* hist_up = (TH1F*) hist->Clone(histname_up.c_str());
 	  TH1F* hist_dn = (TH1F*) hist->Clone(histname_dn.c_str());
 	  int Nb = hist_up->GetNbinsX();
@@ -655,8 +655,8 @@ int main(int argc, char* argv[]) {
 	histname = "MTP_regionD_estBackground"+systnames[s];
 	hist->Write(histname.c_str());
 	if(systnames[s] == ""){
-	  string histname_up = histname+"_ShapeUp";
-	  string histname_dn = histname+"_ShapeDown";
+	  string histname_up = histname+"_ShapeQCDUp";
+	  string histname_dn = histname+"_ShapeQCDDown";
 	  TH1F* hist_up = (TH1F*) hist->Clone(histname_up.c_str());
 	  TH1F* hist_dn = (TH1F*) hist->Clone(histname_dn.c_str());
 	  int Nb = hist_up->GetNbinsX();
