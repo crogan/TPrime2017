@@ -26,6 +26,7 @@ int main(int argc, char* argv[]) {
   // Set to false for quick debugging
   // (then doesn't do bin-by-bin integrals for errors)
   bool DO_ERR = true;
+  bool QUIET  = true;
   
   /// Gets the list of input files and chains
   /// them into a single TChain
@@ -86,7 +87,7 @@ int main(int argc, char* argv[]) {
 	(name.find("TttZ") != string::npos)){
       TH1F* htemp = (TH1F*) F->Get(name.c_str());
       fout->cd();
-      htemp->Write();
+      htemp->Write(); 
       htemp->Delete();
       link = link->Next();
       continue;
@@ -121,8 +122,8 @@ int main(int argc, char* argv[]) {
     if(name.find("regionD_est") != string::npos){
       link = link->Next();
       continue;
-    }
-
+    } 
+    
     histonames.push_back(name);
 
     // Use regionA_TTJets to get
@@ -132,7 +133,7 @@ int main(int argc, char* argv[]) {
       string stemp = name;
       stemp.erase(stemp.begin(),
 		  stemp.begin()+stemp.find("TTJets")+6);
-      systnames.push_back(stemp);
+      systnames.push_back(stemp); 
     }
     
     
@@ -225,9 +226,9 @@ int main(int argc, char* argv[]) {
   systnames.pop_back(); // lup cludge
   systnames.push_back("");
   Nsyst = systnames.size();
-
+  
   TF1 *f_exp = new TF1("f_exp","[0]*exp([1]*x)", 1100., 2500);
-  TF1 *f_nom = new TF1("f_nom", GausExp, 750., 3000., 5);
+  TF1 *f_nom = new TF1("f_nom", GausExp, 800., 2750., 5);
   
   f_nom->SetParName(0, "S");
   f_nom->SetParName(1, "#mu");
@@ -253,7 +254,10 @@ int main(int argc, char* argv[]) {
     cout << " for systematic variation " << systnames[s] << endl;
     
     hist = hist_QCD["regionA"][systnames[s]];
+    if(hist->Integral() == 0)
+      continue;
     // exponential fit of tail to get starting values
+    f_exp->SetParameter(0, -3.24762e-03);
     hist->Fit(f_exp,"LLERQ");
 
     // initial values for fit
@@ -293,7 +297,7 @@ int main(int argc, char* argv[]) {
       } else {
 	double xC = hist->GetXaxis()->GetBinCenter(b+1);
 	double val = f_nom->Eval(xC);
-	hist->SetBinContent(b+1, val);
+	hist->SetBinContent(b+1, val); 
       }
     }
     if(DO_ERR){
@@ -319,6 +323,9 @@ int main(int argc, char* argv[]) {
       cout << " backgrounds for " << regionnames[r] <<" , " << systnames[s] << endl;
       
       hist = hist_Other[regionnames[r]][systnames[s]];
+      if(hist->Integral() == 0)
+	continue;
+      
       TFitResultPtr new_res = hist->Fit("f_nom", "SLLERQ");
       
       f_nom->SetParameter(4, new_res->GetParams()[4]);
@@ -367,6 +374,10 @@ int main(int argc, char* argv[]) {
       cout << regionnames[r] <<" , " << systnames[s] << endl;
       
       hist = hist_TTJets[regionnames[r]][systnames[s]];
+      if(hist->Integral() == 0)
+	continue;
+
+      
       // exponential fit of tail to get starting values
       hist->Fit(f_exp,"LLERQ");
 
@@ -406,7 +417,7 @@ int main(int argc, char* argv[]) {
 	} else {
 	  double xC = hist->GetXaxis()->GetBinCenter(b+1);
 	  double val = f_nom->Eval(xC);
-	  hist->SetBinContent(b+1, val);
+	  hist->SetBinContent(b+1, val); 
 	}
       }
       if(DO_ERR){
@@ -425,6 +436,8 @@ int main(int argc, char* argv[]) {
       continue;
     
     hist = hist_QCD["regionA"][systnames[s]];
+    if(hist->Integral() == 0)
+      continue;
 
      cout << "Recreating QCD histograms from data and smoothed";
      cout << " other backgrounds for region A , " << systnames[s] << endl;
@@ -475,7 +488,7 @@ int main(int argc, char* argv[]) {
       } else {
 	double xC = hist->GetXaxis()->GetBinCenter(b+1);
 	double val = f_nom->Eval(xC);
-	hist->SetBinContent(b+1, val);
+	hist->SetBinContent(b+1, val); 
       }
     }
 
@@ -501,6 +514,9 @@ int main(int argc, char* argv[]) {
       cout << " backgrounds for " << regionnames[r] <<" , " << systnames[s] << endl;
       
       hist = hist_QCD[regionnames[r]][systnames[s]];
+      if(hist->Integral() == 0)
+	continue;
+      
       hist->Reset();
       hist->Add(hist_data[regionnames[r]]);
       hist->Add(hist_TTJets[regionnames[r]][systnames[s]],-1.);
@@ -528,7 +544,7 @@ int main(int argc, char* argv[]) {
 	} else {
 	  double xC = hist->GetXaxis()->GetBinCenter(b+1);
 	  double val = f_nom->Eval(xC);
-	  hist->SetBinContent(b+1, val);
+	  hist->SetBinContent(b+1, val); 
 	}
       }
       if(DO_ERR){
@@ -539,7 +555,6 @@ int main(int argc, char* argv[]) {
       }
     }    
   }
-    
     
   // Write Histograms
   for(int r = 0; r < Nreg; r++){
@@ -568,15 +583,17 @@ int main(int argc, char* argv[]) {
       }
     }
   }
-
+  
   for(int r = 0; r < Nreg; r++){
     for(int s = 0; s < Nsyst; s++){
       if(hist_TTJets.count(regionnames[r]) > 0){
 	if(hist_TTJets[regionnames[r]].count(systnames[s]) > 0){
 	  fout->cd();
 	  string histname = "MTP_"+regionnames[r]+"_TTJets"+systnames[s];
-	  hist_TTJets[regionnames[r]][systnames[s]]->GetFunction("f_nom")->Delete();
-	  hist_TTJets[regionnames[r]][systnames[s]]->Write(histname.c_str());
+	  if(hist_TTJets[regionnames[r]][systnames[s]]->GetFunction("f_nom"))
+	    hist_TTJets[regionnames[r]][systnames[s]]->GetFunction("f_nom")->Delete();
+	  if(hist_TTJets[regionnames[r]][systnames[s]]->Integral() > 0.)
+	    hist_TTJets[regionnames[r]][systnames[s]]->Write(histname.c_str());
 	  if(systnames[s] == ""){
 	    string histname_up = histname+"_ShapeUp";
 	    string histname_dn = histname+"_ShapeDown";
@@ -602,8 +619,10 @@ int main(int argc, char* argv[]) {
 	if(hist_Other[regionnames[r]].count(systnames[s]) > 0){
 	  fout->cd();
 	  string histname = "MTP_"+regionnames[r]+"_Other"+systnames[s];
-	  hist_Other[regionnames[r]][systnames[s]]->GetFunction("f_nom")->Delete();
-	  hist_Other[regionnames[r]][systnames[s]]->Write(histname.c_str());
+	  if(hist_Other[regionnames[r]][systnames[s]]->GetFunction("f_nom"))
+	    hist_Other[regionnames[r]][systnames[s]]->GetFunction("f_nom")->Delete();
+	  if(hist_Other[regionnames[r]][systnames[s]]->Integral() > 0.)
+	    hist_Other[regionnames[r]][systnames[s]]->Write(histname.c_str());
 	  if(systnames[s] == ""){
 	    string histname_up = histname+"_ShapeUp";
 	    string histname_dn = histname+"_ShapeDown";
@@ -622,7 +641,7 @@ int main(int argc, char* argv[]) {
       }							    
     }
   }
-
+  
    // Write estimated region D histograms 
   for(int s = 0; s < Nsyst; s++){
     if(hist_QCD.count("regionB") > 0){
@@ -630,8 +649,10 @@ int main(int argc, char* argv[]) {
 	TH1F* hist = hist_QCD["regionB"][systnames[s]];
 	//hist->GetFunction("f_nom")->Delete();
 	int Nbins = hist->GetNbinsX();
+
 	hist->Scale( hist_QCD["regionC"][systnames[s]]->Integral(1,Nbins)/
 		     hist_QCD["regionA"][systnames[s]]->Integral(1,Nbins) );
+	
 	fout->cd();
 	string histname = "MTP_regionD_estQCD"+systnames[s];
 	hist->Write(histname.c_str());
