@@ -45,6 +45,49 @@ double GausExp(double* xs, double* par){
 
 }
 
+double GausExpN(double* xs, double* par){
+  Float_t xx = xs[0];
+
+  double S = par[0];
+  double mu = par[1];
+  double sig1 = par[2];
+  double sig2 = par[3];
+  double A = par[4];
+  double n = par[5]; // extra parameter
+
+  //
+  // Calculate transition point
+  // w/ Newton-Raphson
+  
+  // starting guess (n = 1)
+  double tran = mu+fabs(S)*sig2*sig2;
+  double f  = 0.;
+  double df = 1.;
+  double dt = 0.;
+  int count = 0;
+
+  while(fabs(df) > 1e-10 && count < 100){
+    f  = n*fabs(S)*sig2*sig2*pow(tran, n-1.) + mu - tran;
+    df = n*(n-1.)*sig2*sig2*fabs(S)*pow(tran, n-2.) - 1.;
+    dt = f/df;
+    tran -= dt;
+    //std::cout << tran << " " << df << " " << count << std::endl;
+    count++;
+  }
+
+  if(xx > tran){
+    return A*(exp(S*pow(xx,n)));
+  } else {
+    double Agaus = A*(exp(S*pow(tran,n)))*exp((tran-mu)*(tran-mu)/(2.*sig2*sig2));
+    if(xx > mu){
+      return Agaus*exp(-(xx-mu)*(xx-mu)/(2.*sig2*sig2));
+    } else {
+      return Agaus*exp(-(xx-mu)*(xx-mu)/(2.*sig1*sig1));
+    }
+  }
+
+}
+
 double DoubleGaus_SameNorm(double* xs, double* par){
   double G0 = Normal(xs[0], par[0], par[3]+par[1], par[2]);
   double G1 = Normal(xs[0], par[0], par[3], par[4]);

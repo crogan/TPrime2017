@@ -59,6 +59,10 @@ int main(int argc, char* argv[]) {
     return 1;
   }
 
+  string sfit = "LLER";
+  if(QUIET)
+    sfit += "Q";
+
   gROOT->ProcessLine("#include <vector>");
 
   vector<string> histonames;
@@ -87,7 +91,7 @@ int main(int argc, char* argv[]) {
 	(name.find("TttZ") != string::npos)){
       TH1F* htemp = (TH1F*) F->Get(name.c_str());
       fout->cd();
-      htemp->Write(); 
+      htemp->Write();
       htemp->Delete();
       link = link->Next();
       continue;
@@ -159,6 +163,12 @@ int main(int argc, char* argv[]) {
   map<string, map<string, TH1F*> > hist_TTJets;
   map<string, map<string, TH1F*> > hist_QCD;
   map<string, map<string, TH1F*> > hist_Other;
+  map<string, double> hist_QCDn;
+  map<string, double> hist_QCDS;
+  map<string, double> hist_QCDmu;
+  map<string, double> hist_QCDsig1;
+  map<string, double> hist_QCDsig2;
+  map<string, double> hist_QCDN;
   
   for(int i = 0; i < Nhist; i++){
     string hname = histonames[i];
@@ -209,6 +219,9 @@ int main(int argc, char* argv[]) {
 	hist_QCD[sregion] = map<string, TH1F*>();
       if(hist_QCD[sregion].count(systname) == 0)
 	hist_QCD[sregion][systname] = new_hist;
+      // nparam
+      if(hist_QCDn.count(systname) == 0)
+	hist_QCDn[systname] = 1.;
       continue;
     }
 
@@ -228,13 +241,15 @@ int main(int argc, char* argv[]) {
   Nsyst = systnames.size();
   
   TF1 *f_exp = new TF1("f_exp","[0]*exp([1]*x)", 1100., 2500);
-  TF1 *f_nom = new TF1("f_nom", GausExp, 800., 2750., 5);
+  //TF1 *f_nom = new TF1("f_nom", GausExpN, 800., 2750., 5);
+  TF1 *f_nom = new TF1("f_nom", GausExpN, 750., 3100., 6);
   
   f_nom->SetParName(0, "S");
   f_nom->SetParName(1, "#mu");
   f_nom->SetParName(2, "#sigma_{left}");
   f_nom->SetParName(3, "#sigma_{right}");
   f_nom->SetParName(4, "N");
+  f_nom->SetParName(5, "n");
 
   // Do QCD Fits in region A, use for other QCD regions
   // and also for "Other" backgrounds
@@ -258,7 +273,7 @@ int main(int argc, char* argv[]) {
       continue;
     // exponential fit of tail to get starting values
     f_exp->SetParameter(0, -3.24762e-03);
-    hist->Fit(f_exp,"LLERQ");
+    hist->Fit(f_exp, sfit.c_str());
 
     // initial values for fit
     f_nom->SetParameter(0, f_exp->GetParameter(1));
@@ -266,16 +281,24 @@ int main(int argc, char* argv[]) {
     f_nom->SetParameter(2, 50.);
     f_nom->SetParameter(3, 220.);
     f_nom->SetParameter(4, f_exp->GetParameter(0));
+    f_nom->SetParameter(5, 1.);
 
-    for(int i = 0; i < 5; i++){
+    for(int i = 0; i < 6; i++){
       f_nom->ReleaseParameter(i);
     }
-    TFitResultPtr result = hist->Fit("f_nom", "SLLERQ");
+    TFitResultPtr result = hist->Fit("f_nom", ("S"+sfit).c_str());
 
     // set function parameters to result
-    for(int i = 0; i < 5; i++){
+    for(int i = 0; i < 6; i++){
       f_nom->SetParameter(i, result->GetParams()[i]);
     }
+
+    hist_QCDS[systnames[s]]    = result->GetParams()[0];
+    hist_QCDmu[systnames[s]]   = result->GetParams()[1];
+    hist_QCDsig1[systnames[s]] = result->GetParams()[2];
+    hist_QCDsig2[systnames[s]] = result->GetParams()[3];
+    hist_QCDN[systnames[s]]    = result->GetParams()[4];
+    hist_QCDn[systnames[s]]    = result->GetParams()[5];
     
     Nbins = hist->GetNbinsX();
     CHI2  = 0.;
@@ -311,6 +334,7 @@ int main(int argc, char* argv[]) {
     for(int i = 0; i < 4; i++){
       f_nom->FixParameter(i, result->GetParams()[i]);
     }
+    f_nom->FixParameter(5, result->GetParams()[5]);
 
     // fix shape parameters while floating normalization for "Other" backgrounds
     for(int r = 0; r < Nreg; r++){
@@ -326,7 +350,7 @@ int main(int argc, char* argv[]) {
       if(hist->Integral() == 0)
 	continue;
       
-      TFitResultPtr new_res = hist->Fit("f_nom", "SLLERQ");
+      TFitResultPtr new_res = hist->Fit("f_nom", ("S"+sfit).c_str());
       
       f_nom->SetParameter(4, new_res->GetParams()[4]);
       Nbins = hist->GetNbinsX();
@@ -379,19 +403,29 @@ int main(int argc, char* argv[]) {
 
       
       // exponential fit of tail to get starting values
-      hist->Fit(f_exp,"LLERQ");
-
-      // initial values for fit
-      f_nom->SetParameter(0, f_exp->GetParameter(1));
-      f_nom->SetParameter(1, 1000.);
-      f_nom->SetParameter(2, 50.);
-      f_nom->SetParameter(3, 220.);
-      f_nom->SetParameter(4, f_exp->GetParameter(0));
+      hist->Fit(f_exp, sfit.c_str());
 
       for(int i = 0; i < 5; i++){
 	f_nom->ReleaseParameter(i);
       }
-      TFitResultPtr result = hist->Fit("f_nom", "SLLERQ");
+      
+      // initial values for fit
+      // f_nom->SetParameter(0, f_exp->GetParameter(1));
+      // f_nom->SetParameter(1, 1000.);
+      // f_nom->SetParameter(2, 50.);
+      // f_nom->SetParameter(3, 220.);
+      // f_nom->SetParameter(4, f_exp->GetParameter(0));
+
+      f_nom->SetParameter(0, f_exp->GetParameter(1));
+      f_nom->SetParameter(1, hist_QCDmu[systnames[s]]);
+      f_nom->SetParameter(2, hist_QCDsig1[systnames[s]]);
+      f_nom->SetParameter(3, hist_QCDsig2[systnames[s]]);
+      f_nom->SetParameter(4, f_exp->GetParameter(0));
+      f_nom->SetParameter(5, 1.);
+
+      f_nom->FixParameter(5, 1.);
+      
+      TFitResultPtr result = hist->Fit("f_nom", ("S"+sfit).c_str());
 
       // set function parameters to result
       for(int i = 0; i < 5; i++){
@@ -450,28 +484,36 @@ int main(int argc, char* argv[]) {
     hist->Add((TH1F*)hist_Other["regionA"][systnames[s]],-1.);
     
     // exponential fit of tail to get starting values
-    hist->Fit(f_exp,"LLERQ");
+    hist->Fit(f_exp, sfit.c_str());
 
-    // initial values for fit
-    f_nom->SetParameter(0, f_exp->GetParameter(1));
-    f_nom->SetParameter(1, 1000.);
-    f_nom->SetParameter(2, 50.);
-    f_nom->SetParameter(3, 220.);
-    f_nom->SetParameter(4, f_exp->GetParameter(0));
-
-    for(int i = 0; i < 5; i++){
+    for(int i = 0; i < 6; i++){
       f_nom->ReleaseParameter(i);
     }
-    TFitResultPtr result = hist->Fit("f_nom", "SLLERQ");
+    
+    // initial values for fit
+    // f_nom->SetParameter(0, f_exp->GetParameter(1));
+    // f_nom->SetParameter(1, 1000.);
+    // f_nom->SetParameter(2, 50.);
+    // f_nom->SetParameter(3, 220.);
+    // f_nom->SetParameter(4, f_exp->GetParameter(0));
+    // f_nom->SetParameter(5, 1.);
+    f_nom->SetParameter(0, f_exp->GetParameter(1));
+    f_nom->SetParameter(1, hist_QCDmu[systnames[s]]);
+    f_nom->SetParameter(2, hist_QCDsig1[systnames[s]]);
+    f_nom->SetParameter(3, hist_QCDsig2[systnames[s]]);
+    f_nom->SetParameter(4, f_exp->GetParameter(0));
+    f_nom->SetParameter(5, 1.);
+
+    TFitResultPtr result = hist->Fit("f_nom", ("S"+sfit).c_str());
 
     // set function parameters to result
-    for(int i = 0; i < 5; i++){
+    for(int i = 0; i < 6; i++){
       f_nom->SetParameter(i, result->GetParams()[i]);
     }
     
     Nbins = hist->GetNbinsX();
     CHI2  = 0.;
-    for(int b = 0; b < Nbins; b++){
+    for(int b = 0; b < Nbins; b++){ 
       if(DO_ERR){
 	double x0 = hist->GetXaxis()->GetBinLowEdge(b+1);
 	double x1 = hist->GetXaxis()->GetBinUpEdge(b+1);
@@ -502,6 +544,7 @@ int main(int argc, char* argv[]) {
     for(int i = 0; i < 4; i++){
       f_nom->FixParameter(i, result->GetParams()[i]);
     }
+    f_nom->FixParameter(5, result->GetParams()[5]);
 
     // fix shape parameters while floating normalization for other QCD region fits
     for(int r = 1; r < Nreg; r++){
@@ -522,10 +565,15 @@ int main(int argc, char* argv[]) {
       hist->Add(hist_TTJets[regionnames[r]][systnames[s]],-1.);
       hist->Add(hist_Other[regionnames[r]][systnames[s]],-1.);
 
-      TFitResultPtr new_res = hist->Fit("f_nom", "SLLERQ");
+      Nbins = hist->GetNbinsX();
+      for(int b = 0; b < Nbins; b++)
+	if(hist->GetBinContent(b+1) < 0.)
+	  hist->SetBinContent(b+1, 0.);
+
+      TFitResultPtr new_res = hist->Fit("f_nom", ("S"+sfit).c_str());
       
       f_nom->SetParameter(4, new_res->GetParams()[4]);
-      Nbins = hist->GetNbinsX();
+      
       CHI2  = 0.;
       for(int b = 0; b < Nbins; b++){
 	if(DO_ERR){
