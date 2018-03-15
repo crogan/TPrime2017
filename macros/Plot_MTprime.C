@@ -17,7 +17,7 @@
 #include <TStyle.h>
 #include <TLorentzVector.h>
 
-#include "include/ReducedBase.hh"
+#include "../include/ReducedBase.hh"
 
 
 using namespace std;
@@ -64,14 +64,18 @@ void Plot_MTprime(){
   // g_File.push_back("signal/TbtH_1200_LH.root");
   // g_PlotTitle = "TbtH LH m_{T'} = 1.2 TeV";
 
-  g_File.push_back("signal/TttH_1200_RH.root");
-  g_PlotTitle = "TttH RH m_{T'} = 1.2 TeV";
+  // g_File.push_back("signal/TttH_1200_RH.root");
+  // g_PlotTitle = "TttH RH m_{T'} = 1.2 TeV";
 
   // g_File.push_back("signal/TbtH_1500_LH.root");
   // g_PlotTitle = "TbtH LH m_{T'} = 1.5 TeV";
 
   // g_File.push_back("signal/TttH_1500_RH.root");
   // g_PlotTitle = "TttH RH m_{T'} = 1.5 TeV";
+
+  g_File.push_back("bkg/QCDPt.root");
+  //g_PlotTitle = "TttH RH m_{T'} = 1.2 TeV";
+  g_PlotTitle = "QCD Pt-bin";
   
   int Nsample = g_File.size();
 
@@ -79,11 +83,11 @@ void Plot_MTprime(){
   
   g_Xname = "M_{T} alternatives [GeV]";
   g_Xmin = 800.;
-  g_Xmax = 1400.;
+  g_Xmax = 2500.;
 
   // g_Xmin = 0.;
   // g_Xmax = 1.;
-  g_NX = 40;
+  g_NX = 25;
 
   int Nhist = 4;
 
@@ -203,7 +207,7 @@ void Plot_MTprime(){
   can->SetGridy();
   can->Draw();
   can->cd();
-  hist[imax]->Draw();
+  hist[imax]->Draw("hist");
   hist[imax]->GetXaxis()->CenterTitle();
   hist[imax]->GetXaxis()->SetTitleFont(132);
   hist[imax]->GetXaxis()->SetTitleSize(0.06);
@@ -231,7 +235,7 @@ void Plot_MTprime(){
     hist[i]->SetMarkerSize(0);
     hist[i]->SetFillColor(kWhite);
     Ntype[0]++;
-    hist[i]->Draw("SAME");
+    hist[i]->Draw("SAME hist");
   }
 
   TLegend* leg = new TLegend(0.1588,0.68,0.3946,0.8947);
