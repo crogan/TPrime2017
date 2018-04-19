@@ -52,7 +52,7 @@ void TemplateCompare(){
   setstyle(0);
 
   bool DO_BAND = true;
-  int REBIN = 2;
+  int REBIN = 1;
   
   vector<int> g_Color;
   g_Color.push_back(kBlue+2);
@@ -62,29 +62,29 @@ void TemplateCompare(){
   g_Color.push_back(kCyan+2);
   g_Color.push_back(kOrange+2);
 
-  //g_File_new = "templates_tH_ptSum850_annulus_0p55-0p9_12Dec17_NEW.root";
-  g_File_new = "test.root";
-  g_Hist_new.push_back("MTP_regionA_Other");
-  g_Label_new.push_back("Other smooth");
-  g_Hist_new.push_back("MTP_regionA_TTJets");
+  g_File_new = "templates_tZ_signal_15Mar18_smoothed.root";
+  //g_File_new = "test.root";
+  // g_Hist_new.push_back("MTP_regionC_Other");
+  // g_Label_new.push_back("Other smooth");
+  g_Hist_new.push_back("MTP_regionD_TTJets");
   g_Label_new.push_back("t #bar{t} + jets smooth");
-  g_Hist_new.push_back("MTP_regionA_QCD");
-  g_Label_new.push_back("QCD smooth");
+  // g_Hist_new.push_back("MTP_regionC_QCD");
+  // g_Label_new.push_back("QCD smooth");
 
-  //g_File_old = "templates_tZ_ptSum850_annulus_0p55-0p9_12Dec17.root";
-  g_File_old = "test.root";
-  //g_Hist_old.push_back("MTP_regionD_TTJets");
-  g_Hist_old.push_back("MTP_regionA_data_obs");
-  //g_Label_old = "t #bar{t} + jets MC";
-  g_Label_old = "Data";
+  g_File_old = "templates_tZ_signal_15Mar18.root";
+  //g_File_old = "test.root";
+  g_Hist_old.push_back("MTP_regionD_TTJets");
+  //g_Hist_old.push_back("MTP_regionC_data_obs");
+  g_Label_old = "t #bar{t} + jets MC";
+  //g_Label_old = "Data";
 
-  g_PlotTitle = "Region C";
+  g_PlotTitle = "Region Z";
   
   int Nhist_new = g_Hist_new.size();
   int Nhist_old = g_Hist_old.size();
 
-  g_Path = "./";
-  //g_Path = "/Users/crogan/Dropbox/SAMPLES/Tprime/templates/13Dec17/";
+  //g_Path = "./";
+  g_Path = "/Users/crogan/Dropbox/SAMPLES/Tprime/templates/16Mar18/";
   
   g_Xname = "#tilde{M}_{T} [GeV]";
 

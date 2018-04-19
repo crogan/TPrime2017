@@ -73,7 +73,7 @@ void Plot_MTprime(){
   // g_File.push_back("signal/TttH_1500_RH.root");
   // g_PlotTitle = "TttH RH m_{T'} = 1.5 TeV";
 
-  g_File.push_back("bkg/QCDPt.root");
+  g_File.push_back("bkg/TTJets.root");
   //g_PlotTitle = "TttH RH m_{T'} = 1.2 TeV";
   g_PlotTitle = "QCD Pt-bin";
   
@@ -83,7 +83,7 @@ void Plot_MTprime(){
   
   g_Xname = "M_{T} alternatives [GeV]";
   g_Xmin = 800.;
-  g_Xmax = 2500.;
+  g_Xmax = 2000.;
 
   // g_Xmin = 0.;
   // g_Xmax = 1.;

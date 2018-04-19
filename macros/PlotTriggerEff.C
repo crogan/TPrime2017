@@ -36,15 +36,20 @@ double g_NX;
 void PlotTriggerEff(){
   RestFrames::SetStyle();
 
-  //string ifile = "/Users/crogan/Dropbox/SAMPLES/Tprime/trigger/L3T23_TbtH_M-1200_Width-30p_LH.root";
-  string ifile = "/Users/crogan/Dropbox/SAMPLES/Tprime/trigger/DATA_2016.root";
+  //string ifile = "/Users/crogan/Dropbox/SAMPLES/Tprime/trigger/03Feb17ReReco2016_Hset_noDenom_Signal/TT.root";
+  string ifile = "/Users/crogan/Dropbox/SAMPLES/Tprime/trigger/03Feb17ReReco2016_IsoMu24_Signal/TT.root";
+
+  //string ifile = "/Users/crogan/Dropbox/SAMPLES/Tprime/trigger/03Feb17ReReco2016_IsoMu24_900ALL_Trig/Run2016BG03Feb2017.root";
+  //string ifile = "/Users/crogan/Dropbox/SAMPLES/Tprime/trigger/03Feb17ReReco2016_IsoMu24Trig/Run2016BG03Feb2017.root";
+  //string ifile = "/Users/crogan/Dropbox/SAMPLES/Tprime/trigger/MU/DATA_2016.root";
+  //string ifile = "/Users/crogan/Dropbox/SAMPLES/Tprime/trigger/MU/DATA_2016.root";
   
   //g_Xname = "#tilde{M}_{T'} [GeV]";
   g_Xname = "p_{T}^{AK8,1} + p_{T}^{AK8,2} [GeV]";
-  g_Xmin = 100.;
-  g_Xmax = 1000.;
+  g_Xmin = 700.;
+  g_Xmax = 2000.;
 
-  g_NX = 100;
+  g_NX = 32;
 
   int Nhist = 1;
 
@@ -62,11 +67,11 @@ void PlotTriggerEff(){
   }
   
   TH2D* h_NUM_2D = new TH2D("h_NUM2D", "h_NUM2D",
-			    50,600.,1500,
-			    50,600.,1500);
+			    50,500.,1500,
+			    50,500.,1500);
   TH2D* h_DEN_2D = new TH2D("h_DEN2D", "h_DEN2D",
-			    50,600.,1500,
-			    50,600.,1500);
+			    50,500.,1500,
+			    50,500.,1500);
 
 
   TChain* chain_NUM = new TChain("anatest/tree");
@@ -107,11 +112,13 @@ void PlotTriggerEff(){
 
     double etaMax = 0.;
     TLorentzVector jet;
+    double HT = 0.;
     for(int i = 0; i < NAK4; i++){
       jet.SetPtEtaPhiM(base->ptAK4->at(i),
 		       base->etaAK4->at(i),
 		       base->phiAK4->at(i),
 		       base->MAK4->at(i));
+      HT += jet.Pt();
       if(jet.DeltaR(P4_AK8[0]) < 1.2 ||
 	 jet.DeltaR(P4_AK8[1]) < 1.2)
 	continue;
@@ -120,29 +127,42 @@ void PlotTriggerEff(){
 	etaMax = fabs(jet.Eta());
 
       P4_extraAK4.push_back(jet);
+      
     }
 
     int Nextra = P4_extraAK4.size();
+    // if(Nextra < 2)
+    //   continue;
+    // if(etaMax < 2.4)
+    //   continue;
+
+    if(base->SoftDropMassAK8->at(0) < 105. && base->SoftDropMassAK8->at(1) < 105.)
+      continue;
+
+    if(base->PrunedMassAK8->at(0) < 65. || base->PrunedMassAK8->at(1) < 65.)
+      continue;
 
     double MTp = (P4_AK8[0]+P4_AK8[1]).M() - P4_AK8[0].M() - P4_AK8[1].M() + 300.;
 
     double sumPT_AK8 = P4_AK8[0].Pt()+P4_AK8[1].Pt();
 
-    if(sumPT_AK8 < 850.) continue;
+    //if(sumPT_AK8 < 850.) continue;
 
-    // if(P4_AK8[0].Pt() < 400.) continue;
-    // if(P4_AK8[1].Pt() < 400.) continue;
+    if(P4_AK8[0].Pt() < 400.) continue;
+    if(P4_AK8[1].Pt() < 400.) continue;
 
     //double HT4 = sumPT_AK8 + P4_extraAK4[0].Pt() + P4_extraAK4[1].Pt();
+    
 
     //h_NUM_2D->Fill(HT4, sumPT_AK8);
 
-    // if(HT4 < 900.) continue;
+    //if(HT4 < 1000.) continue;
     
 
     //h_NUM[0]->Fill(MTp);
-    //h_NUM[0]->Fill(sumPT_AK8);
-    h_NUM[0]->Fill(P4_AK8[0].Pt());
+    h_NUM[0]->Fill(sumPT_AK8);
+    //h_NUM[0]->Fill(HT);
+    //h_NUM[0]->Fill(P4_AK8[0].Pt());
 
   }
    
@@ -187,11 +207,13 @@ void PlotTriggerEff(){
 
     double etaMax = 0.;
     TLorentzVector jet;
+    double HT = 0.;
     for(int i = 0; i < NAK4; i++){
       jet.SetPtEtaPhiM(base->ptAK4->at(i),
 		       base->etaAK4->at(i),
 		       base->phiAK4->at(i),
 		       base->MAK4->at(i));
+      HT += jet.Pt();
       if(jet.DeltaR(P4_AK8[0]) < 1.2 ||
 	 jet.DeltaR(P4_AK8[1]) < 1.2)
 	continue;
@@ -203,25 +225,36 @@ void PlotTriggerEff(){
     }
 
     int Nextra = P4_extraAK4.size();
+    // if(Nextra < 2)
+    //   continue;
+    // if(etaMax < 2.4)
+    //   continue;
 
+    if(base->SoftDropMassAK8->at(0) < 105. && base->SoftDropMassAK8->at(1) < 105.)
+      continue;
+
+     if(base->PrunedMassAK8->at(0) < 65. || base->PrunedMassAK8->at(1) < 65.)
+      continue;
+    
     double MTp = (P4_AK8[0]+P4_AK8[1]).M() - P4_AK8[0].M() - P4_AK8[1].M() + 300.;
 
     double sumPT_AK8 = P4_AK8[0].Pt()+P4_AK8[1].Pt();
 
-    if(sumPT_AK8 < 850.) continue;
+    //if(sumPT_AK8 < 850.) continue;
 
     //double HT4 = sumPT_AK8 + P4_extraAK4[0].Pt() + P4_extraAK4[1].Pt();
 
-    // if(P4_AK8[0].Pt() < 400.) continue;
-    // if(P4_AK8[1].Pt() < 400.) continue;
+    if(P4_AK8[0].Pt() < 400.) continue;
+    if(P4_AK8[1].Pt() < 400.) continue;
 
     //h_DEN_2D->Fill(HT4, sumPT_AK8);
 
-   // if(HT4 < 900.) continue; 
+    //if(HT4 < 1000.) continue; 
 
     //h_DEN[0]->Fill(MTp);
-    //h_DEN[0]->Fill(sumPT_AK8);
-    h_DEN[0]->Fill(P4_AK8[0].Pt());
+    h_DEN[0]->Fill(sumPT_AK8);
+    //h_DEN[0]->Fill(HT);
+    //h_DEN[0]->Fill(P4_AK8[0].Pt());
   }
 
   //h_DEN[0]->Add(h_NUM[0]);

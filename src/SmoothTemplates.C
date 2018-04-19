@@ -314,7 +314,7 @@ int main(int argc, char* argv[]) {
 	double pre_err = hist->GetBinError(b+1);
 	CHI2 += pow(pre-val/(x1-x0), 2.)/
 	  (valerr*valerr/(x1-x0)/(x1-x0) + pre_err*pre_err);
-	valerr = sqrt(valerr*valerr + 0.02*0.02*val*val);
+	valerr = sqrt(valerr*valerr + 0.03*0.03*val*val);
 	hist->SetBinContent(b+1, val/(x1-x0));
 	hist->SetBinError(b+1, valerr/(x1-x0));
       } else {
@@ -366,7 +366,7 @@ int main(int argc, char* argv[]) {
 	  double pre_err = hist->GetBinError(b+1);
 	  CHI2 += pow(pre-val/(x1-x0), 2.)/
 	    (valerr*valerr/(x1-x0)/(x1-x0) + pre_err*pre_err);
-	  valerr = sqrt(valerr*valerr + 0.02*0.02*val*val);
+	  valerr = sqrt(valerr*valerr + 0.03*0.03*val*val);
 	  hist->SetBinContent(b+1, val/(x1-x0));
 	  hist->SetBinError(b+1, valerr/(x1-x0));
 	} else {
@@ -445,7 +445,7 @@ int main(int argc, char* argv[]) {
 	  double pre_err = hist->GetBinError(b+1);
 	  CHI2 += pow(pre-val/(x1-x0), 2.)/
 	    (valerr*valerr/(x1-x0)/(x1-x0) + pre_err*pre_err);
-	  valerr = sqrt(valerr*valerr + 0.02*0.02*val*val);
+	  valerr = sqrt(valerr*valerr + 0.03*0.03*val*val);
 	  hist->SetBinContent(b+1, val/(x1-x0));
 	  hist->SetBinError(b+1, valerr/(x1-x0));
 	} else {
@@ -524,7 +524,7 @@ int main(int argc, char* argv[]) {
 	double pre_err = hist->GetBinError(b+1);
 	CHI2 += pow(pre-val/(x1-x0), 2.)/
 	  (valerr*valerr/(x1-x0)/(x1-x0) + pre_err*pre_err);
-	valerr = sqrt(valerr*valerr + 0.02*0.02*val*val);
+	valerr = sqrt(valerr*valerr + 0.03*0.03*val*val);
 	hist->SetBinContent(b+1, val/(x1-x0));
 	hist->SetBinError(b+1, valerr/(x1-x0));
       } else {
@@ -586,7 +586,7 @@ int main(int argc, char* argv[]) {
 	  double pre_err = hist->GetBinError(b+1);
 	  CHI2 += pow(pre-val/(x1-x0), 2.)/
 	    (valerr*valerr/(x1-x0)/(x1-x0) + pre_err*pre_err);
-	  valerr = sqrt(valerr*valerr + 0.02*0.02*val*val);
+	  valerr = sqrt(valerr*valerr + 0.03*0.03*val*val);
 	  hist->SetBinContent(b+1, val/(x1-x0));
 	  hist->SetBinError(b+1, valerr/(x1-x0));
 	} else {
